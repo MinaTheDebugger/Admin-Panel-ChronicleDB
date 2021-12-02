@@ -1,0 +1,13 @@
+.streamEventlayout {
+  position: relative;
+  left: 180px;
+  top: 0px;
+  height: 100;
+  width: 100;
+}
+
+.selectboxstream {
+  width: 200px;
+  position: relative;
+  margin-left: 50px;
+}
