@@ -531,7 +531,7 @@ class CreateStreamScreen extends Component {
           # These minimum sizes are:
           # 	- Index Data Size 			:= 3 Keys   / Node.
           # 	- Leaf Data Size  			:= 2 Events / Node.
-          # Otherwise, calculates the most suitable TAB+Index sizes.
+          # Otherwise, calculates the most suitable TAB+Index sizes. and hi
           Debug							= ${this.state.checkdebug}
         
         [I/O]#	
