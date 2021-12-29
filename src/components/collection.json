@@ -1,0 +1,260 @@
+{
+	"info": {
+		"_postman_id": "c616f956-36f1-4fb3-b7ab-8283e9d531e9",
+		"name": "ChronicleDB",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create_stream",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### Created by   Amir El-Shaikh on 11.03.2021.\t\t\t\t\t\t\t\t\t #####\r\n##### E-Mail: elshaikh@mathematik.uni-marburg.de\t\t\t\t\t\t\t   \t\t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### @Author: Amir El-Shaikh\t\t\t\t\t\t\t  \t\t\t\t\t \t   \t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### --> Compatible with version: 0.9.2\t\t\t\t\t\t\t  \t\t\t\t #####\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n############################# ChronicleDB Configuration File #############################\r\n#############################      Format -> KEY = VALUE     #############################\r\n\r\n[Debug]#\r\n\t# Enables logs across the system, if log set to true\r\n\t# Otherwise logs are disabled.\r\n\tLog\t\t\t\t\t\t\t\t= false\r\n\r\n\t# All the dynamic TAB+Index optimized sizes are discarded and\r\n\t# the minimum size for the nodes is used instead, if set to true. \r\n\t# These minimum sizes are:\r\n\t# \t- Index Data Size \t\t\t:= 3 Keys   / Node.\r\n\t# \t- Leaf Data Size  \t\t\t:= 2 Events / Node.\r\n\t# Otherwise, calculates the most suitable TAB+Index sizes.\r\n\tDebug\t\t\t\t\t\t\t= false\r\n\r\n[I/O]#\r\n# streamid is deprecated!\r\n\t# The Stream ID of this configuration.\r\n\t# <number> \t\t\t\t\t\t:= The synchronous constant number of this StreamID.\r\n\t# Use with caution, this might fail, if is already in use or concurrent requests made!\r\n\t# Highly recommended not use the constant number configuration, but let the system assign an ID.\r\n\t\r\n\t# n\t\t\t\t\t\t\t\t:= Optimal configuration.\r\n\t# The system will assign a StreamID and is guaranteed to be valid.\r\n\t# This is valid for revoering operations like-wise.\r\n\t#streamid\t\t\t\t\t\t= 0\r\n\t\r\n# schema is deprecated!\r\n\t# Schema file.\r\n\t# This is used on start-up, denoting the specific stream meta information.\r\n\t#schema\t\t\t\t\t\t\t= N:\\schema\r\n\t\r\n\t# Data files.\r\n\t# data = C:\\dataFile1\r\n\t# data = I:\\dataFile2\r\n\t# data = H:\\dataFile3\r\n\t# ...\r\n\tData \t\t\t\t\t\t\t= N:\\data\r\n\t#Data \t\t\t\t\t\t\t= I:\\data\r\n\t\r\n\t# Translation file.\r\n\t# This is used to serialize the rightFlank on a clean system shutdown.\r\n\tTranslation\t\t\t\t\t\t= N:\\translation\r\n\t\r\n\t# Right flank file.\r\n\t# This is used to serialize the rightFlank on a clean system shutdown.\r\n\tRight flank\t\t\t\t\t\t= N:\\flank\r\n\t\r\n\t# Multiple Disk Queue Checkpoint.\r\n\t# The number of MacroBlocks allowed to be queued on disk writer thread(s).\r\n\t# This number must be much lower than MacroBlock Cache * number of data files.\r\n\tMultiple disk max queue \t\t= 100\r\n\t\r\n[Stream Event Layout]#\r\n\t# You must declare the layout in a valid json format.\r\n\t\r\n\t# Note: The layout must be valid, hence a dummy event layout is expected.\r\n\t# Note: For a variable type, the upper limit must be defined.\r\n\t\r\n\t# E.g. (Event) for a variable string length, the dummy layout must contain the max expected string length.\r\n\t\r\n\t# The following list declares possible types for an event layout:\r\n\t# Internal:\r\n\t\t# Empty\r\n\t# JSON:\r\n\t\t# \"Empty\"\r\n\t\r\n\t# Internal:\r\n\t\t# Float(0f64),\r\n\t# JSON:\r\n\t\t# {\"Float\":0.0}\r\n\t\t\r\n\t# Internal:\r\n\t\t# Integer(0u64),\r\n\t# JSON:\r\n\t\t# {\"Integer\":0}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstString(StringBuff::from(\"This is joe, sleepy joe!\".to_string().into_bytes())),\r\n\t# JSON:\r\n\t\t# {\"ConstString\":[84,104,105,115,32,105,115,32,106,111,101,44,32,115,108,101,101,112,121,32,106,111,101,33]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarString(StringBuff::from(\"Kamala!\".to_string().into_bytes()))\r\n\t# JSON:\r\n\t\t# {\"VarString\":[75,97,109,97,108,97,33]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstIntegerList(IntegerArray::from(vec![1, 2, 3]))\r\n\t# JSON:\r\n\t\t# {\"ConstIntegerList\":[1,2,3]}\r\n\t\r\n\t# Internal:\r\n\t\t# VarIntegerList(IntegerArray::from(vec![4, 5, 6, 7]))\r\n\t# JSON:\r\n\t\t# {\"VarIntegerList\":[4,5,6,7]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstFloatList(FloatArray::from(vec![8f64, 9f64]))\r\n\t# JSON:\r\n\t\t# {\"ConstFloatList\":[8.0,9.0]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarFloatList(FloatArray::from(vec![10f64, 11f64]))\r\n\t# JSON:\r\n\t\t# {\"VarFloatList\":[10.0,11.0]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstStringList(StringArray::from(vec![StringBuff::from(\"Mini\".to_string().into_bytes()), StringBuff::from(\"Mike\".to_string().into_bytes())]))\r\n\t# JSON:\r\n\t\t# {\"ConstStringList\":[[77,105,110,105],[77,105,107,101]]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarStringList(StringArray::from(vec![StringBuff::from(\"Trump\".to_string().into_bytes()), StringBuff::from(\"Pence\".to_string().into_bytes())]))\r\n\t# JSON:\r\n\t\t# {\"VarStringList\":[[84,114,117,109,112],[80,101,110,99,101]]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# Compound(DataArray::from(vec![Empty, Float(12f64), Integer(13u64), ConstString(StringBuff::from(\"Pompeo\".to_string().into_bytes()))]))\r\n\t# JSON:\r\n\t\t# {\"Compound\":[\"Empty\",{\"Float\":12.0},{\"Integer\":13},{\"ConstString\":[80,111,109,112,101,111]}]}\r\n\r\n\t# Event Layout in JSON format for this Stream.\r\n\tEvent\t\t\t\t\t\t\t= {\"Float\":0.0}\r\n\t\r\n[Lightweight Index]#\r\n\t# The lightweight index layout must follow similar JSON notes as for for event layout.\r\n\t# The following list declares possible types for `aggregate` value:\r\n\t\r\n\t# Internal:\r\n\t\t# Empty\r\n\t# JSON:\r\n\t\t# \"Empty\"\r\n\t\t\r\n\t# Internal:\r\n\t\t# SMA { cnt: 0, sum: 0f64, min: 0f64, max: 0f64 }\r\n\t# JSON:\r\n\t\t# {\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}}\r\n\t\t\r\n\t# Internal:\r\n\t\t# BloomFilter(BloomFilter::new(8, 32))\r\n\t# JSON:\r\n\t\t# {\"BloomFilter\":{\"bit_set\":{\"bit_array\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},\"hash_functions\":[{\"a\":24309,\"b\":42942},{\"a\":16260,\"b\":39300},{\"a\":14853,\"b\":45314},{\"a\":42661,\"b\":55560},{\"a\":9686,\"b\":36492},{\"a\":785,\"b\":4537},{\"a\":13599,\"b\":16258},{\"a\":8815,\"b\":7937}]}}\r\n\r\n\t# The following list declares possible types for `projector_sequence` value:\r\n\t# \"Mono\"\t\t\t\t\t\t\t:= efficient attribute unwrap of events of a single attribute in total.\r\n\t# \"Empty\"\t\t\t\t\t\t\t:= no mapping to an attribute.\r\n\t# {\"Slice\":[n1,n2,n3,..]}\t\t\t:= sequence of projections, ideal for complex attributes e.g. for Compound(..) or mapping on a char of a String.\r\n\t# The \"Mono\" value is equivalent to {\"Slice\":[0]}.\r\n\t# The \"Empty\" value is equivalent to {\"Slice\":[]}.\r\n\t\r\n\t# Note: SMA/Bloomfilter require a projection on a float value.\r\n\t# You can add unlimited `lightweight index` by defining new ones in new lines, similar to the `data` key earlier.\r\n\t# The index layouts:\r\n\tLightweight index\t\t\t\t= {\"aggregate\":{\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}},\"projector_sequence\":\"Mono\"}\r\n\t#Lightweight index\t\t\t\t= {\"aggregate\":{\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}},\"projector_sequence\":\"Empty\"}\r\n\t\r\n[Block]#\r\n\t# Number of bytes for an uncompressed serialized node.\r\n\t# Generally, this should match the I/O block size of the data files.\r\n\t# Can be an arbitrary numeric value like-wise.\r\n\t# l\t\t\t\t\t\t\t\t:= Logical IO Block Size.\r\n\t# p\t\t\t\t\t\t\t\t:= Phsysical IO Block Size.\r\n\t# <number> \t\t\t\t\t\t:= <number> of bytes.\r\n\t# WARNING: l and p not supported yet!\r\n\tLogicalBlock size \t\t\t\t= 8192\r\n\t\r\n\t# Number of bytes for a MacroBlock.\r\n\t# Denoted in a multiply of Logical Block Size.\r\n\t# The multiply value must be a decimal number and never 0.\r\n\tMacroBlock size \t\t\t\t= 10\r\n\t\r\n\t# Percent of spare space in a MacroBlock.\r\n\tMacroBlock spare\t\t\t\t= 0.1\r\n\t\r\n\t# Number of MacroBlocks to preallocate at start.\r\n\tMacroBlock preallocation \t\t= 300\r\n\t\r\n\t# Allocates a number of MacroBlocks, when MacroBlockPreallocation\r\n\t# is exhausted.\r\n\t# 0\t\t\t\t\t\t\t\t:= Batch allocator disabled.\r\n\t# n, where n is greater or equal to MacroBlockPreallocation.\r\n\tMacroBlock batch allocation\t\t= 300\r\n\t\r\n[Cache]#\r\n\t# Number of MacroBlocks to keep in memory in LRU i.e. cache.\r\n\tMacroBlocks cache\t\t\t\t= 2500\r\n\t\r\n\t# Number of Nodes to keep in memory in LRU i.e. cache.\r\n\tNodes cache\t\t\t\t\t\t= 3000\r\n\t\r\n[Compressor]#\r\n\t# The compression algorithm used.\r\n\t# List of compressors is\t\t:= [none, LZ4_Fast_No_Meta, LZ4_Fast_With_Meta].\r\n\t# none\t\t\t\t\t\t\t:= Compression disabled.\r\n\t\r\n\t# LZ4_fast_no_meta\t\t\t\t:= Official LZ4 library is used with options: Fast and no Meta size information.\r\n\t# This version is ideal when using fixed sized l-blocks, which can not overflow.\r\n\t# Additionally, a c-block may never exceed the l-block size by any means, hence it uses a fixed allocation for \r\n\t# a decompression buffer and may never overflow consequently.\r\n\t\r\n\t# LZ4_Fast_With_Meta\t\t\t:= Official LZ4 library is used with options: Fast and includes Meta size information.\r\n\t# Note: This version will guarantee at any sizes, that the compressor/decompressor allocates sufficient space,\r\n\t# even if provided with less allocation. This ensures dynamic l-blocks of any sizes and allows different l-block sizes across\r\n\t# the \"cold\" vs. \"warm\" regions.\r\n\t# This guarantee comes with a small penalty, hence should only be used with caution.\r\n\t# Later it is planned to switch dynamically between compressors, to ensure cold regions benefit from wider l-blocks\r\n\t# and the warm regions stay fast with aligned l-blocks.\r\n\t# The system does not support switching between compressors dynamically, yet.\r\n\tCompressor\t\t\t\t\t\t= LZ4_Fast_No_Meta\r\n\t\r\n\t# For lz4 the extra parameter is the compression level.\r\n\t# Use of the the wrapped variants:\r\n\t\t# {\"I32\":<Signed Integer>}\r\n\t\t# {\"I32\":\"None\"}\r\n\t# Note: LZ4 variants expect an extra of i32.\r\n\tCompressor extras\t\t\t\t= {\"I32\":12}\r\n\t\r\n\t# Number of river threads in the delta.\r\n\t# 0\t\t\t\t\t\t\t\t:= Pipeline bypassed.\r\n\t# t \t\t\t\t\t\t\t:= Number of CPU threads.\r\n\t# c \t\t\t\t\t\t\t:= Number of CPU cores.\r\n\t# d \t\t\t\t\t\t\t:= Default number threads.\r\n\t# <number> \t\t\t\t\t\t:= <number> of threads.\r\n\t# [t|c] - <number>\t\t\t\t:= [t|c] - <number> of threads.\r\n\tRiver threads \t\t\t\t\t= t\r\n\r\n\t# Number of jobs to queue in the delta before blocking.\r\n\t# Larger queues may enhance performance, but require longer syncing, when shutdown. \r\n\t# This value * number of disks must be always smaller than MacroBlocksCache.\r\n\tMax delta queue\t\t\t\t\t= 10\r\n\t\r\n\t\r\n\t\r\n\t\r\n########################### End ChronicleDB Configuration File ###########################\t\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################"
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/create_stream",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"create_stream"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "system_info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:8000/system_info",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"system_info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insert_ordered/0",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"t1\":1,\"payload\":{\"Float\":1.0}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/insert_ordered/0",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"insert_ordered",
+						"0"
+					]
+				},
+				"description": "Inserts an Event"
+			},
+			"response": []
+		},
+		{
+			"name": "show_right_flank/0",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/show_right_flank/0",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"show_right_flank",
+						"0"
+					]
+				},
+				"description": "Shows the entire right flank nodes"
+			},
+			"response": []
+		},
+		{
+			"name": "query_time_travel/0",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Exclusive\":{\"start\":1,\"end\":3}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/query_time_travel/0",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"query_time_travel",
+						"0"
+					]
+				},
+				"description": "Time Travel Query"
+			},
+			"response": []
+		},
+		{
+			"name": "shutdown_stream/0",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:8000/shutdown_stream/0",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"shutdown_stream",
+						"0"
+					]
+				},
+				"description": "Shutdown a stream"
+			},
+			"response": []
+		},
+		{
+			"name": "show_streams",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:8000/show_streams",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"show_streams"
+					]
+				},
+				"description": "Shows all stream IDs and their online status"
+			},
+			"response": []
+		},
+		{
+			"name": "recover_stream",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### Created by   Amir El-Shaikh on 11.03.2021.\t\t\t\t\t\t\t\t\t #####\r\n##### E-Mail: elshaikh@mathematik.uni-marburg.de\t\t\t\t\t\t\t   \t\t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### @Author: Amir El-Shaikh\t\t\t\t\t\t\t  \t\t\t\t\t \t   \t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### --> Compatible with version: 0.9.2\t\t\t\t\t\t\t  \t\t\t\t #####\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n############################# ChronicleDB Configuration File #############################\r\n#############################      Format -> KEY = VALUE     #############################\r\n\r\n[Debug]#\r\n\t# Enables logs across the system, if log set to true\r\n\t# Otherwise logs are disabled.\r\n\tLog\t\t\t\t\t\t\t\t= false\r\n\r\n\t# All the dynamic TAB+Index optimized sizes are discarded and\r\n\t# the minimum size for the nodes is used instead, if set to true. \r\n\t# These minimum sizes are:\r\n\t# \t- Index Data Size \t\t\t:= 3 Keys   / Node.\r\n\t# \t- Leaf Data Size  \t\t\t:= 2 Events / Node.\r\n\t# Otherwise, calculates the most suitable TAB+Index sizes.\r\n\tDebug\t\t\t\t\t\t\t= false\r\n\r\n[I/O]#\r\n# streamid is deprecated!\r\n\t# The Stream ID of this configuration.\r\n\t# <number> \t\t\t\t\t\t:= The synchronous constant number of this StreamID.\r\n\t# Use with caution, this might fail, if is already in use or concurrent requests made!\r\n\t# Highly recommended not use the constant number configuration, but let the system assign an ID.\r\n\t\r\n\t# n\t\t\t\t\t\t\t\t:= Optimal configuration.\r\n\t# The system will assign a StreamID and is guaranteed to be valid.\r\n\t# This is valid for revoering operations like-wise.\r\n\t#streamid\t\t\t\t\t\t= 0\r\n\t\r\n# schema is deprecated!\r\n\t# Schema file.\r\n\t# This is used on start-up, denoting the specific stream meta information.\r\n\t#schema\t\t\t\t\t\t\t= N:\\schema\r\n\t\r\n\t# Data files.\r\n\t# data = C:\\dataFile1\r\n\t# data = I:\\dataFile2\r\n\t# data = H:\\dataFile3\r\n\t# ...\r\n\tData \t\t\t\t\t\t\t= N:\\data\r\n\t#Data \t\t\t\t\t\t\t= I:\\data\r\n\t\r\n\t# Translation file.\r\n\t# This is used to serialize the rightFlank on a clean system shutdown.\r\n\tTranslation\t\t\t\t\t\t= N:\\translation\r\n\t\r\n\t# Right flank file.\r\n\t# This is used to serialize the rightFlank on a clean system shutdown.\r\n\tRight flank\t\t\t\t\t\t= N:\\flank\r\n\t\r\n\t# Multiple Disk Queue Checkpoint.\r\n\t# The number of MacroBlocks allowed to be queued on disk writer thread(s).\r\n\t# This number must be much lower than MacroBlock Cache * number of data files.\r\n\tMultiple disk max queue \t\t= 100\r\n\t\r\n[Stream Event Layout]#\r\n\t# You must declare the layout in a valid json format.\r\n\t\r\n\t# Note: The layout must be valid, hence a dummy event layout is expected.\r\n\t# Note: For a variable type, the upper limit must be defined.\r\n\t\r\n\t# E.g. (Event) for a variable string length, the dummy layout must contain the max expected string length.\r\n\t\r\n\t# The following list declares possible types for an event layout:\r\n\t# Internal:\r\n\t\t# Empty\r\n\t# JSON:\r\n\t\t# \"Empty\"\r\n\t\r\n\t# Internal:\r\n\t\t# Float(0f64),\r\n\t# JSON:\r\n\t\t# {\"Float\":0.0}\r\n\t\t\r\n\t# Internal:\r\n\t\t# Integer(0u64),\r\n\t# JSON:\r\n\t\t# {\"Integer\":0}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstString(StringBuff::from(\"This is joe, sleepy joe!\".to_string().into_bytes())),\r\n\t# JSON:\r\n\t\t# {\"ConstString\":[84,104,105,115,32,105,115,32,106,111,101,44,32,115,108,101,101,112,121,32,106,111,101,33]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarString(StringBuff::from(\"Kamala!\".to_string().into_bytes()))\r\n\t# JSON:\r\n\t\t# {\"VarString\":[75,97,109,97,108,97,33]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstIntegerList(IntegerArray::from(vec![1, 2, 3]))\r\n\t# JSON:\r\n\t\t# {\"ConstIntegerList\":[1,2,3]}\r\n\t\r\n\t# Internal:\r\n\t\t# VarIntegerList(IntegerArray::from(vec![4, 5, 6, 7]))\r\n\t# JSON:\r\n\t\t# {\"VarIntegerList\":[4,5,6,7]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstFloatList(FloatArray::from(vec![8f64, 9f64]))\r\n\t# JSON:\r\n\t\t# {\"ConstFloatList\":[8.0,9.0]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarFloatList(FloatArray::from(vec![10f64, 11f64]))\r\n\t# JSON:\r\n\t\t# {\"VarFloatList\":[10.0,11.0]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstStringList(StringArray::from(vec![StringBuff::from(\"Mini\".to_string().into_bytes()), StringBuff::from(\"Mike\".to_string().into_bytes())]))\r\n\t# JSON:\r\n\t\t# {\"ConstStringList\":[[77,105,110,105],[77,105,107,101]]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarStringList(StringArray::from(vec![StringBuff::from(\"Trump\".to_string().into_bytes()), StringBuff::from(\"Pence\".to_string().into_bytes())]))\r\n\t# JSON:\r\n\t\t# {\"VarStringList\":[[84,114,117,109,112],[80,101,110,99,101]]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# Compound(DataArray::from(vec![Empty, Float(12f64), Integer(13u64), ConstString(StringBuff::from(\"Pompeo\".to_string().into_bytes()))]))\r\n\t# JSON:\r\n\t\t# {\"Compound\":[\"Empty\",{\"Float\":12.0},{\"Integer\":13},{\"ConstString\":[80,111,109,112,101,111]}]}\r\n\r\n\t# Event Layout in JSON format for this Stream.\r\n\tEvent\t\t\t\t\t\t\t= {\"Float\":0.0}\r\n\t\r\n[Lightweight Index]#\r\n\t# The lightweight index layout must follow similar JSON notes as for for event layout.\r\n\t# The following list declares possible types for `aggregate` value:\r\n\t\r\n\t# Internal:\r\n\t\t# Empty\r\n\t# JSON:\r\n\t\t# \"Empty\"\r\n\t\t\r\n\t# Internal:\r\n\t\t# SMA { cnt: 0, sum: 0f64, min: 0f64, max: 0f64 }\r\n\t# JSON:\r\n\t\t# {\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}}\r\n\t\t\r\n\t# Internal:\r\n\t\t# BloomFilter(BloomFilter::new(8, 32))\r\n\t# JSON:\r\n\t\t# {\"BloomFilter\":{\"bit_set\":{\"bit_array\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},\"hash_functions\":[{\"a\":24309,\"b\":42942},{\"a\":16260,\"b\":39300},{\"a\":14853,\"b\":45314},{\"a\":42661,\"b\":55560},{\"a\":9686,\"b\":36492},{\"a\":785,\"b\":4537},{\"a\":13599,\"b\":16258},{\"a\":8815,\"b\":7937}]}}\r\n\r\n\t# The following list declares possible types for `projector_sequence` value:\r\n\t# \"Mono\"\t\t\t\t\t\t\t:= efficient attribute unwrap of events of a single attribute in total.\r\n\t# \"Empty\"\t\t\t\t\t\t\t:= no mapping to an attribute.\r\n\t# {\"Slice\":[n1,n2,n3,..]}\t\t\t:= sequence of projections, ideal for complex attributes e.g. for Compound(..) or mapping on a char of a String.\r\n\t# The \"Mono\" value is equivalent to {\"Slice\":[0]}.\r\n\t# The \"Empty\" value is equivalent to {\"Slice\":[]}.\r\n\t\r\n\t# Note: SMA/Bloomfilter require a projection on a float value.\r\n\t# You can add unlimited `lightweight index` by defining new ones in new lines, similar to the `data` key earlier.\r\n\t# The index layouts:\r\n\tLightweight index\t\t\t\t= {\"aggregate\":{\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}},\"projector_sequence\":\"Mono\"}\r\n\t#Lightweight index\t\t\t\t= {\"aggregate\":{\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}},\"projector_sequence\":\"Empty\"}\r\n\t\r\n[Block]#\r\n\t# Number of bytes for an uncompressed serialized node.\r\n\t# Generally, this should match the I/O block size of the data files.\r\n\t# Can be an arbitrary numeric value like-wise.\r\n\t# l\t\t\t\t\t\t\t\t:= Logical IO Block Size.\r\n\t# p\t\t\t\t\t\t\t\t:= Phsysical IO Block Size.\r\n\t# <number> \t\t\t\t\t\t:= <number> of bytes.\r\n\t# WARNING: l and p not supported yet!\r\n\tLogicalBlock size \t\t\t\t= 8192\r\n\t\r\n\t# Number of bytes for a MacroBlock.\r\n\t# Denoted in a multiply of Logical Block Size.\r\n\t# The multiply value must be a decimal number and never 0.\r\n\tMacroBlock size \t\t\t\t= 10\r\n\t\r\n\t# Percent of spare space in a MacroBlock.\r\n\tMacroBlock spare\t\t\t\t= 0.1\r\n\t\r\n\t# Number of MacroBlocks to preallocate at start.\r\n\tMacroBlock preallocation \t\t= 300\r\n\t\r\n\t# Allocates a number of MacroBlocks, when MacroBlockPreallocation\r\n\t# is exhausted.\r\n\t# 0\t\t\t\t\t\t\t\t:= Batch allocator disabled.\r\n\t# n, where n is greater or equal to MacroBlockPreallocation.\r\n\tMacroBlock batch allocation\t\t= 300\r\n\t\r\n[Cache]#\r\n\t# Number of MacroBlocks to keep in memory in LRU i.e. cache.\r\n\tMacroBlocks cache\t\t\t\t= 2500\r\n\t\r\n\t# Number of Nodes to keep in memory in LRU i.e. cache.\r\n\tNodes cache\t\t\t\t\t\t= 3000\r\n\t\r\n[Compressor]#\r\n\t# The compression algorithm used.\r\n\t# List of compressors is\t\t:= [none, LZ4_Fast_No_Meta, LZ4_Fast_With_Meta].\r\n\t# none\t\t\t\t\t\t\t:= Compression disabled.\r\n\t\r\n\t# LZ4_fast_no_meta\t\t\t\t:= Official LZ4 library is used with options: Fast and no Meta size information.\r\n\t# This version is ideal when using fixed sized l-blocks, which can not overflow.\r\n\t# Additionally, a c-block may never exceed the l-block size by any means, hence it uses a fixed allocation for \r\n\t# a decompression buffer and may never overflow consequently.\r\n\t\r\n\t# LZ4_Fast_With_Meta\t\t\t:= Official LZ4 library is used with options: Fast and includes Meta size information.\r\n\t# Note: This version will guarantee at any sizes, that the compressor/decompressor allocates sufficient space,\r\n\t# even if provided with less allocation. This ensures dynamic l-blocks of any sizes and allows different l-block sizes across\r\n\t# the \"cold\" vs. \"warm\" regions.\r\n\t# This guarantee comes with a small penalty, hence should only be used with caution.\r\n\t# Later it is planned to switch dynamically between compressors, to ensure cold regions benefit from wider l-blocks\r\n\t# and the warm regions stay fast with aligned l-blocks.\r\n\t# The system does not support switching between compressors dynamically, yet.\r\n\tCompressor\t\t\t\t\t\t= LZ4_Fast_No_Meta\r\n\t\r\n\t# For lz4 the extra parameter is the compression level.\r\n\t# Use of the the wrapped variants:\r\n\t\t# {\"I32\":<Signed Integer>}\r\n\t\t# {\"I32\":\"None\"}\r\n\t# Note: LZ4 variants expect an extra of i32.\r\n\tCompressor extras\t\t\t\t= {\"I32\":12}\r\n\t\r\n\t# Number of river threads in the delta.\r\n\t# 0\t\t\t\t\t\t\t\t:= Pipeline bypassed.\r\n\t# t \t\t\t\t\t\t\t:= Number of CPU threads.\r\n\t# c \t\t\t\t\t\t\t:= Number of CPU cores.\r\n\t# d \t\t\t\t\t\t\t:= Default number threads.\r\n\t# <number> \t\t\t\t\t\t:= <number> of threads.\r\n\t# [t|c] - <number>\t\t\t\t:= [t|c] - <number> of threads.\r\n\tRiver threads \t\t\t\t\t= t\r\n\r\n\t# Number of jobs to queue in the delta before blocking.\r\n\t# Larger queues may enhance performance, but require longer syncing, when shutdown. \r\n\t# This value * number of disks must be always smaller than MacroBlocksCache.\r\n\tMax delta queue\t\t\t\t\t= 10\r\n\t\r\n\t\r\n\t\r\n\t\r\n########################### End ChronicleDB Configuration File ###########################\t\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################"
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/recover_stream",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"recover_stream"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recover_stream (snapshot)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### Created by   Amir El-Shaikh on 11.03.2021.\t\t\t\t\t\t\t\t\t #####\r\n##### E-Mail: elshaikh@mathematik.uni-marburg.de\t\t\t\t\t\t\t   \t\t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### @Author: Amir El-Shaikh\t\t\t\t\t\t\t  \t\t\t\t\t \t   \t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n#####\t\t\t\t\t\t\t  \t\t\t\t\t\t\t\t\t\t\t\t\t #####\r\n##### --> Compatible with version: 0.9.2\t\t\t\t\t\t\t  \t\t\t\t #####\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n############################# ChronicleDB Configuration File #############################\r\n#############################      Format -> KEY = VALUE     #############################\r\n\r\n[Debug]#\r\n\t# Enables logs across the system, if log set to true\r\n\t# Otherwise logs are disabled.\r\n\tLog\t\t\t\t\t\t\t\t= false\r\n\r\n\t# All the dynamic TAB+Index optimized sizes are discarded and\r\n\t# the minimum size for the nodes is used instead, if set to true. \r\n\t# These minimum sizes are:\r\n\t# \t- Index Data Size \t\t\t:= 3 Keys   / Node.\r\n\t# \t- Leaf Data Size  \t\t\t:= 2 Events / Node.\r\n\t# Otherwise, calculates the most suitable TAB+Index sizes.\r\n\tDebug\t\t\t\t\t\t\t= false\r\n\r\n[I/O]#\r\n# streamid is deprecated!\r\n\t# The Stream ID of this configuration.\r\n\t# <number> \t\t\t\t\t\t:= The synchronous constant number of this StreamID.\r\n\t# Use with caution, this might fail, if is already in use or concurrent requests made!\r\n\t# Highly recommended not use the constant number configuration, but let the system assign an ID.\r\n\t\r\n\t# n\t\t\t\t\t\t\t\t:= Optimal configuration.\r\n\t# The system will assign a StreamID and is guaranteed to be valid.\r\n\t# This is valid for revoering operations like-wise.\r\n\t#streamid\t\t\t\t\t\t= 0\r\n\t\r\n# schema is deprecated!\r\n\t# Schema file.\r\n\t# This is used on start-up, denoting the specific stream meta information.\r\n\t#schema\t\t\t\t\t\t\t= N:\\schema\r\n\t\r\n\t# Data files.\r\n\t# data = C:\\dataFile1\r\n\t# data = I:\\dataFile2\r\n\t# data = H:\\dataFile3\r\n\t# ...\r\n\tData \t\t\t\t\t\t\t= N:\\data\r\n\t#Data \t\t\t\t\t\t\t= I:\\data\r\n\t\r\n\t# Translation file.\r\n\t# This is used to serialize the rightFlank on a clean system shutdown.\r\n\tTranslation\t\t\t\t\t\t= N:\\translation\r\n\t\r\n\t# Right flank file.\r\n\t# This is used to serialize the rightFlank on a clean system shutdown.\r\n\tRight flank\t\t\t\t\t\t= N:\\flank\r\n\t\r\n\t# Multiple Disk Queue Checkpoint.\r\n\t# The number of MacroBlocks allowed to be queued on disk writer thread(s).\r\n\t# This number must be much lower than MacroBlock Cache * number of data files.\r\n\tMultiple disk max queue \t\t= 100\r\n\t\r\n[Stream Event Layout]#\r\n\t# You must declare the layout in a valid json format.\r\n\t\r\n\t# Note: The layout must be valid, hence a dummy event layout is expected.\r\n\t# Note: For a variable type, the upper limit must be defined.\r\n\t\r\n\t# E.g. (Event) for a variable string length, the dummy layout must contain the max expected string length.\r\n\t\r\n\t# The following list declares possible types for an event layout:\r\n\t# Internal:\r\n\t\t# Empty\r\n\t# JSON:\r\n\t\t# \"Empty\"\r\n\t\r\n\t# Internal:\r\n\t\t# Float(0f64),\r\n\t# JSON:\r\n\t\t# {\"Float\":0.0}\r\n\t\t\r\n\t# Internal:\r\n\t\t# Integer(0u64),\r\n\t# JSON:\r\n\t\t# {\"Integer\":0}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstString(StringBuff::from(\"This is joe, sleepy joe!\".to_string().into_bytes())),\r\n\t# JSON:\r\n\t\t# {\"ConstString\":[84,104,105,115,32,105,115,32,106,111,101,44,32,115,108,101,101,112,121,32,106,111,101,33]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarString(StringBuff::from(\"Kamala!\".to_string().into_bytes()))\r\n\t# JSON:\r\n\t\t# {\"VarString\":[75,97,109,97,108,97,33]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstIntegerList(IntegerArray::from(vec![1, 2, 3]))\r\n\t# JSON:\r\n\t\t# {\"ConstIntegerList\":[1,2,3]}\r\n\t\r\n\t# Internal:\r\n\t\t# VarIntegerList(IntegerArray::from(vec![4, 5, 6, 7]))\r\n\t# JSON:\r\n\t\t# {\"VarIntegerList\":[4,5,6,7]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstFloatList(FloatArray::from(vec![8f64, 9f64]))\r\n\t# JSON:\r\n\t\t# {\"ConstFloatList\":[8.0,9.0]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarFloatList(FloatArray::from(vec![10f64, 11f64]))\r\n\t# JSON:\r\n\t\t# {\"VarFloatList\":[10.0,11.0]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# ConstStringList(StringArray::from(vec![StringBuff::from(\"Mini\".to_string().into_bytes()), StringBuff::from(\"Mike\".to_string().into_bytes())]))\r\n\t# JSON:\r\n\t\t# {\"ConstStringList\":[[77,105,110,105],[77,105,107,101]]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# VarStringList(StringArray::from(vec![StringBuff::from(\"Trump\".to_string().into_bytes()), StringBuff::from(\"Pence\".to_string().into_bytes())]))\r\n\t# JSON:\r\n\t\t# {\"VarStringList\":[[84,114,117,109,112],[80,101,110,99,101]]}\r\n\t\t\r\n\t# Internal:\r\n\t\t# Compound(DataArray::from(vec![Empty, Float(12f64), Integer(13u64), ConstString(StringBuff::from(\"Pompeo\".to_string().into_bytes()))]))\r\n\t# JSON:\r\n\t\t# {\"Compound\":[\"Empty\",{\"Float\":12.0},{\"Integer\":13},{\"ConstString\":[80,111,109,112,101,111]}]}\r\n\r\n\t# Event Layout in JSON format for this Stream.\r\n\tEvent\t\t\t\t\t\t\t= {\"Float\":0.0}\r\n\t\r\n[Lightweight Index]#\r\n\t# The lightweight index layout must follow similar JSON notes as for for event layout.\r\n\t# The following list declares possible types for `aggregate` value:\r\n\t\r\n\t# Internal:\r\n\t\t# Empty\r\n\t# JSON:\r\n\t\t# \"Empty\"\r\n\t\t\r\n\t# Internal:\r\n\t\t# SMA { cnt: 0, sum: 0f64, min: 0f64, max: 0f64 }\r\n\t# JSON:\r\n\t\t# {\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}}\r\n\t\t\r\n\t# Internal:\r\n\t\t# BloomFilter(BloomFilter::new(8, 32))\r\n\t# JSON:\r\n\t\t# {\"BloomFilter\":{\"bit_set\":{\"bit_array\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},\"hash_functions\":[{\"a\":24309,\"b\":42942},{\"a\":16260,\"b\":39300},{\"a\":14853,\"b\":45314},{\"a\":42661,\"b\":55560},{\"a\":9686,\"b\":36492},{\"a\":785,\"b\":4537},{\"a\":13599,\"b\":16258},{\"a\":8815,\"b\":7937}]}}\r\n\r\n\t# The following list declares possible types for `projector_sequence` value:\r\n\t# \"Mono\"\t\t\t\t\t\t\t:= efficient attribute unwrap of events of a single attribute in total.\r\n\t# \"Empty\"\t\t\t\t\t\t\t:= no mapping to an attribute.\r\n\t# {\"Slice\":[n1,n2,n3,..]}\t\t\t:= sequence of projections, ideal for complex attributes e.g. for Compound(..) or mapping on a char of a String.\r\n\t# The \"Mono\" value is equivalent to {\"Slice\":[0]}.\r\n\t# The \"Empty\" value is equivalent to {\"Slice\":[]}.\r\n\t\r\n\t# Note: SMA/Bloomfilter require a projection on a float value.\r\n\t# You can add unlimited `lightweight index` by defining new ones in new lines, similar to the `data` key earlier.\r\n\t# The index layouts:\r\n\tLightweight index\t\t\t\t= {\"aggregate\":{\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}},\"projector_sequence\":\"Mono\"}\r\n\t#Lightweight index\t\t\t\t= {\"aggregate\":{\"SMA\":{\"cnt\":0,\"sum\":0.0,\"min\":0.0,\"max\":0.0}},\"projector_sequence\":\"Empty\"}\r\n\t\r\n[Block]#\r\n\t# Number of bytes for an uncompressed serialized node.\r\n\t# Generally, this should match the I/O block size of the data files.\r\n\t# Can be an arbitrary numeric value like-wise.\r\n\t# l\t\t\t\t\t\t\t\t:= Logical IO Block Size.\r\n\t# p\t\t\t\t\t\t\t\t:= Phsysical IO Block Size.\r\n\t# <number> \t\t\t\t\t\t:= <number> of bytes.\r\n\t# WARNING: l and p not supported yet!\r\n\tLogicalBlock size \t\t\t\t= 8192\r\n\t\r\n\t# Number of bytes for a MacroBlock.\r\n\t# Denoted in a multiply of Logical Block Size.\r\n\t# The multiply value must be a decimal number and never 0.\r\n\tMacroBlock size \t\t\t\t= 10\r\n\t\r\n\t# Percent of spare space in a MacroBlock.\r\n\tMacroBlock spare\t\t\t\t= 0.1\r\n\t\r\n\t# Number of MacroBlocks to preallocate at start.\r\n\tMacroBlock preallocation \t\t= 300\r\n\t\r\n\t# Allocates a number of MacroBlocks, when MacroBlockPreallocation\r\n\t# is exhausted.\r\n\t# 0\t\t\t\t\t\t\t\t:= Batch allocator disabled.\r\n\t# n, where n is greater or equal to MacroBlockPreallocation.\r\n\tMacroBlock batch allocation\t\t= 300\r\n\t\r\n[Cache]#\r\n\t# Number of MacroBlocks to keep in memory in LRU i.e. cache.\r\n\tMacroBlocks cache\t\t\t\t= 2500\r\n\t\r\n\t# Number of Nodes to keep in memory in LRU i.e. cache.\r\n\tNodes cache\t\t\t\t\t\t= 3000\r\n\t\r\n[Compressor]#\r\n\t# The compression algorithm used.\r\n\t# List of compressors is\t\t:= [none, LZ4_Fast_No_Meta, LZ4_Fast_With_Meta].\r\n\t# none\t\t\t\t\t\t\t:= Compression disabled.\r\n\t\r\n\t# LZ4_fast_no_meta\t\t\t\t:= Official LZ4 library is used with options: Fast and no Meta size information.\r\n\t# This version is ideal when using fixed sized l-blocks, which can not overflow.\r\n\t# Additionally, a c-block may never exceed the l-block size by any means, hence it uses a fixed allocation for \r\n\t# a decompression buffer and may never overflow consequently.\r\n\t\r\n\t# LZ4_Fast_With_Meta\t\t\t:= Official LZ4 library is used with options: Fast and includes Meta size information.\r\n\t# Note: This version will guarantee at any sizes, that the compressor/decompressor allocates sufficient space,\r\n\t# even if provided with less allocation. This ensures dynamic l-blocks of any sizes and allows different l-block sizes across\r\n\t# the \"cold\" vs. \"warm\" regions.\r\n\t# This guarantee comes with a small penalty, hence should only be used with caution.\r\n\t# Later it is planned to switch dynamically between compressors, to ensure cold regions benefit from wider l-blocks\r\n\t# and the warm regions stay fast with aligned l-blocks.\r\n\t# The system does not support switching between compressors dynamically, yet.\r\n\tCompressor\t\t\t\t\t\t= LZ4_Fast_No_Meta\r\n\t\r\n\t# For lz4 the extra parameter is the compression level.\r\n\t# Use of the the wrapped variants:\r\n\t\t# {\"I32\":<Signed Integer>}\r\n\t\t# {\"I32\":\"None\"}\r\n\t# Note: LZ4 variants expect an extra of i32.\r\n\tCompressor extras\t\t\t\t= {\"I32\":12}\r\n\t\r\n\t# Number of river threads in the delta.\r\n\t# 0\t\t\t\t\t\t\t\t:= Pipeline bypassed.\r\n\t# t \t\t\t\t\t\t\t:= Number of CPU threads.\r\n\t# c \t\t\t\t\t\t\t:= Number of CPU cores.\r\n\t# d \t\t\t\t\t\t\t:= Default number threads.\r\n\t# <number> \t\t\t\t\t\t:= <number> of threads.\r\n\t# [t|c] - <number>\t\t\t\t:= [t|c] - <number> of threads.\r\n\tRiver threads \t\t\t\t\t= t\r\n\r\n\t# Number of jobs to queue in the delta before blocking.\r\n\t# Larger queues may enhance performance, but require longer syncing, when shutdown. \r\n\t# This value * number of disks must be always smaller than MacroBlocksCache.\r\n\tMax delta queue\t\t\t\t\t= 10\r\n\t\r\n\t\r\n\t\r\n\t\r\n########################### End ChronicleDB Configuration File ###########################\t\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################\r\n##########################################################################################"
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/recover_stream",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"recover_stream"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

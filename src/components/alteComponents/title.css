@@ -1,0 +1,10 @@
+.coloroftitle {
+  color: white;
+  text-align: center;
+  margin: auto;
+  background: rgb(82, 143, 179);
+  height: 75px;
+  top: 0;
+  position: static;
+  width: 41cm;
+}
