@@ -22,29 +22,17 @@ async function signIn(params) {
 }
 
 
-export class login extends Component {
-
-
-
-
-
-
-
-
-
-
-
-
-
+export class LoginScreen extends Component {
 
 
     render() {
         return (
             <div>
+                <h1>Welcome To Our ChronicalDB Project</h1>
 
             </div>
         )
     }
 }
 
-export default login
+export default LoginScreen

@@ -6,7 +6,7 @@ function Leftbar() {
   return (
     <div class="sidenav">
       <nav className="navbar">
-        <NavLink to="/">Home</NavLink>
+        <NavLink to="/Home">Home</NavLink>
       </nav >
 
       <nav className="navbar">

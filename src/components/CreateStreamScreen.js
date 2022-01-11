@@ -1120,7 +1120,7 @@ class CreateStreamScreen extends Component {
                     />
                     <div>
                         <Link to={{
-                            pathname: "/",
+                            pathname: "/Home",
                             state: { fromDashboard: "Stream Data :" + this.state.compressor + " " + this.state.riverthreads + " " + this.state.maxdeltaqueue }
                         }}>
                             <button className='createStreambutton1' type="button" name='WWalid' onClick={this.createStreamTest}>

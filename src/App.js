@@ -6,6 +6,7 @@ import Home from '../src/screens/Home'
 import About from '../src/screens/About'
 import CreateStream from '../src/screens/Createstream'
 import history from './components/alteComponents/history';
+import LoginScreen from './screens/LoginScreen';
 
 
 
@@ -17,7 +18,11 @@ class App extends Component {
           <Leftbar />
 
           <Switch>
+
             <Route exact path="/">
+              <LoginScreen />
+            </Route>
+            <Route exact path="/Home">
               <Home />
             </Route>
             <Route exact path="/About">
