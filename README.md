@@ -1,6 +1,16 @@
 # Admin Panel for ChronicalDB 
 an Admin Panel for A DB using React as a frontEnd-Framework
 
+## Aktuelle Screenshots 
+![Home Page](https://github.com/MinaTheDebugger/Admin-Panel-ChronicleDB/blob/main/HomePage.jpeg)
+![created Streams](https://github.com/MinaTheDebugger/Admin-Panel-ChronicleDB/blob/main/createdStreams.jpeg)
+
+
+
+
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
