@@ -230,6 +230,13 @@ class App extends Component {
             </this.ProtectAbout>
           </Switch>
 
+          <Switch>
+
+
+          </Switch>
+          <Route exact path="/register">
+            <Registerscreen />
+          </Route>
 
 
         </Router>
