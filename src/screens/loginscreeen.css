@@ -1,0 +1,35 @@
+.login1 {
+  position: relative;
+  left: 550px;
+  top: 180px;
+}
+.logintobemade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signinbutton {
+  position: relative;
+  left: 60px;
+  width: 40ch;
+  top: 20px;
+}
+
+.stillnotregisterd {
+  position: relative;
+  left: 150px;
+  top: 100px;
+}
+
+.email {
+  position: relative;
+  left: 8px;
+}
+
+.signUp {
+  position: relative;
+  width: 80px;
+  height: 50px;
+  left: 6px;
+}

@@ -25,7 +25,7 @@ async function signUp(email, password, name, phonenumber) {
     }
 }
 
-
+/*
 async function signIn(email, password) {
     try {
         const signInDetails = {
@@ -38,7 +38,7 @@ async function signIn(email, password) {
         console.error("error while Signing In is  ", err)
     }
 }
-
+*/
 
 async function showStreams() {
     //console.log("its working");
@@ -71,24 +71,49 @@ async function recover(id) {
     //  alert("stream recovered successfully");
 }
 
+/*
+insertOrderedEventArr = async (id, arr) => {
+    try {
+        let eventDetails = arr
+        const response = await axios.post(`http://localhost:8000/insert_ordered_array/${id}`, eventDetails);
 
+        const data = await response.data;
+        console.log("ddddddddddddddddddddddd ", data);
+        this.setState({
+            InsertOrderDialog: false,
+
+
+        })
+
+    } catch (e) {
+        //console.log(e)
+        console.error(e)
+        alert("Please the Data correctly")
+    }
+}
+*/
 async function show_QueryTime(id, exklusivOrInklusiv, start, end) {
 
 
 
     //console.log("its working");
-    const url = `http://192.168.137.89:8000/query_time_travel/${id}`
+    const url = `http://localhost:8000/query_time_travel/${id}`
     // exklusivOrInklusiv is boolean , falls es true ist dann ist es inklusiv // 
     // if exklusivOrInklusiv false ist , ist es exklusiv
     function getInklusivOrExklusiv(exklusivOrInklusiv) {
-        return (exklusivOrInklusiv ? `"Inclusive"` : `"Exclusive"`);
+        return (exklusivOrInklusiv ? "Inclusive" : "Exclusive");
     }
-    const jsonBody = `{ ${getInklusivOrExklusiv(exklusivOrInklusiv)} : {"start" : ${start} , "end": ${end}}}`
+    const jsonBody = `{${(exklusivOrInklusiv ? `"Inclusive"` : `"Exclusive"`)} : {"start" : ${start} , "end": ${end}}}`
     //toDo  change URL with the one from Localhost (From the Rust-Project)
     try {
         const response = await axios.post(url, jsonBody);
         const data = await response.data;
-        alert(data + "ist gut")
+
+        let firstKey = Object.keys(data[0].payload)[0];
+        alert(firstKey)
+        // alert(JSON.stringify(data[0]));
+        //  alert(JSON.stringify(data[0].payload.U16));
+        //alert("Time Stamp is " + JSON.stringify(data[0].t1) + " type is" + JSON.stringify(data[0].payload))
         console.log(data)
     } catch (err) {
         console.error(`Error is -->  ${err}`)
@@ -120,7 +145,7 @@ export default class Homepage extends Component {
             vartype: "",
             queryTimeStart: 0,
             queryTimeEnd: 0,
-            exclusiveorinclusive: true
+            exclusiveorinclusive: false,
         }
     }
 
@@ -172,9 +197,14 @@ export default class Homepage extends Component {
 
         const response = await axios(`http://localhost:8000/stream_info/${id}`);
         const data1 = await response.data;
+        //alert(data1)
+        //let data2 = await JSON.parse(data1)
+
+
         this.setState({
             systeminfoopendialog: true,
             index: id,
+            // systeminfo: JSON.stringify(data1).
             systeminfo: data1
         })
     }
@@ -567,6 +597,7 @@ export default class Homepage extends Component {
                                                                 </Select>
                                                             </FormControl>
 
+
                                                             <TextField
                                                                 onChange={this.changedataofevent}
                                                                 sx={{ m: 1, width: '80ch' }}
@@ -598,7 +629,7 @@ export default class Homepage extends Component {
 
 
                                                     <Dialog open={this.state.systeminfoopendialog} onClose={this.closeSysteminfoDialog} fullScreen maxWidth='md' fullWidth='md' >
-                                                        <DialogTitle>System Info:</DialogTitle>
+                                                        <DialogTitle>Stream Info:</DialogTitle>
                                                         <DialogContent>
                                                             <DialogContentText>
                                                                 <h3> {this.state.systeminfo} </h3>
@@ -708,7 +739,7 @@ export default class Homepage extends Component {
 
                                                         </DialogContent>
                                                         <DialogActions>
-                                                            <Button onClick={() => show_QueryTime(this.state.index, this.state.exclusiveorinclusive, this.state.queryTimeStart, this.state.queryTimeEnd)}> Show Query Time Travel</Button>
+                                                            <Button onClick={() => show_QueryTime(this.state.index, this.state.exclusiveoriEnclusive, this.state.queryTimeStart, this.state.queryTimeEnd)}> Show Query Time Travel</Button>
                                                             <Button onClick={this.closeQueryTimeTravelDialog}>Close</Button>
 
                                                         </DialogActions>
@@ -746,7 +777,7 @@ export default class Homepage extends Component {
 
                 </div>
                 {/* <button onClick={signUp("waliddd.net", "12333", "waliii", "011215458454")}>SignUp</button> */}
-                <button onClick={signIn("waliddd.net", "12333")}>SignIn</button>
+                {/* <button onClick={signIn("waliddd.net", "12333")}>SignIn</button>   */}
 
 
 

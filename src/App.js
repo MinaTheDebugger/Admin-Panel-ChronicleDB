@@ -1,39 +1,240 @@
 
 import React, { Component } from 'react';
 import Leftbar from './components/alteComponents/Leftbar';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import Home from '../src/screens/Home'
 import About from '../src/screens/About'
 import CreateStream from '../src/screens/Createstream'
 import history from './components/alteComponents/history';
 import LoginScreen from './screens/LoginScreen';
+import { Registerscreen } from './screens/Registerscreen';
+import axios from "axios";
+import AuthApi from './AuthApi';
+
+
+
+
+
+
+
+
 
 
 
 class App extends Component {
+
+
+  constructor(props) {
+    super(props)
+
+
+    this.state = {
+      loggedInStatus: "200",
+      userEmail: '',
+      auth: true
+    }
+  }
+
+
+  Routes = () => {
+
+
+
+    return (
+      <Switch>
+
+        <Route exact path="/">
+          <LoginScreen />
+        </Route>
+        <this.ProtectedRoute exact path="/register" >
+          <Registerscreen />
+        </this.ProtectedRoute>
+
+        <Route exact path="/Home">
+          <Home />
+        </Route>
+        <Route exact path="/About">
+          <About />
+        </Route>
+        <Route exact path="/CreateStream">
+          <CreateStream />
+        </Route>
+      </Switch>
+    )
+  }
+
+
+
+  ProtectedRoute = ({ component: Component, ...rest }) => {
+
+    const walid = false;
+    return (
+      <Route
+        {...rest}
+        render={() => walid ? (
+          <Home />
+        ) :
+          (<Redirect to={{ pathname: "/Home" }} />
+          )
+
+        }
+      />
+
+    )
+  }
+
+
+
+
+  checkLoginStatus() {
+    axios
+      .get("http://localhost:3001/logged_in", { withCredentials: true })
+      .then(response => {
+        if (
+          response.data.logged_in &&
+          this.state.loggedInStatus === "NOT_LOGGED_IN"
+        ) {
+          this.setState({
+            loggedInStatus: "LOGGED_IN",
+            user: response.data.user
+          });
+        } else if (
+          !response.data.logged_in &
+          (this.state.loggedInStatus === "LOGGED_IN")
+        ) {
+          this.setState({
+            loggedInStatus: "NOT_LOGGED_IN",
+            user: {}
+          });
+        }
+      })
+      .catch(error => {
+        console.log("check login error", error);
+      });
+  }
+
+
+  /*
+ 
+ 
+ 
+   ProtectHomescreen = () => {
+     const walid = true;
+     return (
+ 
+       < Switch >
+         <Route exact path="/">
+           <LoginScreen />
+         </Route>
+ 
+ 
+         <Route
+           render={() => walid ? (
+             <Home />
+           ) :
+             (<Redirect to={{ pathname: "/" }} />
+             )
+ 
+           } />
+       </Switch >
+     )
+   }
+     */
+
+
+  ProtectHomeScreen = () => {
+    const walid = false;
+    return (
+      < Switch >
+        <Route
+          render={() => walid ? (
+            <Home />
+          ) :
+            (<Redirect to={{ pathname: "/" }} />
+            )
+          } />
+      </Switch >
+    )
+  }
+
+  ProtectCreateStream = () => {
+    const walid = false;
+    return (
+      < Switch >
+        <Route
+          render={() => walid ? (
+            <CreateStream />
+          ) :
+            (<Redirect to={{ pathname: "/" }} />
+            )
+          } />
+      </Switch >
+
+    )
+  }
+
+
+  ProtectAbout = () => {
+    const walid = false;
+    return (
+      < Switch >
+        <Route
+          render={() => walid ? (
+            <About />
+          ) :
+            (<Redirect to={{ pathname: "/" }} />
+            )
+          } />
+      </Switch >
+
+    )
+  }
+
+
+
+
+
+
+
+
+
   render() {
     return (
-      <Router history={history}>
-        <div className="App">
-          <Leftbar />
 
+      <div className="App">
+
+        <Router history={history}>
           <Switch>
-
             <Route exact path="/">
               <LoginScreen />
             </Route>
-            <Route exact path="/Home">
-              <Home />
-            </Route>
-            <Route exact path="/About">
-              <About />
-            </Route>
-            <Route exact path="/CreateStream">
-              <CreateStream />
-            </Route>
           </Switch>
-        </div>
-      </Router>
+
+          <Switch>
+            <this.ProtectHomeScreen exact path="/Home">
+              <Home />
+            </this.ProtectHomeScreen>
+          </Switch>
+
+
+          <Switch>
+            <this.ProtectCreateStream exact path="/CreateStream">
+              <CreateStream />
+            </this.ProtectCreateStream>
+          </Switch>
+
+
+          <Switch>
+            <this.ProtectAbout exact path="/About">
+              <About />
+            </this.ProtectAbout>
+          </Switch>
+
+
+
+        </Router>
+      </div>
+
     )
   }
 }
@@ -77,6 +278,7 @@ async function performGetReq() {
       </button>
     </div>
   */
+
 
 
 
