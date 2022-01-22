@@ -11,117 +11,127 @@ import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useHistory } from "react-router-dom";
+import { useState } from 'react';
+
+
+
+/*
+function goToLoginScreen() {
+
+    history.push("/");
+
+
+
+}
+
+*/
+
+
+function Registerscreen() {
+
+
+    let history = useHistory();
 
 
 
 
 
 
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phonenumber, setPhonenumber] = useState("");
+    const [password1, setPassword1] = useState("");
+    const [password2, setPassword2] = useState("");
+    const [passwordconfirm, setPasswordconfirm] = useState("''");
+    const [showPassword1, setShowPassword1] = useState("");
+    const [showPassword2, setShowPassword2] = useState("");
 
 
-export class Registerscreen extends Component {
 
 
 
-    constructor(props) {
-        super(props)
+    function goToLoginScreen() {
+        Cookies.remove('User1')
+        history.push("/");
+
+        Cookies.set('refresh', false, { expires: 7 })
+
+    }
+
+    const setname = event => {
+
+        setName(event.target.value)
 
 
-        this.state = {
-            name: '',
-            email: '',
-            phonenumber: 123456789,
-            password1: '',
-            password2: '',
-            passwordconfirm: '',
-            showPassword1: false,
-            showPassword2: false,
-        }
     }
 
 
-    setname = event => {
-        this.setState({
-            name: event.target.value,
-
-        }
-        )
-    }
-
-
-    setemail = event => {
-        this.setState({
-            email: event.target.value,
-
-        }
-        )
-    }
-
-
-
-    setphonenumber = event => {
-        this.setState({
-            phonenumber: event.target.value,
-
-        }
-        )
-    }
-
-    setpassword1 = event => {
-        this.setState({
-            password1: event.target.value,
-
-        }
-        )
-    }
-
-
-    setpassword2 = event => {
-        this.setState({
-            password2: event.target.value,
-
-        }
-        )
+    const setemail = event => {
+        setEmail(event.target.value)
     }
 
 
 
-    handleClickShowPassword1 = () => {
-        this.setState({
-            showPassword1: !this.state.showPassword1,
-        })
+    const setphonenumber = event => {
+        setPhonenumber(event.target.value)
+    }
+
+    const setpassword1 = event => {
+        setPassword1(event.target.value)
     }
 
 
-    handleMouseDownPassword1 = (event) => {
+    const setpassword2 = event => {
+        setPassword2(event.target.value)
+    }
+
+
+
+    const handleClickShowPassword1 = () => {
+        setShowPassword1(!showPassword1)
+    }
+
+
+    const handleMouseDownPassword1 = (event) => {
         event.preventDefault();
     };
 
-    handleClickShowPassword2 = () => {
-        this.setState({
-            showPassword2: !this.state.showPassword2,
-        })
+    const handleClickShowPassword2 = () => {
+        setShowPassword2(!showPassword2)
     }
 
 
-    handleMouseDownPassword2 = (event) => {
+    const handleMouseDownPassword2 = (event) => {
         event.preventDefault();
     };
 
 
 
-    signUp = async (email, password, name, phonenumber) => {
-        try {
-            const signUpDetails = {
-                name: name,
-                email: email,
-                phonenumber: phonenumber,
-                password: password
-            };
-            const response = await axios.post('http://localhost:5000/user/register', signUpDetails)
-            console.log(response.data)
-        } catch (err) {
-            console.error(err + "sssssssssssssssssssssssss" + email)
+    const signUp = async (email, password, name, phonenumber) => {
+
+        if (email === "" || password === "") {
+            return;
+        }
+        else {
+
+            try {
+                const signUpDetails = {
+                    name: name,
+                    email: email,
+                    phonenumber: phonenumber,
+                    password: password
+                };
+                const response = await axios.post('http://localhost:5000/user/register', signUpDetails)
+                console.log(response.data)
+                goToLoginScreen()
+
+
+            } catch (err) {
+                console.error(err + "sssssssssssssssssssssssss" + email)
+            }
+
         }
     }
 
@@ -132,185 +142,183 @@ export class Registerscreen extends Component {
 
 
 
-    render() {
-        return (
-            <div className='register'>
+
+    return (
+        <div className='register'>
 
 
 
-                <h2>Register:
-                    Please fill the detials
-                </h2>
+            <h2>Register:
+                Please fill the detials
+            </h2>
 
 
 
-                <div>
-
-
-                    <div className='textdiv'>
-                        {/* className='text'   */}
-                        <text className='text'  > <big>Name:</big></text>
-
-                    </div>
-                    <div className='textfielddiv'>
-                        <TextField
-                            className='textfield'
-                            onChange={this.setname}
-
-
-                            label="Name"
-
-
-                            defaultValue=""
-                            fullWidth
-
-                            sx={{ m: 1, width: '51ch' }}
-
-                        />
-
-                    </div>
-                </div>
-
-                <div className='bigdiv'>
-                    <div className='textdiv'>
-                        <text className='text'  > <big>Email:*</big></text>
-                    </div>
-                    <div className='textfielddiv'>
-                        <TextField
-                            className='textfield'
-                            onChange={this.setemail}
-
-
-                            label="Email"
-                            type="email"
-                            required
-                            id="outlined-required"
-
-                            defaultValue=""
-                            fullWidth
-
-                            sx={{ m: 1, width: '51ch' }}
-
-                        />
-                    </div>
-                </div>
-
-                <div className='bigdiv'>
-                    <div className='textdiv'>
-                        <text className='text' > <big>Telefon:</big></text>
-                    </div>
-
-                    <div className='textfielddiv'>
-                        <TextField
-                            className='textfield'
-                            onChange={this.setphonenumber}
-
-
-                            label="Phone Number"
-
-
-                            defaultValue=""
-                            fullWidth
-
-                            sx={{ m: 1, width: '51ch' }}
-
-                        />
-
-                    </div>
-                </div>
-
-
-                <div className='bigdiv'>
-
-                    <div className='textdiv'>
-                        <text className='text' > <big>Password:*</big></text>
-                    </div>
-
-
-                    <div className='textfielddiv'>
-                        <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                            <OutlinedInput
-
-                                id="outlined-adornment-password"
-                                type={this.state.showPassword1 ? 'text' : 'password'}
-                                value={this.state.password1}
-                                onChange={this.setpassword1}
-                                sx={{ m: 1, width: '50ch' }}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={this.handleClickShowPassword1}
-                                            onMouseDown={this.handleMouseDownPassword1}
-                                            edge="end"
-                                        >
-                                            {this.state.showPassword1 ? <VisibilityOff /> : < Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label="Password"
-                            />
-                        </FormControl>
-
-                    </div>
-
-                </div>
-
-
+            <div>
 
 
                 <div className='textdiv'>
-                    <text className='confirmtext' > <big>Confirm:*</big></text>
+                    {/* className='text'   */}
+                    <text className='text'  > <big>Name:</big></text>
+
                 </div>
+                <div className='textfielddiv'>
+                    <TextField
+                        className='textfield'
+                        onChange={setname}
 
 
-                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password" className='textfeild5'>Password</InputLabel>
-                    <OutlinedInput
+                        label="Name"
 
-                        id="outlined-adornment-password"
-                        type={this.state.showPassword2 ? 'text' : 'password'}
-                        value={this.state.password2}
-                        onChange={this.setpassword2}
-                        sx={{ m: 1, width: '50ch' }}
-                        endAdornment={
-                            <InputAdornment position="end">
-                                <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={this.handleClickShowPassword2}
-                                    onMouseDown={this.handleMouseDownPassword2}
-                                    edge="end"
-                                >
-                                    {this.state.showPassword2 ? <VisibilityOff /> : < Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                        label="Password"
+
+                        defaultValue=""
+                        fullWidth
+
+                        sx={{ m: 1, width: '51ch' }}
+
                     />
-                </FormControl>
+
+                </div>
+            </div>
+
+            <div className='bigdiv'>
+                <div className='textdiv'>
+                    <text className='text'  > <big>Email:*</big></text>
+                </div>
+                <div className='textfielddiv'>
+                    <TextField
+                        className='textfield'
+                        onChange={setemail}
 
 
+                        label="Email"
+                        type="email"
+                        required
+                        id="outlined-required"
+
+                        defaultValue=""
+                        fullWidth
+
+                        sx={{ m: 1, width: '51ch' }}
+
+                    />
+                </div>
+            </div>
+
+            <div className='bigdiv'>
+                <div className='textdiv'>
+                    <text className='text' > <big>Telefon:</big></text>
+                </div>
+
+                <div className='textfielddiv'>
+                    <TextField
+                        className='textfield'
+                        onChange={setphonenumber}
 
 
+                        label="Phone Number"
 
 
-                <div className='registerButtondiv'>
+                        defaultValue=""
+                        fullWidth
 
-                    {/*  <Link to={{
-                        pathname: "/"
-                    }}>
-                */}
-                    <Button variant="contained" size="small" type="submit" className='registerbutton' onClick={() => this.signUp(this.state.email, this.state.password1, this.state.name, this.state.phonenumber)} >
-                        Register
-                    </Button>
-                    {/*    </Link>        */}
+                        sx={{ m: 1, width: '51ch' }}
+
+                    />
+
+                </div>
+            </div>
+
+
+            <div className='bigdiv'>
+
+                <div className='textdiv'>
+                    <text className='text' > <big>Password:*</big></text>
+                </div>
+
+
+                <div className='textfielddiv'>
+                    <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                        <OutlinedInput
+
+                            id="outlined-adornment-password"
+                            type={showPassword1 ? 'text' : 'password'}
+                            value={password1}
+                            onChange={setpassword1}
+                            sx={{ m: 1, width: '50ch' }}
+                            endAdornment={
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword1}
+                                        onMouseDown={handleMouseDownPassword1}
+                                        edge="end"
+                                    >
+                                        {showPassword1 ? <VisibilityOff /> : < Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                            label="Password"
+                        />
+                    </FormControl>
 
                 </div>
 
-            </div >
-        )
-    }
+            </div>
+
+
+
+
+            <div className='textdiv'>
+                <text className='confirmtext' > <big>Confirm:*</big></text>
+            </div>
+
+
+            <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password" className='textfeild5'>Password</InputLabel>
+                <OutlinedInput
+
+                    id="outlined-adornment-password"
+                    type={showPassword2 ? 'text' : 'password'}
+                    value={password2}
+                    onChange={setpassword2}
+                    sx={{ m: 1, width: '50ch' }}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword2}
+                                onMouseDown={handleMouseDownPassword2}
+                                edge="end"
+                            >
+                                {showPassword2 ? <VisibilityOff /> : < Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    }
+                    label="Password"
+                />
+            </FormControl>
+
+
+
+
+
+
+            <div className='registerButtondiv'>
+
+
+
+                <Button variant="contained" size="small" type="submit" className='registerbutton' onClick={() => signUp(email, password1, name, phonenumber)} >
+                    Register
+                </Button>
+
+
+            </div>
+
+        </div >
+    )
+
 }
 
-
+export default Registerscreen;

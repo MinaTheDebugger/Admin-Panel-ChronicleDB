@@ -7,9 +7,13 @@ import About from '../src/screens/About'
 import CreateStream from '../src/screens/Createstream'
 import history from './components/alteComponents/history';
 import LoginScreen from './screens/LoginScreen';
-import { Registerscreen } from './screens/Registerscreen';
+import Registerscreen from './screens/Registerscreen';
 import axios from "axios";
 import AuthApi from './AuthApi';
+import Cookies from 'js-cookie';
+
+import { useHistory } from "react-router-dom";
+
 
 
 
@@ -31,9 +35,114 @@ class App extends Component {
     this.state = {
       loggedInStatus: "200",
       userEmail: '',
-      auth: true
+      auth: Cookies.get('User1'),
+      push: true
     }
   }
+
+  /*
+    componentWillUnmount() {
+      const currentPathName = window.location.href;
+      this.gotoHome()
+      if (Cookies.get('User1') && currentPathName == 'http://localhost:3000/') {
+  
+  
+        history.push("/Home");
+        //   window.location.reload();
+      }
+    }
+  
+  */
+  /*
+    componentDidMount() {
+      const currentPathName = window.location.href;
+  
+      setInterval(() => {
+        this.gotoHome()
+  
+        if (Cookies.get('User1') && currentPathName == 'http://localhost:3000/') {
+  
+  
+          history.push("/Home");
+          //  window.location.reload();
+        }
+      })
+  
+    }
+  
+  */
+
+
+  componentDidMount() {
+    const currentPathName = window.location.href;
+    const refresh = Cookies.get('refresh')
+
+
+    setInterval(() => {
+      this.gotoHome()
+
+      //  alert(currentPathName)
+
+
+      if (Cookies.get('User1') && currentPathName == 'http://localhost:3000/') {
+
+
+        history.push("/Home");
+        window.location.reload();
+        //    alert(this.state.push)
+        this.setState({
+          push: false
+        })
+
+
+        Cookies.set('refresh', false, { expires: 7 })
+        //    alert(this.state.push)
+
+      }
+    })
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  /*
+    componentDidMount() {
+   
+      setInterval(() => {
+        this.setState({
+          auth: Cookies.get('User1')
+        })
+   
+      }
+    }
+   
+  */
+
+
+
+
+
+  /*
+    ff() {
+      setInterval(() => {
+        this.setState({
+          auth: Cookies.get('User1')
+        })
+      }, 1000);
+    }
+   
+  */
+
+
 
 
   Routes = () => {
@@ -41,6 +150,8 @@ class App extends Component {
 
 
     return (
+
+
       <Switch>
 
         <Route exact path="/">
@@ -115,26 +226,26 @@ class App extends Component {
 
 
   /*
- 
- 
- 
+   
+   
+   
    ProtectHomescreen = () => {
      const walid = true;
      return (
- 
+   
        < Switch >
          <Route exact path="/">
            <LoginScreen />
          </Route>
- 
- 
+   
+   
          <Route
            render={() => walid ? (
              <Home />
            ) :
              (<Redirect to={{ pathname: "/" }} />
              )
- 
+   
            } />
        </Switch >
      )
@@ -143,11 +254,13 @@ class App extends Component {
 
 
   ProtectHomeScreen = () => {
-    const walid = false;
+
     return (
+
+
       < Switch >
         <Route
-          render={() => walid ? (
+          render={() => this.state.auth ? (
             <Home />
           ) :
             (<Redirect to={{ pathname: "/" }} />
@@ -158,11 +271,11 @@ class App extends Component {
   }
 
   ProtectCreateStream = () => {
-    const walid = false;
+
     return (
       < Switch >
         <Route
-          render={() => walid ? (
+          render={() => this.state.auth ? (
             <CreateStream />
           ) :
             (<Redirect to={{ pathname: "/" }} />
@@ -175,11 +288,11 @@ class App extends Component {
 
 
   ProtectAbout = () => {
-    const walid = false;
+
     return (
       < Switch >
         <Route
-          render={() => walid ? (
+          render={() => this.state.auth ? (
             <About />
           ) :
             (<Redirect to={{ pathname: "/" }} />
@@ -194,7 +307,16 @@ class App extends Component {
 
 
 
+  gotoHome = () => {
+    const currentPathName = window.location.href;
+    this.setState({
+      auth: Cookies.get('User1')
+    }
 
+    )
+
+
+  }
 
 
 
@@ -203,7 +325,17 @@ class App extends Component {
 
       <div className="App">
 
+        {//this.ff
+        }
+        {
+          //  alert("ssssssssssss")
+        }
+
         <Router history={history}>
+
+
+
+
           <Switch>
             <Route exact path="/">
               <LoginScreen />

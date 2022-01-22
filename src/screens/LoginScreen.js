@@ -18,6 +18,10 @@ import { ImageBackground } from 'react-native';
 
 import pic1 from '../assets/pic1.jpg'
 
+import { useCookies } from 'react-cookie';
+import { useState } from 'react';
+import Cookies from 'js-cookie';
+import { useHistory } from "react-router-dom";
 
 
 
@@ -25,61 +29,62 @@ import pic1 from '../assets/pic1.jpg'
 
 
 
-export default class Loginscreeen extends Component {
+function Loginscreeen() {
 
 
 
-    constructor(props) {
-        super(props)
 
 
-        this.state = {
-            email: '',
-            password: '',
-            showPassword: false,
-            walid: false,
-        }
+
+    let history = useHistory();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [walid, setWalid] = useState(false);
+    // const [cookies, setCookie, removeCookie] = useCookies(['user']);
+
+
+
+
+    const setemail = event => {
+        setEmail(event.target.value)
+    }
+
+
+    const setpassword = event => {
+
+        setPassword(event.target.value)
+
     }
 
 
 
-    setemail = event => {
-        this.setState({
-            email: event.target.value,
 
-        }
-        )
+    const handleClickShowPassword = () => {
+
+        setShowPassword(!showPassword)
+
+
+
+
     }
 
 
-    setpassword = event => {
-        this.setState({
-            password: event.target.value,
-
-        }
-        )
-    }
-
-
-    handleClickShowPassword = () => {
-        this.setState({
-            showPassword: !this.state.showPassword,
-        })
-    }
-
-
-    handleMouseDownPassword = (event) => {
+    const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
 
 
 
 
-    SignIn = async (email, password) => {
+    const SignIn = async (email, password) => {
+
+
+
 
         if (email === "" || password === "") {
 
-
+            return
         } else {
 
 
@@ -90,7 +95,19 @@ export default class Loginscreeen extends Component {
                 };
                 const response = await axios.post('http://localhost:5000/user/login', signInDetails)
                 console.log("the data is of walidddddd ", response.data)
-                alert(response.data.logged_in)
+                //      alert(response.data.message)
+
+                Cookies.set('User1', true, { expires: 7 })
+                Cookies.set('refresh', true, { expires: 7 })
+
+                history.push("/Home");
+                await window.location.reload();
+
+
+
+                //    setCookie('user', response.data.message)
+                //    alert(cookies + "Cookies")
+
             } catch (err) {
                 console.error("error while Signing In is  ", err)
             }
@@ -100,112 +117,116 @@ export default class Loginscreeen extends Component {
 
 
 
+    const printEmail = () => {
+        console.log(email + "EMAILLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+        console.log(password + "PAssworddddddddddddddddddddddddddddddd");
+    }
 
 
 
-    render() {
-        return (
+    return (
 
-            <div className="login1"
+        <div className="login1"
 
-            //      styles={{ backgroundImage: `url(${pic1})` }}
+        //      styles={{ backgroundImage: `url(${pic1})` }}
 
 
-            >
-
+        >
 
 
 
 
 
-                <div className='email'>
-                    <TextField
 
-                        onChange={this.setemail}
+            <div className='email'>
+                <TextField
+
+                    onChange={setemail}
 
 
-                        label="Email"
-                        type="email"
+                    label="Email"
+                    type="email"
 
-                        defaultValue=""
-                        fullWidth
+                    defaultValue=""
+                    fullWidth
 
-                        sx={{ m: 1, width: '51ch' }}
+                    sx={{ m: 1, width: '51ch' }}
 
+                />
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+            <div>
+
+
+
+
+
+                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                    <OutlinedInput
+                        id="outlined-adornment-password"
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={setpassword}
+                        sx={{ m: 1, width: '50ch' }}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {showPassword ? <VisibilityOff /> : < Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        label="Password"
                     />
+                </FormControl>
 
-
-
-
-
-
-
-
-
-                </div>
-
-
-                <div>
-
-
-
-
-
-                    <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={this.state.showPassword ? 'text' : 'password'}
-                            value={this.state.password}
-                            onChange={this.setpassword}
-                            sx={{ m: 1, width: '50ch' }}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={this.handleClickShowPassword}
-                                        onMouseDown={this.handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {this.state.showPassword ? <VisibilityOff /> : < Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Password"
-                        />
-                    </FormControl>
-
-                </div>
-                <div>
-                    {/*
+            </div>
+            <div>
+                {/*
                     <Link to={{
                         pathname: "/Home"
                     }}>       */}
 
-                    <Button variant="contained" size="large" type="submit" className='signinbutton' onClick={() => this.SignIn(this.state.email, this.state.password)} >
-                        Sign IN
+                <Button variant="contained" size="large" type="submit" className='signinbutton' onClick={() => SignIn(email, password)} >
+                    Sign IN
+                </Button>
+                {/*          </Link> */}
+            </div>
+
+            <div className='stillnotregisterd'>
+                <label for="one" >Still not registered?</label>
+
+
+
+                <Link to={{
+                    pathname: "/register"
+                }}>
+                    <Button variant="contained" size="small" type="submit" className='signUp' onClick={() => printEmail} >
+                        Register
                     </Button>
-                    {/*          </Link> */}
-                </div>
+                </Link>
 
-                <div className='stillnotregisterd'>
-                    <label for="one" >Still not registered?</label>
+            </div>
 
+        </div >
+    )
 
-
-                    <Link to={{
-                        pathname: "/register"
-                    }}>
-                        <Button variant="contained" size="small" type="submit" className='signUp'   >
-                            Register
-                        </Button>
-                    </Link>
-
-                </div>
-
-            </div >
-        )
-    }
 }
 
 
+export default Loginscreeen

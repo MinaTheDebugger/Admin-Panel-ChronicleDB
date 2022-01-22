@@ -3,18 +3,12 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import history from './alteComponents/history';
-
-import '../components/alteComponents/debug.css'
-import '../components/alteComponents/io.css'
-import '../components/alteComponents/compressor.css'
 import { useHistory } from 'react-router-dom';
-import '../components/alteComponents/streamlayoutevent.css'
-import '../components/alteComponents/lightweightindex.css'
-import '../components/alteComponents/cache.css'
-import './createStreamScreen.css'
 import Switch from '@mui/material/Switch';
-
 import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, Input } from '@mui/material';
+import '../components/alteComponents/debug.css'
+
+import '../components/createStreamScreen.css'
 
 
 const switchlabel = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -932,7 +926,7 @@ class CreateStreamScreen extends Component {
                 </div>
                 {/*//////////////////////////////////////// < LightweightIndex     >/////////////////////////////////////////////////////////////////////*/}
                 {/*//////////////////////////////////////// < BLock    >/////////////////////////////////////////////////////////////////////////////////*/}
-                <div className='Block'>
+                <div>
                     <h1>Block</h1>
                     <form>
                         <div className='Macroblocksizediv'>

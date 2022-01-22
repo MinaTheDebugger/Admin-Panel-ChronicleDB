@@ -92,36 +92,6 @@ insertOrderedEventArr = async (id, arr) => {
     }
 }
 */
-async function show_QueryTime(id, exklusivOrInklusiv, start, end) {
-
-
-
-    //console.log("its working");
-    const url = `http://localhost:8000/query_time_travel/${id}`
-    // exklusivOrInklusiv is boolean , falls es true ist dann ist es inklusiv // 
-    // if exklusivOrInklusiv false ist , ist es exklusiv
-    function getInklusivOrExklusiv(exklusivOrInklusiv) {
-        return (exklusivOrInklusiv ? "Inclusive" : "Exclusive");
-    }
-    const jsonBody = `{${(exklusivOrInklusiv ? `"Inclusive"` : `"Exclusive"`)} : {"start" : ${start} , "end": ${end}}}`
-    //toDo  change URL with the one from Localhost (From the Rust-Project)
-    try {
-        const response = await axios.post(url, jsonBody);
-        const data = await response.data;
-
-        let firstKey = Object.keys(data[0].payload)[0];
-        alert(firstKey)
-        // alert(JSON.stringify(data[0]));
-        //  alert(JSON.stringify(data[0].payload.U16));
-        //alert("Time Stamp is " + JSON.stringify(data[0].t1) + " type is" + JSON.stringify(data[0].payload))
-        console.log(data)
-    } catch (err) {
-        console.error(`Error is -->  ${err}`)
-        alert(jsonBody + " ist nicht gut")
-
-
-    }
-}
 
 export default class Homepage extends Component {
 
@@ -146,6 +116,7 @@ export default class Homepage extends Component {
             queryTimeStart: 0,
             queryTimeEnd: 0,
             exclusiveorinclusive: false,
+            querytimeResult: ''
         }
     }
 
@@ -408,6 +379,46 @@ export default class Homepage extends Component {
 
     }
 
+
+    show_QueryTime = async (id, exklusivOrInklusiv, start, end) => {
+
+
+
+        //console.log("its working");
+        const url = `http://localhost:8000/query_time_travel/${id}`
+        // exklusivOrInklusiv is boolean , falls es true ist dann ist es inklusiv // 
+        // if exklusivOrInklusiv false ist , ist es exklusiv
+        function getInklusivOrExklusiv(exklusivOrInklusiv) {
+            return (exklusivOrInklusiv ? "Inclusive" : "Exclusive");
+        }
+        const jsonBody = `{${(exklusivOrInklusiv ? `"Inclusive"` : `"Exclusive"`)} : {"start" : ${start} , "end": ${end}}}`
+        //toDo  change URL with the one from Localhost (From the Rust-Project)
+        try {
+            const response = await axios.post(url, jsonBody);
+            const data = await response.data;
+
+            let firstKey = Object.keys(data[0].payload)[0];
+            //   alert(firstKey)
+            //alert(response.data);
+            //  alert(JSON.stringify(data));
+
+            this.setState({
+                querytimeResult: JSON.stringify(data)
+            })
+
+            //  alert(JSON.stringify(data[0].payload.U16));
+            //alert("Time Stamp is " + JSON.stringify(data[0].t1) + " type is" + JSON.stringify(data[0].payload))
+            console.log(data)
+        } catch (err) {
+            console.error(`Error is -->  ${err}`)
+            alert(jsonBody + " ist nicht gut")
+
+
+        }
+    }
+
+
+
     render() {
 
         const Listofallstream = this.state.id
@@ -440,6 +451,10 @@ export default class Homepage extends Component {
 
                         <th>Status</th>
 
+                        <th>Min Key</th>
+
+                        <th>Max Key</th>
+
 
 
                     </table>
@@ -461,6 +476,8 @@ export default class Homepage extends Component {
                                             <li key={items.id}>
                                                 <div className='iddiv'>{items[0]}</div>
                                                 <div className='statusdiv' >{items[1]}</div>
+                                                <div className='minkeydiv'>3</div>
+                                                <div className='maxkeydiv'>3</div>
                                                 <div className='buttonsdiv' >
                                                     <button className='close' onClick={() => shutDown(index)} > Shutdown</button>
                                                     <button className='close1' onClick={() => recover(index)} > recover</button>
@@ -716,7 +733,7 @@ export default class Homepage extends Component {
 
 
                                                             <TextField
-                                                                id="filled-multiline-flexible"
+                                                                id="outlined-read-only-input"
                                                                 label="Array[Event]"
                                                                 multiline
                                                                 maxRows={6}
@@ -725,6 +742,7 @@ export default class Homepage extends Component {
 
                                                                 variant="filled"
                                                                 helperText="The result will be shown here"
+                                                                value={this.state.querytimeResult}
                                                             />
 
 
@@ -739,7 +757,7 @@ export default class Homepage extends Component {
 
                                                         </DialogContent>
                                                         <DialogActions>
-                                                            <Button onClick={() => show_QueryTime(this.state.index, this.state.exclusiveoriEnclusive, this.state.queryTimeStart, this.state.queryTimeEnd)}> Show Query Time Travel</Button>
+                                                            <Button onClick={() => this.show_QueryTime(this.state.index, this.state.exclusiveoriEnclusive, this.state.queryTimeStart, this.state.queryTimeEnd)}> Show Query Time Travel</Button>
                                                             <Button onClick={this.closeQueryTimeTravelDialog}>Close</Button>
 
                                                         </DialogActions>
@@ -789,7 +807,6 @@ export default class Homepage extends Component {
 
 
 }
-
 
 
 

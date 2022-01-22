@@ -2,7 +2,7 @@
 
 .Streamclass {
   position: relative;
-  left: 180px;
+
   top: 0px;
   height: 100;
   width: 100;
@@ -157,8 +157,8 @@ ul li:nth-child(odd) {
 
 .iddiv {
   /* background-color: #f44336;*/
-  position: absolute;
-  width: 10%;
+  position: relative;
+  width: 7%;
   float: left;
 }
 
@@ -166,17 +166,30 @@ ul li:nth-child(odd) {
   position: relative;
   width: 60%;
   float: left;
+  right: 4cm;
 }
 
 .statusdiv {
-  position: absolute;
+  position: relative;
 
-  left: 6.4cm;
-  width: 10%;
+  width: 5%;
   float: left;
-
-  /* background-color: #5ba6bd;*/
 }
+
+.minkeydiv {
+  position: relative;
+  width: 5%;
+  left: 3cm;
+  float: left;
+}
+
+.maxkeydiv {
+  position: relative;
+  width: 5%;
+  left: 6.5cm;
+  float: left;
+}
+
 .dropbtn {
   position: relative;
   background-color: rgba(0, 0, 39, 0.938);

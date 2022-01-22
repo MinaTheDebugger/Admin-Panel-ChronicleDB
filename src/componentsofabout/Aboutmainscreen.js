@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../components/alteComponents/block.css'
+
 
 export default class Aboutmainscreen extends Component {
     render() {
@@ -15,7 +15,7 @@ export default class Aboutmainscreen extends Component {
         const info10 = "Serial#: 0"
         const info11 = "CPU Cores/Threads: 4/8"
         return (
-            <div className='Block'>
+            <div >
                 <h1 >{info1}</h1>
                 <h1 >{info2}</h1>
                 <h1 >{info3}</h1>
