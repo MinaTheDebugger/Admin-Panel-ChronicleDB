@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, Input } from '@mui/material';
+import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, Input, extractEventHandlers } from '@mui/material';
 import { Button } from 'react-bootstrap';
 
 async function signUp(email, password, name, phonenumber) {
@@ -71,6 +71,56 @@ async function recover(id) {
     //  alert("stream recovered successfully");
 }
 
+
+
+
+
+
+
+
+
+async function getMinkey4(id) {
+
+    try {
+        const url = await `http://localhost:8000/min_key/${id}`
+        const response = await axios(url);
+        const data = await response.data;
+        //  alert(data)
+        return await (data)
+    } catch (err) {
+        console.error(`Error is -->  ${err}`)
+        const string2 = "NO"
+        return string2
+
+    }
+}
+
+
+
+
+
+
+
+async function getMaxKey(id) {
+
+    try {
+        const url = `http://localhost:8000/max_key/${id}`
+        const response = await axios(url);
+        const data = await response.data;
+        return (data)
+    } catch (err) {
+        console.error(`Error is -->  ${err}`)
+        const string2 = "NO"
+        return string2
+
+    }
+}
+
+
+
+
+
+
 /*
 insertOrderedEventArr = async (id, arr) => {
     try {
@@ -116,17 +166,27 @@ export default class Homepage extends Component {
             queryTimeStart: 0,
             queryTimeEnd: 0,
             exclusiveorinclusive: false,
-            querytimeResult: ''
+            querytimeResult: '',
+            arrayofarrayss: []
+
         }
     }
 
 
 
 
-    fetchData = () => {
-        fetch('http://localhost:8000/show_streams')
-            .then(response => response.json())
-            .then(data => this.setState({ id: data }));
+
+
+    fetchData = async () => {
+        const fetch1 = await fetch('http://localhost:8000/show_streams')
+        const response1 = await fetch1.json()
+
+
+
+
+
+
+        this.setState({ id: response1 });
     }
 
     updatestreamcreated = () => {
@@ -140,12 +200,107 @@ export default class Homepage extends Component {
     }
 
 
-    componentDidMount() {
+
+    async componentDidMount() {
         setInterval(() => {
             this.fetchData()
             this.updatestreamcreated()
+            this.getStreamIDsFromList(this.state.id)
+            //   this.getArrayofKeyfromID(this.state.arrayofIDs)
         }, 1000);
     }
+
+
+
+    /*
+           getStreamIDsFromList = async (list) => {
+               let arrayofarrays = [];
+               let arrayofKeys = [];
+               list.forEach(element => arrayofarrays.push(element[0]))
+       
+       
+       
+               this.setState({
+                   arrayofIDs: arrayofarrays
+               }, () => {
+                   // alert(this.state.arrayofIDs)
+                   // console.log(typeof (this.state.arrayofIDs) + "ssssssssssssssssssssssssssssssss")
+               }
+               )
+           }
+       
+       */
+
+    getStreamIDsFromList = async (list) => {
+
+
+
+
+
+        if (list.length >= 1) {
+
+            list.forEach(async (e) => {
+                let index = e[0];
+                let maxkey = await getMaxKey(index)
+
+                let minkey = await getMinkey4(index);
+                e.push(minkey)
+                e.push(maxkey)
+                this.state.arrayofarrayss = list
+
+            }
+            )
+        }
+
+
+
+
+
+        //   alert(arrayofarrays)
+
+        /*
+                this.setState({
+                    arrayofarrayss: list
+                }, () => {
+                    // alert(this.state.arrayofIDs)
+                    // console.log(typeof (this.state.arrayofIDs) + "ssssssssssssssssssssssssssssssss")
+                }
+                )
+        */
+
+    }
+
+
+
+
+
+
+
+
+
+    getArrayofKeyfromID = async (list2) => {
+        let arrayofarrayss = [];
+
+
+        //   getMinkey4(0)
+
+        list2.forEach(element => list2.push([getMinkey4(0), getMinkey4(0)])
+        )
+
+        this.setState({
+            arrayofKeys: arrayofarrayss
+        }, () => {
+            //  alert(this.state.arrayofKey)
+
+        }
+        )
+    }
+
+
+
+
+
+
 
     OpenIsertOrderDialog = (id) => {
         this.setState({
@@ -419,9 +574,31 @@ export default class Homepage extends Component {
 
 
 
+
+    getMinkey = async (id) => {
+
+        try {
+            const url = `http://localhost:8000/min_key/${id}`
+            const response = await axios(url);
+            const data = await response.data;
+            //   alert(data)
+            return (data)
+        } catch (err) {
+            console.error(`Error is -->  ${err}`)
+
+        }
+    }
+
+
+
+
+
+
+
+
     render() {
 
-        const Listofallstream = this.state.id
+        const Listofallstream = this.state.arrayofarrayss
         console.log(Listofallstream)
         const sindlistofallstreamsleer = this.state.istherestreamcreated;
 
@@ -476,8 +653,8 @@ export default class Homepage extends Component {
                                             <li key={items.id}>
                                                 <div className='iddiv'>{items[0]}</div>
                                                 <div className='statusdiv' >{items[1]}</div>
-                                                <div className='minkeydiv'>3</div>
-                                                <div className='maxkeydiv'>3</div>
+                                                <div className='minkeydiv'>{items[2]}</div>
+                                                <div className='maxkeydiv'>{items[3]}</div>
                                                 <div className='buttonsdiv' >
                                                     <button className='close' onClick={() => shutDown(index)} > Shutdown</button>
                                                     <button className='close1' onClick={() => recover(index)} > recover</button>
@@ -807,6 +984,5 @@ export default class Homepage extends Component {
 
 
 }
-
 
 
