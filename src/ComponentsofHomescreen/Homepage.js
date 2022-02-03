@@ -86,7 +86,11 @@ async function getMinkey4(id) {
         const response = await axios(url);
         const data = await response.data;
         //  alert(data)
-        return await (data)
+        if (data == "Empty Index") {
+            return "NO"
+        } else {
+            return await (data)
+        }
     } catch (err) {
         console.error(`Error is -->  ${err}`)
         const string2 = "NO"
@@ -107,7 +111,14 @@ async function getMaxKey(id) {
         const url = `http://localhost:8000/max_key/${id}`
         const response = await axios(url);
         const data = await response.data;
-        return (data)
+        if (data == "Empty Index") {
+            return "NO"
+        } else {
+            return await (data)
+        }
+
+
+
     } catch (err) {
         console.error(`Error is -->  ${err}`)
         const string2 = "NO"
