@@ -41,12 +41,16 @@ function Registerscreen() {
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [phonenumber, setPhonenumber] = useState("");
+
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
     const [passwordconfirm, setPasswordconfirm] = useState("''");
     const [showPassword1, setShowPassword1] = useState("");
     const [showPassword2, setShowPassword2] = useState("");
+    const [errorName, setErrorName] = useState(false)
+    const [errorEmail, setErrorEmail] = useState(false)
+    const [errorPassword1, setErrorPassword1] = useState(false)
+    const [errorPassword2, setErrorPassword2] = useState(false)
 
 
 
@@ -74,9 +78,7 @@ function Registerscreen() {
 
 
 
-    const setphonenumber = event => {
-        setPhonenumber(event.target.value)
-    }
+
 
     const setpassword1 = event => {
         setPassword1(event.target.value)
@@ -109,7 +111,33 @@ function Registerscreen() {
 
 
 
-    const signUp = async (email, password, name, phonenumber) => {
+    const signUp = async (email, password, name) => {
+
+
+        if (name === "") {
+            setErrorName(true)
+
+        }
+
+        if (email === "") {
+            setErrorEmail(true)
+
+        }
+
+        if (password1 === "") {
+            setErrorPassword1(true)
+
+        }
+
+
+        if (password2 === "") {
+            setErrorPassword2(true)
+
+        }
+
+
+
+
 
         if (email === "" || password === "") {
             return;
@@ -120,7 +148,7 @@ function Registerscreen() {
                 const signUpDetails = {
                     name: name,
                     email: email,
-                    phonenumber: phonenumber,
+
                     password: password
                 };
                 const response = await axios.post('http://localhost:5000/user/register', signUpDetails)
@@ -147,26 +175,24 @@ function Registerscreen() {
         <div className='register'>
 
 
+            <div>
+                <h2 className='title'>Register:
+                    Please fill the detials
+                </h2>
 
-            <h2>Register:
-                Please fill the detials
-            </h2>
-
-
+            </div>
 
             <div>
 
 
-                <div className='textdiv'>
-                    {/* className='text'   */}
-                    <text className='text'  > <big>Name:</big></text>
-
-                </div>
-                <div className='textfielddiv'>
+                <div >
                     <TextField
+                        error={errorName}
                         className='textfield'
                         onChange={setname}
 
+
+                        helperText={errorName ? "Please enter your name" : ""}
 
                         label="Name"
 
@@ -181,21 +207,23 @@ function Registerscreen() {
                 </div>
             </div>
 
-            <div className='bigdiv'>
-                <div className='textdiv'>
-                    <text className='text'  > <big>Email:*</big></text>
-                </div>
-                <div className='textfielddiv'>
+            <div >
+
+                <div >
                     <TextField
+
                         className='textfield'
                         onChange={setemail}
 
+                        error={errorEmail}
 
                         label="Email"
                         type="email"
                         required
                         id="outlined-required"
 
+                        helperText={errorEmail ? "Please enter your Email" : ""}
+
                         defaultValue=""
                         fullWidth
 
@@ -205,43 +233,19 @@ function Registerscreen() {
                 </div>
             </div>
 
-            <div className='bigdiv'>
-                <div className='textdiv'>
-                    <text className='text' > <big>Telefon:</big></text>
-                </div>
-
-                <div className='textfielddiv'>
-                    <TextField
-                        className='textfield'
-                        onChange={setphonenumber}
 
 
-                        label="Phone Number"
+
+            <div >
 
 
-                        defaultValue=""
-                        fullWidth
 
-                        sx={{ m: 1, width: '51ch' }}
-
-                    />
-
-                </div>
-            </div>
-
-
-            <div className='bigdiv'>
-
-                <div className='textdiv'>
-                    <text className='text' > <big>Password:*</big></text>
-                </div>
-
-
-                <div className='textfielddiv'>
+                <div >
                     <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                         <OutlinedInput
-
+                            error={errorPassword1}
+                            helperText={errorPassword1 ? "Please enter your Password" : ""}
                             id="outlined-adornment-password"
                             type={showPassword1 ? 'text' : 'password'}
                             value={password1}
@@ -269,47 +273,46 @@ function Registerscreen() {
 
 
 
+            <div>
 
-            <div className='textdiv'>
-                <text className='confirmtext' > <big>Confirm:*</big></text>
+
+
+                <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password" className='textfeild5'>Password</InputLabel>
+                    <OutlinedInput
+                        error={errorPassword2}
+                        helperText={errorPassword2 ? "Please enter your Password" : ""}
+                        id="outlined-adornment-password"
+                        type={showPassword2 ? 'text' : 'password'}
+                        value={password2}
+                        onChange={setpassword2}
+                        sx={{ m: 1, width: '50ch' }}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowPassword2}
+                                    onMouseDown={handleMouseDownPassword2}
+                                    edge="end"
+                                >
+                                    {showPassword2 ? <VisibilityOff /> : < Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                        label="Password"
+                    />
+                </FormControl>
+
+
+
+
             </div>
 
-
-            <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password" className='textfeild5'>Password</InputLabel>
-                <OutlinedInput
-
-                    id="outlined-adornment-password"
-                    type={showPassword2 ? 'text' : 'password'}
-                    value={password2}
-                    onChange={setpassword2}
-                    sx={{ m: 1, width: '50ch' }}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword2}
-                                onMouseDown={handleMouseDownPassword2}
-                                edge="end"
-                            >
-                                {showPassword2 ? <VisibilityOff /> : < Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                    label="Password"
-                />
-            </FormControl>
+            <div >
 
 
 
-
-
-
-            <div className='registerButtondiv'>
-
-
-
-                <Button variant="contained" size="small" type="submit" className='registerbutton' onClick={() => signUp(email, password1, name, phonenumber)} >
+                <Button variant="contained" size="small" type="submit" className='registerbutton' onClick={() => signUp(email, password1, name)} >
                     Register
                 </Button>
 

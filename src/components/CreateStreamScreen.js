@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import axios from "axios";
+
 import { NavLink } from "react-router-dom";
 import history from './alteComponents/history';
 import { useHistory } from 'react-router-dom';
 import Switch from '@mui/material/Switch';
 import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, Input } from '@mui/material';
 import '../components/alteComponents/debug.css'
+import Cookies from 'js-cookie';
 
 import '../components/createStreamScreen.css'
 
@@ -244,63 +246,62 @@ const compressoroptions = [
 
 const riverthreads = [
     {
-        label: "Mina",
-        value: "MINA",
+        label: "t",
+        value: "t",
     },
     {
-        label: "MACH",
-        value: "MACH",
+        label: "c",
+        value: "c",
     },
     {
-        label: "ES",
-        value: "ES",
+        label: "d",
+        value: "d",
     },
+    {
+        label: "0",
+        value: "0",
+    }
 ]
-
-async function show_system_info() {
-    //console.log("its working");
-    const url = 'http://localhost:8000/system_info'
-
-    //toDo  change URL with the one from Localhost (From the Rust-Project)
-    try {
-        const response = await axios(url);
-        const data = await response.data;
-        alert(data)
-        console.log(data)
-    } catch (err) {
-        console.error(`Error is -->  ${err}`)
-    }
-}
-async function showStreams() {
-    //console.log("its working");
-    const url = 'http://localhost:8000/show_streams'
-    try {
-        const response = await axios(url);
-        const data = await response.data;
-        //  alert(data.length)
-        console.log(data)
-    } catch (err) {
-        console.error(`Error is -->  ${err}`)
-    }
-}
-
-async function shutDownStream(id) {
-    //console.log("its working");
-    const url = `http://localhost:8000/shutdown_stream/3`
-    try {
-        const response = await axios(url);
-        const data = await response.data;
-        alert(data)
-        console.log(data)
-    } catch (err) {
-        console.error(`Error is -->  ${err}`)
-    }
-}
 
 const routeChange = () => {
     let path = '/CreateStream';
     history.push(path);
 }
+
+
+async function CreateStreamPgAdmin(stream_id, user_id) {
+
+    try {
+        const createStreamDetails = {
+            stream_id: stream_id,
+            user_id: user_id,
+        };
+        const response = await axios.post('http://localhost:5000/user/createstream', createStreamDetails)
+        console.log(response.data)
+
+
+
+    } catch (err) {
+        console.error(err + "sssssssssssssssssssssssss")
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class CreateStreamScreen extends Component {
 
     constructor(props) {
@@ -754,9 +755,13 @@ class CreateStreamScreen extends Component {
 
         axios.post(url, objectTest)
             .then(function (response) {
+
+
                 //console.log(response);
-                //    alert(response.data)
-                console.log(response.data)
+                //     alert(response.data[31])
+
+                CreateStreamPgAdmin(response.data[31], Cookies.get('UserID'))
+
             })
             .catch(function (error) {
                 console.log(error.message);

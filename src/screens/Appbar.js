@@ -8,6 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import './Appbar.css';
 
+import { Icon } from '@mui/material';
+
 
 import { useHistory } from "react-router-dom";
 import Cookies from 'js-cookie';
@@ -90,6 +92,11 @@ function Appbar() {
                         </Typography>
 
                     </IconButton>
+
+                    <Typography variant="h6" color="inherit" component="div" className='username'  >
+                        {Cookies.get('Name')}
+                    </Typography>
+
 
                     <IconButton
                         size="large"

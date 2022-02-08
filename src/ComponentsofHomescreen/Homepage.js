@@ -9,6 +9,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, Input, extractEventHandlers } from '@mui/material';
 import { Button } from 'react-bootstrap';
+import Cookies from 'js-cookie';
 
 async function signUp(email, password, name, phonenumber) {
     try {
@@ -77,10 +78,7 @@ async function recover(id) {
 
 
 
-
-
 async function getMinkey4(id) {
-
     try {
         const url = await `http://localhost:8000/min_key/${id}`
         const response = await axios(url);
@@ -95,6 +93,25 @@ async function getMinkey4(id) {
         console.error(`Error is -->  ${err}`)
         const string2 = "NO"
         return string2
+
+    }
+}
+
+
+
+
+async function ShowRightFlank(id) {
+
+    try {
+        const url = await `http://localhost:8000/show_right_flank/${id}`
+        const response = await axios(url);
+        alert(JSON.stringify(response.data))
+        console.log("ressss is" + response.data)
+        //   return (data)
+
+    } catch (err) {
+        console.error(`Error is -->  ${err}`)
+
 
     }
 }
@@ -128,6 +145,25 @@ async function getMaxKey(id) {
 }
 
 
+async function getTreeHeight(id) {
+
+    try {
+        const url = `http://localhost:8000/tree_height/${id}`
+        const response = await axios(url);
+        const data = await response.data;
+
+        return await (data)
+
+
+
+
+    } catch (err) {
+        console.error(`Error is -->  ${err}`)
+        const string2 = "NO"
+        return string2
+
+    }
+}
 
 
 
@@ -168,6 +204,7 @@ export default class Homepage extends Component {
             istherestreamcreated: false,
             timeStamp: 0,
             systeminfoopendialog: false,
+            rightflankopendialog: false,
             systeminfo: '',
             eventType: "U8",
             dataofevent: '0',
@@ -178,10 +215,91 @@ export default class Homepage extends Component {
             queryTimeEnd: 0,
             exclusiveorinclusive: false,
             querytimeResult: '',
-            arrayofarrayss: []
+            arrayofarrayss: [],
+            rightFlankText: '',
+            arrayOFIdCurrenUser: []
 
         }
     }
+
+
+
+
+    getArrayOFStreamsIdOFTHeCurrentUser = async (id) => {
+        try {
+            const url = await `http://localhost:5000/user/streamperuser?user_id=${id}`
+            const response = await axios(url);
+            const data = await response.data;
+
+            this.setState({
+                arrayOFIdCurrenUser: data
+            }, () => {
+                //  alert(this.state.arrayOFIdCurrenUser)
+            }
+            )
+        } catch (err) {
+            alert(err)
+            console.error(`Error is -->  ${err}`)
+        }
+    }
+
+
+
+
+
+    getStreamIDsFromList = async (list) => {
+        if (list.length >= 1) {
+            list.forEach(async (e) => {
+                let index = e[0];
+                let maxkey = await getMaxKey(index)
+                let minkey = await getMinkey4(index);
+                let treeHeight = await getTreeHeight(index);
+                e.push(minkey)
+                e.push(maxkey)
+                e.push(treeHeight)
+                this.state.arrayofarrayss = list
+            }
+            )
+        }
+    }
+
+
+
+    filterStreamsForUser = () => {
+        //    alert(this.state.id)
+
+
+        let array2 = []
+
+        this.state.id.forEach((element) => {
+            // alert(element)
+            //  alert(element[0] + "first")
+            // let index = this.state.id.indexOf(element);
+
+
+            if (this.state.arrayOFIdCurrenUser.includes(element[0])) {
+
+                array2.push(element)
+                //   alert(array2)
+
+
+            }
+        })
+
+        this.state.id = array2
+
+        //    alert(this.state.id)
+
+
+
+    }
+
+
+
+
+
+
+
 
 
 
@@ -191,14 +309,12 @@ export default class Homepage extends Component {
     fetchData = async () => {
         const fetch1 = await fetch('http://localhost:8000/show_streams')
         const response1 = await fetch1.json()
-
-
-
-
-
-
         this.setState({ id: response1 });
     }
+
+
+
+
 
     updatestreamcreated = () => {
         const mina = this.state.id;
@@ -215,11 +331,17 @@ export default class Homepage extends Component {
     async componentDidMount() {
         setInterval(() => {
             this.fetchData()
+            this.getArrayOFStreamsIdOFTHeCurrentUser(Cookies.get('UserID'))
+            this.filterStreamsForUser()
             this.updatestreamcreated()
             this.getStreamIDsFromList(this.state.id)
             //   this.getArrayofKeyfromID(this.state.arrayofIDs)
         }, 1000);
     }
+
+
+
+
 
 
 
@@ -242,31 +364,25 @@ export default class Homepage extends Component {
        
        */
 
+
+
+
     getStreamIDsFromList = async (list) => {
-
-
-
-
-
         if (list.length >= 1) {
 
             list.forEach(async (e) => {
                 let index = e[0];
                 let maxkey = await getMaxKey(index)
-
                 let minkey = await getMinkey4(index);
+                let treeHeight = await getTreeHeight(index);
                 e.push(minkey)
                 e.push(maxkey)
+                e.push(treeHeight)
                 this.state.arrayofarrayss = list
 
             }
             )
         }
-
-
-
-
-
         //   alert(arrayofarrays)
 
         /*
@@ -326,18 +442,27 @@ export default class Homepage extends Component {
             QueryTimeTravelDialog: true,
             index: id
         })
+    }
 
+
+
+
+    openRightFlankDialog = async (id) => {
+        const url = await `http://localhost:8000/show_right_flank/${id}`
+        const response = await axios(url);
+        const data = await response.data;
+        this.setState({
+            rightFlankText: data,
+            rightflankopendialog: true
+        })
     }
 
 
     OpenSysteminfoDialog = async (id) => {
-
         const response = await axios(`http://localhost:8000/stream_info/${id}`);
         const data1 = await response.data;
         //alert(data1)
         //let data2 = await JSON.parse(data1)
-
-
         this.setState({
             systeminfoopendialog: true,
             index: id,
@@ -346,6 +471,9 @@ export default class Homepage extends Component {
         })
     }
 
+
+
+
     closeInsertOrderDialog = () => {
         this.setState({
             InsertOrderDialog: false
@@ -353,11 +481,11 @@ export default class Homepage extends Component {
         )
     }
 
-    closeQueryTimeTravelDialog = () => {
 
+
+    closeQueryTimeTravelDialog = () => {
         this.setState({
             QueryTimeTravelDialog: false
-
         }
         )
 
@@ -372,6 +500,15 @@ export default class Homepage extends Component {
 
         }
         )
+    }
+
+
+
+    closeRightFlankDialog = () => {
+
+        this.setState({
+            rightflankopendialog: false
+        })
     }
 
 
@@ -603,6 +740,28 @@ export default class Homepage extends Component {
 
 
 
+    ShowRightFlank = async (id) => {
+
+        try {
+            const url = await `http://localhost:8000/show_right_flank/${id}`
+            const response = await axios(url);
+            const data = await response.data;
+            //  alert(data)
+
+            return (data)
+
+        } catch (err) {
+            console.error(`Error is -->  ${err}`)
+
+
+        }
+    }
+
+
+
+
+
+
 
 
 
@@ -612,6 +771,8 @@ export default class Homepage extends Component {
         const Listofallstream = this.state.arrayofarrayss
         console.log(Listofallstream)
         const sindlistofallstreamsleer = this.state.istherestreamcreated;
+
+        let UserID = parseInt(Cookies.get('UserID'));
 
 
 
@@ -631,21 +792,25 @@ export default class Homepage extends Component {
 
 
                 <div>
-                    <table className="streams" >
+                    <div className="Tablediv" >
 
 
 
-                        <th>ID</th>
+                        <div className="TableID"  ><h2>ID</h2></div>
 
-                        <th>Status</th>
+                        <div className="TableStatus" ><h2>Status</h2></div>
 
-                        <th>Min Key</th>
+                        <div className="TableMinkey" ><h2>Min key</h2></div>
 
-                        <th>Max Key</th>
+                        <div className="TableMaxKey"><h2>Max key</h2></div>
+
+                        <div className="TableTreeHeight"><h2>Tree Height</h2></div>
 
 
 
-                    </table>
+
+
+                    </div>
 
 
 
@@ -666,6 +831,7 @@ export default class Homepage extends Component {
                                                 <div className='statusdiv' >{items[1]}</div>
                                                 <div className='minkeydiv'>{items[2]}</div>
                                                 <div className='maxkeydiv'>{items[3]}</div>
+                                                <div className='treeheightdiv'>{items[4]}</div>
                                                 <div className='buttonsdiv' >
                                                     <button className='close' onClick={() => shutDown(index)} > Shutdown</button>
                                                     <button className='close1' onClick={() => recover(index)} > recover</button>
@@ -682,6 +848,7 @@ export default class Homepage extends Component {
                                                             <Dropdown.Item variant="outlined" onClick={() => this.OpenIsertOrderDialog(index)} href="">Insert Ordered </Dropdown.Item>
                                                             <Dropdown.Item href="">Insert Ordered Array</Dropdown.Item>
                                                             <Dropdown.Item onClick={() => this.OpenQueryTimeTravelDialog(index)} href="">Query Time Travel</Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => ShowRightFlank(index)} href="">Show Right Flank</Dropdown.Item>
                                                         </Dropdown.Menu>
 
                                                     </Dropdown>
@@ -955,6 +1122,37 @@ export default class Homepage extends Component {
 
 
 
+                                                    <Dialog open={this.state.rightflankopendialog} onClose={this.closeRightFlankDialog} maxWidth='md' fullWidth='md' >
+                                                        <DialogTitle>Right Flank:</DialogTitle>
+                                                        <DialogContent>
+                                                            <DialogContentText>
+
+                                                                <TextField
+                                                                    id="outlined-read-only-input"
+                                                                    label="Array[Event]"
+                                                                    multiline
+                                                                    maxRows={6}
+                                                                    sx={{ m: 1, width: '90ch' }}
+
+
+                                                                    variant="filled"
+                                                                    helperText="The result will be shown here"
+                                                                    value={this.state.rightFlankText}
+                                                                />
+                                                            </DialogContentText>
+
+
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={this.closeRightFlankDialog}>Close</Button>
+
+                                                        </DialogActions>
+                                                    </Dialog>
+
+
+
+
+
 
 
 
@@ -971,13 +1169,15 @@ export default class Homepage extends Component {
 
 
 
-                        : <div>
-                            <h1>Welcome to our Website</h1>
-                            <h1> There are No Streams created. </h1>
-                            <h1>Please press on "Create Stream" Button to create your first Stream </h1>
+                        : <div className='inCaseNoStreams'>
+
+                            <h1 className='noStreams'></h1>
+
+
                         </div>
 
                     }
+
 
 
 

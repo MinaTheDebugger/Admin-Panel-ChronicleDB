@@ -135,12 +135,40 @@ ul li:nth-child(odd) {
   margin: 2px;
 }
 
-.streams {
+.Tablediv {
   position: relative;
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 16cm;
+
   left: 1.64cm;
+  background-color: #f44336;
+}
+.TableID {
+  position: relative;
+  width: 6%;
+  float: left;
+}
+.TableStatus {
+  position: relative;
+  width: 8.5%;
+  float: left;
+}
+
+.TableMinkey {
+  position: relative;
+  width: 8.5%;
+  float: left;
+}
+
+.TableMaxKey {
+  position: relative;
+  width: 10%;
+  float: left;
+}
+
+.TableTreeHeight {
+  position: relative;
+  width: 10%;
+  float: left;
+  right: 0.7cm;
 }
 
 .streams td {
@@ -166,7 +194,7 @@ ul li:nth-child(odd) {
   position: relative;
   width: 60%;
   float: left;
-  right: 4cm;
+  right: 3cm;
 }
 
 .statusdiv {
@@ -186,7 +214,14 @@ ul li:nth-child(odd) {
 .maxkeydiv {
   position: relative;
   width: 5%;
-  left: 6.5cm;
+  left: 5cm;
+  float: left;
+}
+
+.treeheightdiv {
+  position: relative;
+  width: 5%;
+  left: 7.4cm;
   float: left;
 }
 
@@ -265,4 +300,14 @@ ul li:nth-child(odd) {
 }
 .dropdown:hover .dropbtn {
   background-color: rgba(0, 0, 39, 0.938);
+}
+
+.inCaseNoStreams {
+  position: relative;
+  top: 230px;
+}
+
+.noStreams {
+  position: relative;
+  right: 660px;
 }

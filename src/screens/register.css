@@ -1,19 +1,7 @@
 .register {
   position: relative;
-  left: 400px;
-  top: 10px;
-}
-
-.text {
-  position: relative;
-  top: 25px;
-}
-
-.textdiv {
-  float: left;
-  width: 9%;
-
-  height: 72px;
+  left: 470px;
+  top: 23px;
 }
 
 .textfielddiv {
@@ -22,22 +10,24 @@
 }
 
 .textfield {
-  position: relative;
+  position: absolute;
   left: 7px;
 }
 
-.confirmtext {
-  position: relative;
-  top: 38px;
-}
-
 .registerButtondiv {
-  position: relative;
-  top: 50px;
-  left: 145px;
+  position: absolute;
+  top: 55px;
+  left: 235px;
 }
 
 .registerbutton {
-  width: 40ch;
+  position: absolute;
+  left: 20px;
+  width: 60ch;
   height: 10ch;
+}
+
+.title {
+  position: relative;
+  left: 12px;
 }

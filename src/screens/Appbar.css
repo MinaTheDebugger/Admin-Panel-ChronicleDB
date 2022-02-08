@@ -1,4 +1,9 @@
 .logoutbutton {
   position: relative;
-  left: 550px;
+  left: 520px;
+}
+
+.username {
+  position: relative;
+  left: 1020px;
 }

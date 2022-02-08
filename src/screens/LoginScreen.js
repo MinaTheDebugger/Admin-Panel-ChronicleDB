@@ -41,6 +41,9 @@ function Loginscreeen() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [walid, setWalid] = useState(false);
+
+    const [errorEmail, setErrorEmail] = useState(false)
+    const [errorPassword, setErrorPassword] = useState(false)
     // const [cookies, setCookie, removeCookie] = useCookies(['user']);
 
 
@@ -84,7 +87,9 @@ function Loginscreeen() {
 
         if (email === "" || password === "") {
 
-            return
+            setErrorEmail(true)
+            setErrorPassword(true)
+
         } else {
 
 
@@ -95,11 +100,14 @@ function Loginscreeen() {
                 };
                 const response = await axios.post('http://localhost:5000/user/login', signInDetails)
                 console.log("the data is of walidddddd ", response.data)
-                //      alert(response.data.message)
+                //  alert(response.data.userId)
 
-                Cookies.set('User1', true, { expires: 7 })
-                Cookies.set('refresh', true, { expires: 7 })
-
+                Cookies.set('User1', true, { expires: 1 })
+                Cookies.set('UserID', response.data.userId, { expires: 1 })
+                //  alert(Cookies.get('UserID'))
+                Cookies.set('refresh', true, { expires: 1 })
+                Cookies.set('Name', response.data.Name, { expires: 1 })
+                // alert(Cookies.get('Name'))
                 history.push("/Home");
                 await window.location.reload();
 
@@ -109,7 +117,10 @@ function Loginscreeen() {
                 //    alert(cookies + "Cookies")
 
             } catch (err) {
+
                 console.error("error while Signing In is  ", err)
+                setErrorEmail(true)
+                setErrorPassword(true)
             }
 
         }
@@ -141,9 +152,10 @@ function Loginscreeen() {
             <div className='email'>
                 <TextField
 
+                    error={errorEmail}
                     onChange={setemail}
 
-
+                    helperText={errorEmail ? "Invalid Email or Password" : ""}
                     label="Email"
                     type="email"
 
@@ -174,6 +186,11 @@ function Loginscreeen() {
                 <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
+
+                        onChange={setemail}
+                        error={errorPassword}
+                        helperText={errorPassword ? "Invalid Email or Password" : ""}
+
                         id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
                         value={password}
