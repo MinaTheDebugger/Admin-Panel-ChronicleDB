@@ -833,9 +833,9 @@ export default class Homepage extends Component {
                                                 <div className='maxkeydiv'>{items[3]}</div>
                                                 <div className='treeheightdiv'>{items[4]}</div>
                                                 <div className='buttonsdiv' >
-                                                    <button className='close' onClick={() => shutDown(index)} > Shutdown</button>
-                                                    <button className='close1' onClick={() => recover(index)} > recover</button>
-                                                    <button className='close2' onClick={() => this.OpenSysteminfoDialog(index)} > show Stream Info</button>
+                                                    <button className='close' onClick={() => shutDown(items[0])} > Shutdown</button>
+                                                    <button className='close1' onClick={() => recover(items[0])} > recover</button>
+                                                    <button className='close2' onClick={() => this.OpenSysteminfoDialog(items[0])} > show Stream Info</button>
 
 
                                                     <Dropdown className="d-inline mx-2" >
@@ -845,10 +845,10 @@ export default class Homepage extends Component {
 
                                                         <Dropdown.Menu title="Dropdown button" id="dropdown-basic-button" as={ButtonGroup} variant="dark" className="dropdown-content">
 
-                                                            <Dropdown.Item variant="outlined" onClick={() => this.OpenIsertOrderDialog(index)} href="">Insert Ordered </Dropdown.Item>
+                                                            <Dropdown.Item variant="outlined" onClick={() => this.OpenIsertOrderDialog(items[0])} href="">Insert Ordered </Dropdown.Item>
                                                             <Dropdown.Item href="">Insert Ordered Array</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => this.OpenQueryTimeTravelDialog(index)} href="">Query Time Travel</Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => ShowRightFlank(index)} href="">Show Right Flank</Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => this.OpenQueryTimeTravelDialog(items[0])} href="">Query Time Travel</Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => ShowRightFlank(items[0])} href="">Show Right Flank</Dropdown.Item>
                                                         </Dropdown.Menu>
 
                                                     </Dropdown>
@@ -1195,5 +1195,4 @@ export default class Homepage extends Component {
 
 
 }
-
 
