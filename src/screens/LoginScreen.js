@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+
 import axios from 'axios'
 import { TextField } from '@mui/material';
 import '../screens/loginscreeen.css';
@@ -7,18 +7,18 @@ import { Link } from 'react-router-dom';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormHelperText from '@mui/material/FormHelperText';
+
 import FormControl from '@mui/material/FormControl';
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
-import FilledInput from '@mui/material/FilledInput';
-import { ImageBackground } from 'react-native';
 
-import pic1 from '../assets/pic1.jpg'
 
-import { useCookies } from 'react-cookie';
+
+
+
+
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useHistory } from "react-router-dom";
@@ -40,7 +40,7 @@ function Loginscreeen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [walid, setWalid] = useState(false);
+
 
     const [errorEmail, setErrorEmail] = useState(false)
     const [errorPassword, setErrorPassword] = useState(false)
@@ -107,6 +107,7 @@ function Loginscreeen() {
                 //  alert(Cookies.get('UserID'))
                 Cookies.set('refresh', true, { expires: 1 })
                 Cookies.set('Name', response.data.Name, { expires: 1 })
+                Cookies.set('isAdmin', response.data.isadmin, { expires: 1 })
                 // alert(Cookies.get('Name'))
                 history.push("/Home");
                 await window.location.reload();
@@ -187,7 +188,7 @@ function Loginscreeen() {
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
 
-                        onChange={setemail}
+                        //     onChange={setemail}
                         error={errorPassword}
                         helperText={errorPassword ? "Invalid Email or Password" : ""}
 
