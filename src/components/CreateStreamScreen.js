@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import axios from "axios";
+import { FormControlLabel } from '@mui/material';
+import FormGroup from '@mui/material/FormGroup';
 
-import { NavLink } from "react-router-dom";
+
 import history from './alteComponents/history';
-import { useHistory } from 'react-router-dom';
+
 import Switch from '@mui/material/Switch';
-import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, Input } from '@mui/material';
+import { TextField, } from '@mui/material';
 import '../components/alteComponents/debug.css'
 import Cookies from 'js-cookie';
 
 import '../components/createStreamScreen.css'
 
 
-const switchlabel = { inputProps: { 'aria-label': 'Switch demo' } };
+
 
 
 const optionsofmultiplediskqueue = [
@@ -778,23 +780,17 @@ class CreateStreamScreen extends Component {
 
                 {/*///////////////////////////////////////////////////////Debug Box/////////////////////////////////////////////////////////////*/}
                 <div className='Debugboxex'>
+
                     <h1> Debug: </h1>
                     <div>
+                        <FormControlLabel checked={this.state.checklog} onChange={this.changelog} control={<Switch />} label="Log" className='chechlog' />
+                        <FormControlLabel checked={this.state.checkdebug} onChange={this.changedebug} control={<Switch />} label="Debug" className='chechdebug' />
+                        <FormGroup>
 
-                        <label className='log'>
-                            <input type='checkbox' checklog={this.state.checklog} onChange={this.changelog}
-                            />
-                            <span class='slider' />
-                        </label>
-                        <label className='logtext'>    Log </label>
+                        </FormGroup>
                     </div>
                     <div>
-                        <label className='debug'>
-                            <input type='checkbox' checkdebug={this.state.checkdebug}
-                                onChange={this.changedebug} />
-                            <span class='slider' />
-                        </label>
-                        <label>    Debug </label>
+
                     </div>
 
 
@@ -1141,4 +1137,3 @@ class CreateStreamScreen extends Component {
 }
 
 export default CreateStreamScreen
-
