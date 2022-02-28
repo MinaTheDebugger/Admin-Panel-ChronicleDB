@@ -3,12 +3,12 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+
 import './Appbar.css';
 
-import { Icon } from '@mui/material';
+
 
 
 import { useHistory } from "react-router-dom";
@@ -34,12 +34,19 @@ function Appbar() {
         history.push("/About");
     }
 
-    function goToLoginScreen() {
+
+    function goToJobsPage() {
+        history.push("/Jobs")
+    }
+
+    function Signout() {
         Cookies.remove('User1')
         history.push("/");
 
-        Cookies.set('refresh', false, { expires: 7 })
-
+        Cookies.set('refresh', false, { expires: 1 })
+        Cookies.set('isAdmin', false, { expires: 1 })
+        Cookies.set('Name', "NO", { expires: 1 })
+        Cookies.set('UserID', '00000000000000000000000000', { expires: 1 })
     }
 
 
@@ -78,6 +85,26 @@ function Appbar() {
                         </Typography>
 
                     </IconButton>
+
+
+
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={goToJobsPage}
+                    >
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            Jobs
+
+                        </Typography>
+
+                    </IconButton>
+
+
+
                     <IconButton
                         size="large"
                         edge="start"
@@ -93,6 +120,7 @@ function Appbar() {
 
                     </IconButton>
 
+
                     <Typography variant="h6" color="inherit" component="div" className='username'  >
                         {Cookies.get('Name')}
                     </Typography>
@@ -104,7 +132,7 @@ function Appbar() {
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
-                        onClick={goToLoginScreen}
+                        onClick={Signout}
                         className='logoutbutton'
                     >
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} className='logoutbutton'  >

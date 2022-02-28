@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import Leftbar from './components/alteComponents/Leftbar';
+
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import Home from '../src/screens/Home'
 import About from '../src/screens/About'
@@ -9,10 +9,10 @@ import history from './components/alteComponents/history';
 import LoginScreen from './screens/LoginScreen';
 import Registerscreen from './screens/Registerscreen';
 import axios from "axios";
-import AuthApi from './AuthApi';
-import Cookies from 'js-cookie';
 
-import { useHistory } from "react-router-dom";
+import Cookies from 'js-cookie';
+import Jobscreen from './screens/Jobscreen';
+
 
 
 
@@ -75,7 +75,7 @@ class App extends Component {
 
   componentDidMount() {
     const currentPathName = window.location.href;
-    const refresh = Cookies.get('refresh')
+
 
 
     setInterval(() => {
@@ -84,7 +84,7 @@ class App extends Component {
       //  alert(currentPathName)
 
 
-      if (Cookies.get('User1') && currentPathName == 'http://localhost:3000/') {
+      if (Cookies.get('User1') && currentPathName === 'http://localhost:3000/') {
 
 
         history.push("/Home");
@@ -305,10 +305,31 @@ class App extends Component {
 
 
 
+  ProtectJobs = () => {
+
+    return (
+      < Switch >
+        <Route
+          render={() => this.state.auth ? (
+            <Jobscreen />
+          ) :
+            (<Redirect to={{ pathname: "/" }} />
+            )
+          } />
+      </Switch >
+
+    )
+  }
+
+
+
+
+
+
 
 
   gotoHome = () => {
-    const currentPathName = window.location.href;
+    //const currentPathName = window.location.href;
     this.setState({
       auth: Cookies.get('User1')
     }
@@ -362,10 +383,27 @@ class App extends Component {
             </this.ProtectAbout>
           </Switch>
 
+
+
+
+
+          <Switch>
+            <this.ProtectJobs exact path="/Jobs">
+              <Jobscreen />
+            </this.ProtectJobs>
+          </Switch>
+
+
           <Switch>
 
 
           </Switch>
+
+
+
+
+
+
           <Route exact path="/register">
             <Registerscreen />
           </Route>

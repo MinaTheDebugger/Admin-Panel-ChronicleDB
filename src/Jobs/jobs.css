@@ -1,0 +1,83 @@
+.maindiv {
+  position: relative;
+  top: 13ch;
+  left: 5ch;
+}
+
+.bbb {
+  position: relative;
+  top: 16ch;
+  width: 100px;
+  height: 60px;
+}
+
+.jobtype {
+  position: relative;
+  width: 50%;
+  float: left;
+  left: 7ch;
+}
+
+.setintervall {
+  position: relative;
+  width: 50%;
+  float: left;
+  left: 16ch;
+}
+
+.boxdiv {
+  position: relative;
+  left: 18ch;
+}
+
+.JobName {
+  position: relative;
+  float: left;
+}
+
+.buttonforJob {
+  position: relative;
+  width: 33.33%;
+  float: left;
+}
+
+.jobtype1 {
+  position: relative;
+  width: 40%;
+  float: left;
+  left: 7ch;
+  top: 2ch;
+}
+
+.off {
+  position: relative;
+  width: 5%;
+  float: left;
+  top: 5ch;
+  right: 10ch;
+}
+.switch {
+  position: relative;
+  width: 5%;
+  float: left;
+  top: 4.3ch;
+  right: 3ch;
+  right: 10ch;
+}
+
+.on {
+  position: relative;
+  width: 8%;
+  float: left;
+  top: 5.2ch;
+  right: 4.7ch;
+  right: 10ch;
+}
+
+.intervalloptions {
+  position: relative;
+  width: 35%;
+  float: right;
+  top: 2ch;
+  right: 10ch;
+}

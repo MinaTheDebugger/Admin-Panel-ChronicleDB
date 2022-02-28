@@ -7,68 +7,22 @@ import { Link } from 'react-router-dom';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, Input, extractEventHandlers } from '@mui/material';
+import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import Cookies from 'js-cookie';
 
-async function signUp(email, password, name, phonenumber) {
-    try {
-        const signUpDetails = {
-            name: name,
-            email: email,
-            phonenumber: phonenumber,
-            password: password
-        };
-        const response = await axios.post('http://localhost:5000/user/register', signUpDetails)
-        //console.log(response.data)
-    } catch (err) {
-        console.error("error while Signing Up is  ", err)
-    }
-}
 
-/*
-async function signIn(email, password) {
-    try {
-        const signInDetails = {
-            email: email,
-            password: password
-        };
-        const response = await axios.post('http://localhost:5000/user/login', signInDetails)
-        console.log("the data is of walidddddd ", response.data)
-    } catch (err) {
-        console.error("error while Signing In is  ", err)
-    }
-}
-*/
 
-async function showStreams() {
-    //console.log("its working");
-    const url = 'http://localhost:8000/show_streams'
-    try {
-        const response = await axios(url);
-        const data = await response.data;
-        //   const walid = await data.length
-        /*
-          //  alert(data)
-          //  console.log(data)ss
-          */
-        return data.length
-        console.log(data.length)
-    } catch (err) {
-        console.error(`Error is -->  ${err}`)
-        return 0
-    }
-}
 
 async function shutDown(id) {
-    const response = await fetch(`http://localhost:8000/shutdown_stream/${id}`);
+    await fetch(`http://localhost:8000/shutdown_stream/${id}`);
 
     //  alert("its now shutDown succesfulyys");
 
 }
 
 async function recover(id) {
-    const response = await fetch(`http://localhost:8000/recover_stream_snapshot/${id}`);
+    await fetch(`http://localhost:8000/recover_stream_snapshot/${id}`);
     //  alert("stream recovered successfully");
 }
 
@@ -84,7 +38,7 @@ async function getMinkey4(id) {
         const response = await axios(url);
         const data = await response.data;
         //  alert(data)
-        if (data == "Empty Index") {
+        if (data === "Empty Index") {
             return "NO"
         } else {
             return await (data)
@@ -128,7 +82,7 @@ async function getMaxKey(id) {
         const url = `http://localhost:8000/max_key/${id}`
         const response = await axios(url);
         const data = await response.data;
-        if (data == "Empty Index") {
+        if (data === "Empty Index") {
             return "NO"
         } else {
             return await (data)
@@ -217,7 +171,9 @@ export default class Homepage extends Component {
             querytimeResult: '',
             arrayofarrayss: [],
             rightFlankText: '',
-            arrayOFIdCurrenUser: []
+            arrayOFIdCurrenUser: [],
+            addMultipleEvents: false,
+            EventArray: []
 
         }
     }
@@ -267,30 +223,30 @@ export default class Homepage extends Component {
 
     filterStreamsForUser = () => {
         //    alert(this.state.id)
+        //   Cookies.get('isAdmin') === false
+        if (Cookies.get('isAdmin') === 'false') {
+            let array2 = []
+
+            this.state.id.forEach((element) => {
+                // alert(element)
+                //  alert(element[0] + "first")
+                // let index = this.state.id.indexOf(element);
 
 
-        let array2 = []
+                if (this.state.arrayOFIdCurrenUser.includes(element[0])) {
 
-        this.state.id.forEach((element) => {
-            // alert(element)
-            //  alert(element[0] + "first")
-            // let index = this.state.id.indexOf(element);
+                    array2.push(element)
+                    //   alert(array2)
 
 
-            if (this.state.arrayOFIdCurrenUser.includes(element[0])) {
+                }
+            })
 
-                array2.push(element)
-                //   alert(array2)
+            this.state.id = array2
 
+            //    alert(this.state.id)
 
-            }
-        })
-
-        this.state.id = array2
-
-        //    alert(this.state.id)
-
-
+        }
 
     }
 
@@ -473,10 +429,27 @@ export default class Homepage extends Component {
 
 
 
+    ShowSysteminfo = async (id) => {
+
+        const response = await axios(`http://localhost:8000/stream_info/${id}`);
+        const data1 = await response.data;
+
+        alert(data1)
+
+
+    }
+
+
+
+
+
+
 
     closeInsertOrderDialog = () => {
         this.setState({
-            InsertOrderDialog: false
+            InsertOrderDialog: false,
+            addMultipleEvents: false,
+            EventArray: ""
         }
         )
     }
@@ -542,6 +515,34 @@ export default class Homepage extends Component {
     }
 
 
+    ShowHidenTextAndButton = () => {
+
+        this.setState({
+            addMultipleEvents: true
+        })
+    }
+
+
+    InsertToArray = (id, timeStamp, eventType, dataofevent) => {
+
+
+
+
+        this.state.EventArray.push(`
+{"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`)
+        /*
+        this.setState({
+            EventArray: [`
+                {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`]
+        })
+*/
+
+    }
+
+
+
+
+
 
 
 
@@ -563,7 +564,8 @@ export default class Homepage extends Component {
             console.log("ddddddddddddddddddddddd ", data);
             this.setState({
                 InsertOrderDialog: false,
-
+                addMultipleEvents: false,
+                EventArray: ""
 
             })
 
@@ -592,7 +594,7 @@ export default class Homepage extends Component {
 
     changeraw = event => {
 
-        if (event.target.value != "") {
+        if (event.target.value !== "") {
             this.setState({
                 rawtype: event.target.value,
                 consttype: "",
@@ -618,7 +620,7 @@ export default class Homepage extends Component {
 
     changeconst = event => {
 
-        if (event.target.value != "") {
+        if (event.target.value !== "") {
             this.setState({
                 consttype: event.target.value,
                 rawtype: "",
@@ -646,7 +648,7 @@ export default class Homepage extends Component {
 
     changevar = event => {
 
-        if (event.target.value != "") {
+        if (event.target.value !== "") {
             this.setState({
                 vartype: event.target.value,
                 rawtype: "",
@@ -700,7 +702,7 @@ export default class Homepage extends Component {
             const response = await axios.post(url, jsonBody);
             const data = await response.data;
 
-            let firstKey = Object.keys(data[0].payload)[0];
+            //   let firstKey = Object.keys(data[0].payload)[0];
             //   alert(firstKey)
             //alert(response.data);
             //  alert(JSON.stringify(data));
@@ -772,7 +774,7 @@ export default class Homepage extends Component {
         console.log(Listofallstream)
         const sindlistofallstreamsleer = this.state.istherestreamcreated;
 
-        let UserID = parseInt(Cookies.get('UserID'));
+        //   let UserID = parseInt(Cookies.get('UserID'));
 
 
 
@@ -835,7 +837,7 @@ export default class Homepage extends Component {
                                                 <div className='buttonsdiv' >
                                                     <button className='close' onClick={() => shutDown(items[0])} > Shutdown</button>
                                                     <button className='close1' onClick={() => recover(items[0])} > recover</button>
-                                                    <button className='close2' onClick={() => this.OpenSysteminfoDialog(items[0])} > show Stream Info</button>
+                                                    <button className='close2' onClick={() => this.ShowSysteminfo(items[0])} > show Stream Info</button>
 
 
                                                     <Dropdown className="d-inline mx-2" >
@@ -846,9 +848,9 @@ export default class Homepage extends Component {
                                                         <Dropdown.Menu title="Dropdown button" id="dropdown-basic-button" as={ButtonGroup} variant="dark" className="dropdown-content">
 
                                                             <Dropdown.Item variant="outlined" onClick={() => this.OpenIsertOrderDialog(items[0])} href="">Insert Ordered </Dropdown.Item>
-                                                            <Dropdown.Item href="">Insert Ordered Array</Dropdown.Item>
                                                             <Dropdown.Item onClick={() => this.OpenQueryTimeTravelDialog(items[0])} href="">Query Time Travel</Dropdown.Item>
                                                             <Dropdown.Item onClick={() => ShowRightFlank(items[0])} href="">Show Right Flank</Dropdown.Item>
+
                                                         </Dropdown.Menu>
 
                                                     </Dropdown>
@@ -984,16 +986,43 @@ export default class Homepage extends Component {
                                                                 helperText="Please enter data according to the chosen Event type!"
 
                                                             />
+                                                            <Button variant="outlined" size="large" className="ArrayOfEvents" onClick={this.ShowHidenTextAndButton}>
+                                                                Add Array of Events
+                                                            </Button>
 
 
+                                                            {this.state.addMultipleEvents ?
 
+                                                                <TextField
+                                                                    id="outlined-read-only-input"
+                                                                    label="Added Events"
+                                                                    multiline
+                                                                    maxRows={6}
+                                                                    sx={{ m: 1, width: '160ch' }}
+
+
+                                                                    variant="filled"
+                                                                    helperText="Here will be the added Events be shown"
+                                                                    value={this.state.EventArray}
+                                                                />
+
+                                                                : <div></div>}
+
+
+                                                            {this.state.addMultipleEvents ?
+                                                                <Button variant="outlined" size="large" className="addtoArray" onClick={() => this.InsertToArray(this.state.index, this.state.timeStamp, this.state.eventType, this.state.dataofevent)} >
+                                                                    Add To Array
+                                                                </Button>
+
+
+                                                                : <div></div>}
                                                         </DialogContent>
 
 
 
                                                         <DialogActions>
-                                                            <Button onClick={() => this.insertEvent(this.state.index, this.state.timeStamp, this.state.eventType, this.state.dataofevent)}>Insert</Button>
-                                                            <Button onClick={this.closeInsertOrderDialog}>Close</Button>
+                                                            <Button className='insertbutton' onClick={() => this.insertEvent(this.state.index, this.state.timeStamp, this.state.eventType, this.state.dataofevent)}>Insert</Button>
+                                                            <Button className='closeInsertOrderdialog' onClick={this.closeInsertOrderDialog}>Close</Button>
 
                                                         </DialogActions>
                                                     </Dialog>
@@ -1086,7 +1115,6 @@ export default class Homepage extends Component {
 
                                                             />
 
-
                                                             <TextField
                                                                 id="outlined-read-only-input"
                                                                 label="Array[Event]"
@@ -1099,7 +1127,6 @@ export default class Homepage extends Component {
                                                                 helperText="The result will be shown here"
                                                                 value={this.state.querytimeResult}
                                                             />
-
 
 
 

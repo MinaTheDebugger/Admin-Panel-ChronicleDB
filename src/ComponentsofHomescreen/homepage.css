@@ -311,3 +311,36 @@ ul li:nth-child(odd) {
   position: relative;
   right: 660px;
 }
+
+.addtoArray {
+  position: relative;
+  width: 40ch;
+  height: 10ch;
+  color: rgb(0, 0, 0);
+  background-color: greenyellow;
+  border-radius: 12px;
+  top: 30px;
+  left: 50ch;
+}
+
+.ArrayOfEvents {
+  position: relative;
+  height: 8ch;
+  width: 30ch;
+  border-radius: 12px;
+  background-color: greenyellow;
+  left: 240px;
+  top: 6px;
+}
+
+.insertbutton {
+  position: relative;
+  height: 7ch;
+  width: 14ch;
+}
+
+.closeInsertOrderdialog {
+  position: relative;
+  height: 7ch;
+  width: 14ch;
+}

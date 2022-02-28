@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
-
-import CreateStreamScreen from '../components/CreateStreamScreen';
-
+import Jobs from '../Jobs/Jobs'
 import Appbar from './Appbar';
 
-
-export default class CreateStream extends Component {
+export default class Jobscreen extends Component {
     render() {
         return (
             <div>
-
                 <Appbar />
-
-                <CreateStreamScreen />
-
+                <Jobs />
             </div>
         )
     }
