@@ -14,6 +14,18 @@ import Cookies from 'js-cookie';
 
 
 
+const ExluciveOrInclusiveOptions = [
+    {
+        label: "Inclusive",
+        value: true,
+    },
+    {
+        label: "Exclusive",
+        value: false,
+    }
+]
+
+
 async function shutDown(id) {
     await fetch(`http://localhost:8000/shutdown_stream/${id}`);
 
@@ -167,7 +179,7 @@ export default class Homepage extends Component {
             vartype: "",
             queryTimeStart: 0,
             queryTimeEnd: 0,
-            exclusiveorinclusive: false,
+            exclusiveorinclusive: true,
             querytimeResult: '',
             arrayofarrayss: [],
             rightFlankText: '',
@@ -678,6 +690,8 @@ export default class Homepage extends Component {
 
         this.setState({
             exclusiveorinclusive: event.target.value,
+        }, () => {
+            //   alert(this.state.exclusiveorinclusive)
         }
         )
 
@@ -696,6 +710,7 @@ export default class Homepage extends Component {
         function getInklusivOrExklusiv(exklusivOrInklusiv) {
             return (exklusivOrInklusiv ? "Inclusive" : "Exclusive");
         }
+
         const jsonBody = `{${(exklusivOrInklusiv ? `"Inclusive"` : `"Exclusive"`)} : {"start" : ${start} , "end": ${end}}}`
         //toDo  change URL with the one from Localhost (From the Rust-Project)
         try {
@@ -716,7 +731,7 @@ export default class Homepage extends Component {
             console.log(data)
         } catch (err) {
             console.error(`Error is -->  ${err}`)
-            alert(jsonBody + " ist nicht gut")
+            alert(jsonBody + "Error")
 
 
         }
@@ -1078,9 +1093,11 @@ export default class Homepage extends Component {
                                                                 }}
 
                                                             >
-                                                                Inclusive
-                                                                <option value={"true"}>Inclusive</option>
-                                                                <option value={"false"}>Exclusive</option>
+                                                                {ExluciveOrInclusiveOptions.map((option) => (
+                                                                    <option key={option.value} value={option.value}>
+                                                                        {option.label}
+                                                                    </option>
+                                                                ))}
 
                                                             </TextField>
 
@@ -1139,7 +1156,7 @@ export default class Homepage extends Component {
 
                                                         </DialogContent>
                                                         <DialogActions>
-                                                            <Button onClick={() => this.show_QueryTime(this.state.index, this.state.exclusiveoriEnclusive, this.state.queryTimeStart, this.state.queryTimeEnd)}> Show Query Time Travel</Button>
+                                                            <Button onClick={() => this.show_QueryTime(this.state.index, this.state.exclusiveorinclusive, this.state.queryTimeStart, this.state.queryTimeEnd)}> Show Query Time Travel</Button>
                                                             <Button onClick={this.closeQueryTimeTravelDialog}>Close</Button>
 
                                                         </DialogActions>
