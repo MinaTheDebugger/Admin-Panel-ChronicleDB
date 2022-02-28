@@ -10,7 +10,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
-
+import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useHistory } from "react-router-dom";
 import { useState } from 'react';
@@ -44,7 +44,7 @@ function Registerscreen() {
 
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-    const [passwordconfirm, setPasswordconfirm] = useState("''");
+
     const [showPassword1, setShowPassword1] = useState("");
     const [showPassword2, setShowPassword2] = useState("");
     const [errorName, setErrorName] = useState(false)
@@ -111,37 +111,50 @@ function Registerscreen() {
 
 
 
+
+
+
+
     const signUp = async (email, password, name) => {
 
 
         if (name === "") {
             setErrorName(true)
-
+            return
         }
 
         if (email === "") {
             setErrorEmail(true)
-
+            return
         }
 
         if (password1 === "") {
             setErrorPassword1(true)
-
+            return
         }
 
 
         if (password2 === "") {
             setErrorPassword2(true)
-
+            return
         }
-
-
-
-
 
         if (email === "" || password === "") {
             return;
         }
+
+
+        if (password1 !== password2) {
+            setErrorPassword2(true)
+            return;
+
+        }
+
+
+
+
+
+
         else {
 
             try {
@@ -316,6 +329,18 @@ function Registerscreen() {
                     Register
                 </Button>
 
+
+            </div>
+
+            <div className='SignIndiv'>
+                <label  >Are you already registered?</label>
+                <Link to={{
+                    pathname: "/"
+                }}>
+                    <Button variant="contained" size="small" type="submit"  >
+                        Sign In
+                    </Button>
+                </Link>
 
             </div>
 
