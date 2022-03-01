@@ -13,23 +13,13 @@ import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import { createChainedFunction } from '@mui/material';
 
 
 
 
 
 
-function mina(params) {
-
-    alert("Walid");
-
-}
-
-function walid(params) {
-    setInterval(() => {
-        alert("Walid");
-    }, 1000);
-}
 
 
 
@@ -59,45 +49,64 @@ export default class Jobs extends Component {
             Timershutdown: 0,
             systemLoadSwitch: false,
             systemLoadTimer: 0,
-            disableddt: false
+            disableddt: false,
+            arrayofstreams: [],
+            statusofthestream: false,
+            status: false
+        }
+    }
+
+
+    async componentDidMount() {
+        setInterval(() => {
+            //   this.fetchData()
+        }, 1000);
+    }
+
+
+    recover = async (id) => {
+        try {
+            await fetch(`http://localhost:8000/recover_stream_snapshot/${id}`);
+        } catch (err) {
+            console.error(`Error is -->  ${err}`)
+        }
+        //  alert("stream recovered successfully");
+    }
+
+
+
+    shutdown2 = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/shutdown_stream/${this.state.choosenStream}`)
+            this.setState({
+                disabledd: true
+            })
+        } catch (err) {
+            console.error(`Error is -->  ${err}`)
         }
     }
 
 
 
-
-
-    shutdown2 = async () => {
-
-
-
-
-        try {
-            const response = await fetch(`http://localhost:8000/shutdown_stream/${this.state.choosenStream}`)
-
-            this.setState({
-                disabledd: true
-            })
-
-        } catch (err) {
-            console.error(`Error is -->  ${err}`)
-
-        }
-
-
+    walid = () => {
+        this.setState({
+            status: !this.state.status
+        })
     }
 
 
     shutdown = async () => {
         let choosenstream = this.state.choosenStream;
         let Timershutdown1 = this.state.Timershutdown * 1000
-        setTimeout(this.shutdown2,
-
-
-            Timershutdown1);
+        if (this.state.status === false) {
+            setTimeout(this.shutdown2, Timershutdown1);
+        }
         this.setState({
-            shutdownswitch: !this.state.shutdownswitch
+            shutdownswitch: !this.state.shutdownswitch,
         })
+        if (this.state.status === false) {
+            setTimeout(this.walid, Timershutdown1);
+        }
     }
 
 
@@ -112,6 +121,32 @@ export default class Jobs extends Component {
     }
 
 
+    fetchData = async () => {
+        try {
+            const fetch1 = await fetch('http://localhost:8000/show_streams')
+            const response1 = await fetch1.json()
+            // alert(response1)
+            this.setState({ arrayofstreams: response1 }, () => {
+                // alert(this.state.choosenStream),
+                if (response1[this.state.choosenStream][1] === "Online") {
+                    this.setState({
+                        status: false
+                    })
+                } else {
+                    this.setState({
+                        status: true
+                    })
+                }
+            }
+            );
+        } catch (e) {
+            alert(e)
+        }
+    }
+
+
+
+
 
 
 
@@ -121,6 +156,7 @@ export default class Jobs extends Component {
         this.setState({
             choosenStream: event.target.value
         }, () => {
+            this.fetchData()
             if (this.state.choosenStream != "") {
                 this.setState({
                     showbox: true
@@ -131,10 +167,7 @@ export default class Jobs extends Component {
                 })
             }
         }
-
-
         )
-
     }
 
 
@@ -282,13 +315,43 @@ export default class Jobs extends Component {
                                 </div>
                                 <div className="listdiv">
                                     <div className='jobtype1'  >
+                                        <h2 className='JobName'>Recover:</h2>
+                                    </div>
+                                    <div className='off'>
+                                        <Typography>Off</Typography>
+                                    </div>
+                                    <div className='switch'>
+                                        <FormControlLabel checked={this.state.shutdownswitch} onChange={this.shutdown} control={<Switch />} label="" className='chechlog' />
+                                    </div>
+                                    <div className='on'>
+                                        <Typography>On</Typography>
+                                    </div>
+                                    <div className='intervalloptions'>
+                                        <FormControl sx={{ m: 1, width: '38ch' }} variant="outlined">
+                                            <OutlinedInput
+                                                size="small"
+                                                id="outlined-adornment-weight"
+                                                value={this.state.Timershutdown}
+                                                onChange={this.setTimerShutdown}
+                                                endAdornment={<InputAdornment position="end"> in sec</InputAdornment>}
+                                                aria-describedby="outlined-weight-helper-text"
+                                                inputProps={{
+                                                    'aria-label': 'weight',
+                                                }}
+                                            />
+                                            <FormHelperText id="outlined-weight-helper-text">Shutdown works only one time!</FormHelperText>
+                                        </FormControl>
+                                    </div>
+                                </div>
+                                <div className="listdiv">
+                                    <div className='jobtype1'  >
                                         <h2 className='JobName'>System Load:</h2>
                                     </div>
                                     <div className='off'>
                                         <Typography>Off</Typography>
                                     </div>
                                     <div className='switch'>
-                                        <FormControlLabel disabled={this.state.disabledd} checked={this.state.systemloadswitch} onChange={this.systemLoad} control={<Switch />} label="" className='chechlog' />
+                                        <FormControlLabel disabled={this.state.status} checked={this.state.systemloadswitch} onChange={this.systemLoad} control={<Switch />} label="" className='chechlog' />
                                     </div>
                                     <div className='on'>
                                         <Typography>On</Typography>
@@ -329,7 +392,7 @@ export default class Jobs extends Component {
                                     </div>
                                     <div className='switch'>
                                         <FormControlLabel
-                                            disabled={this.state.disabledd}
+                                            disabled={this.state.status}
                                             checked={this.state.checklog}
                                             onChange={this.changelog}
                                             control={<Switch />}
