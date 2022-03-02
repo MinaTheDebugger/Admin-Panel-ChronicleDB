@@ -326,21 +326,51 @@ ul li:nth-child(odd) {
 .ArrayOfEvents {
   position: relative;
   height: 8ch;
-  width: 30ch;
+  width: 25ch;
   border-radius: 12px;
   background-color: greenyellow;
-  left: 240px;
+  left: 3px;
+  top: 6px;
+}
+
+.ArrayOfEvents1 {
+  position: relative;
+  height: 8ch;
+  width: 25ch;
+  border-radius: 12px;
+  background-color: Gold;
+  left: 3px;
   top: 6px;
 }
 
 .insertbutton {
   position: relative;
-  height: 7ch;
-  width: 14ch;
+  height: 9ch;
+  width: 23ch;
+  background-color: white;
+}
+
+.insertbuttonschedule {
+  position: relative;
+  height: 9ch;
+  width: 23ch;
+  background-color: #e0ee1e;
 }
 
 .closeInsertOrderdialog {
   position: relative;
-  height: 7ch;
-  width: 14ch;
+  height: 9ch;
+  width: 23ch;
+  background-color: #f44336;
+}
+
+.insertorderschedule {
+  position: relative;
+  right: 85ch;
+  bottom: 1ch;
+  float: right;
+}
+
+.succesnotify {
+  background-color: #04aa6d;
 }

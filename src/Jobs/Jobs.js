@@ -13,7 +13,10 @@ import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-import { createChainedFunction } from '@mui/material';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+
+import { DateTimePicker } from '@mui/lab';
 
 
 
@@ -46,29 +49,85 @@ export default class Jobs extends Component {
             choosenStream: "",
             showbox: false,
             shutdownswitch: false,
-            Timershutdown: 0,
+            RecoverDate: '',
             systemLoadSwitch: false,
             systemLoadTimer: 0,
-            disableddt: false,
             arrayofstreams: [],
             statusofthestream: false,
-            status: false
+            StreamStatus: false,
+            recoverSwitch: false,
+            ShutdownDate: ''
         }
     }
 
 
     async componentDidMount() {
         setInterval(() => {
-            //   this.fetchData()
-        }, 1000);
+            this.fetchData()
+        }, 500);
     }
 
 
-    recover = async (id) => {
-        try {
-            await fetch(`http://localhost:8000/recover_stream_snapshot/${id}`);
-        } catch (err) {
-            console.error(`Error is -->  ${err}`)
+
+
+    recover = () => {
+
+
+        var secondBetweenTwoDate = Math.abs((this.state.RecoverDate - new Date().getTime()));
+
+
+        this.setState({
+            recoverSwitch: !this.state.recoverSwitch,
+
+
+        })
+        setTimeout(this.recover2, secondBetweenTwoDate)
+    }
+
+
+    setShutdwonTimer = (newValue) => {
+
+        this.setState({
+            ShutdownDate: newValue
+        }, //alert(this.state.ShutdownDate))
+
+        )
+
+    }
+
+
+    SetRecoverTime = (newValue) => {
+        this.setState({
+            RecoverDate: newValue
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+    recover2 = async () => {
+        if (this.state.recoverSwitch === true) {
+            try {
+                await fetch(`http://localhost:8000/recover_stream_snapshot/${this.state.choosenStream}`);
+                this.setState({
+                    StreamStatus: false,
+                    shutdownswitch: false
+
+                }, () => {
+                    //    alert(this.state.StreamStatus)
+                })
+            } catch (err) {
+                alert(`Error is -->  ${err}`)
+                this.setState({
+                    recoverSwitch: !this.state.recoverSwitch
+                })
+            }
         }
         //  alert("stream recovered successfully");
     }
@@ -88,24 +147,27 @@ export default class Jobs extends Component {
 
 
 
-    walid = () => {
+    disablebuttons = () => {
         this.setState({
-            status: !this.state.status
+            StreamStatus: !this.state.StreamStatus
         })
     }
 
 
     shutdown = async () => {
-        let choosenstream = this.state.choosenStream;
-        let Timershutdown1 = this.state.Timershutdown * 1000
-        if (this.state.status === false) {
-            setTimeout(this.shutdown2, Timershutdown1);
+
+
+        var secondBetweenTwoDate = Math.abs((this.state.ShutdownDate - new Date().getTime()));
+        // alert(secondBetweenTwoDate / 1000)
+        if (this.state.StreamStatus === false) {
+            setTimeout(this.shutdown2, secondBetweenTwoDate);
         }
         this.setState({
             shutdownswitch: !this.state.shutdownswitch,
+            recoverSwitch: false
         })
-        if (this.state.status === false) {
-            setTimeout(this.walid, Timershutdown1);
+        if (this.state.StreamStatus === false) {
+            setTimeout(this.disablebuttons, secondBetweenTwoDate);
         }
     }
 
@@ -128,17 +190,25 @@ export default class Jobs extends Component {
             // alert(response1)
             this.setState({ arrayofstreams: response1 }, () => {
                 // alert(this.state.choosenStream),
-                if (response1[this.state.choosenStream][1] === "Online") {
-                    this.setState({
-                        status: false
-                    })
-                } else {
-                    this.setState({
-                        status: true
-                    })
+                //      alert(response1.length)
+                if (response1.length >= 1) {
+                    // When u see this error u was too fast , Just refresh the page and wait 2 seconds !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    // When u see this error u was too fast , Just refresh the page and wait 2 seconds !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if (response1[this.state.choosenStream][1] === "Online") {
+                        // When u see this error u was too fast , Just refresh the page and wait 2 seconds !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        // When u see this error u was too fast , Just refresh the page and wait 2 seconds !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        this.setState({
+                            StreamStatus: false
+                        })
+                    } else {
+                        this.setState({
+                            StreamStatus: true,
+                            shutdownswitch: true
+                        })
+                    }
+
                 }
-            }
-            );
+            });
         } catch (e) {
             alert(e)
         }
@@ -153,6 +223,7 @@ export default class Jobs extends Component {
 
 
     selectStream = event => {
+        //   alert(Math.abs((new Date().getTime())))
         this.setState({
             choosenStream: event.target.value
         }, () => {
@@ -172,12 +243,6 @@ export default class Jobs extends Component {
 
 
 
-    setTimerShutdown = event => {
-        this.setState({
-            Timershutdown: event.target.value
-        })
-    }
-
 
 
     setTimerSystemload = event => {
@@ -195,42 +260,28 @@ export default class Jobs extends Component {
             const url = await `http://localhost:5000/user/streamperuser?user_id=${id}`
             const response = await axios(url);
             const data = await response.data;
+
+            let array = [];
+            array.unshift('');
+            let array2 = array.concat(data)
             /* 
+    
              data.forEach(element => {
                  this.state.arrayOFIdCurrenUser.push(element)
              });
              */
-
-            data.unshift('')
-
-
-
-
+            data.unshift('');
             this.setState({
-
-
-                arrayOFIdCurrenUser: data
+                arrayOFIdCurrenUser: array2
             }, () => {
                 //   alert(this.state.arrayOFIdCurrenUser)
             }
             )
-
-
         } catch (err) {
             alert(err)
             console.error(`Error is -->  ${err}`)
         }
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -283,7 +334,7 @@ export default class Jobs extends Component {
                                     <div className='jobtype'   ><h2>Job Type</h2></div>
                                     <div className='setintervall'><h2>Set Interval</h2></div>
                                 </div>
-                                <div className="listdiv">
+                                <div className="listdiv1">
                                     <div className='jobtype1'  >
                                         <h2 className='JobName'>Shutdown:</h2>
                                     </div>
@@ -298,51 +349,47 @@ export default class Jobs extends Component {
                                     </div>
                                     <div className='intervalloptions'>
                                         <FormControl sx={{ m: 1, width: '38ch' }} variant="outlined">
-                                            <OutlinedInput
-                                                size="small"
-                                                id="outlined-adornment-weight"
-                                                value={this.state.Timershutdown}
-                                                onChange={this.setTimerShutdown}
-                                                endAdornment={<InputAdornment position="end"> in sec</InputAdornment>}
-                                                aria-describedby="outlined-weight-helper-text"
-                                                inputProps={{
-                                                    'aria-label': 'weight',
-                                                }}
-                                            />
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <DateTimePicker
+                                                    renderInput={(props) => <TextField {...props} />}
+                                                    label="DateTimePicker"
+                                                    value={this.state.ShutdownDate}
+                                                    onChange={this.setShutdwonTimer}
+                                                />
+                                            </LocalizationProvider>
                                             <FormHelperText id="outlined-weight-helper-text">Shutdown works only one time!</FormHelperText>
                                         </FormControl>
                                     </div>
                                 </div>
+
                                 <div className="listdiv">
                                     <div className='jobtype1'  >
-                                        <h2 className='JobName'>Recover:</h2>
+                                        <h2 className='JobNameRecover'>Recover:</h2>
                                     </div>
-                                    <div className='off'>
+                                    <div className='offrecover'>
                                         <Typography>Off</Typography>
                                     </div>
-                                    <div className='switch'>
-                                        <FormControlLabel checked={this.state.shutdownswitch} onChange={this.shutdown} control={<Switch />} label="" className='chechlog' />
+                                    <div className='switchrecover'>
+                                        <FormControlLabel checked={this.state.recoverSwitch} onChange={this.recover} control={<Switch />} label="" className='chechlog' />
                                     </div>
-                                    <div className='on'>
+                                    <div className='onrecover'>
                                         <Typography>On</Typography>
                                     </div>
                                     <div className='intervalloptions'>
                                         <FormControl sx={{ m: 1, width: '38ch' }} variant="outlined">
-                                            <OutlinedInput
-                                                size="small"
-                                                id="outlined-adornment-weight"
-                                                value={this.state.Timershutdown}
-                                                onChange={this.setTimerShutdown}
-                                                endAdornment={<InputAdornment position="end"> in sec</InputAdornment>}
-                                                aria-describedby="outlined-weight-helper-text"
-                                                inputProps={{
-                                                    'aria-label': 'weight',
-                                                }}
-                                            />
-                                            <FormHelperText id="outlined-weight-helper-text">Shutdown works only one time!</FormHelperText>
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <DateTimePicker
+                                                    renderInput={(props) => <TextField {...props} />}
+                                                    label="DateTimePicker"
+                                                    value={this.state.RecoverDate}
+                                                    onChange={this.SetRecoverTime}
+                                                />
+                                            </LocalizationProvider>
+                                            <FormHelperText id="outlined-weight-helper-text">Recover works only when stream is offline</FormHelperText>
                                         </FormControl>
                                     </div>
                                 </div>
+                                {/*
                                 <div className="listdiv">
                                     <div className='jobtype1'  >
                                         <h2 className='JobName'>System Load:</h2>
@@ -351,7 +398,7 @@ export default class Jobs extends Component {
                                         <Typography>Off</Typography>
                                     </div>
                                     <div className='switch'>
-                                        <FormControlLabel disabled={this.state.status} checked={this.state.systemloadswitch} onChange={this.systemLoad} control={<Switch />} label="" className='chechlog' />
+                                        <FormControlLabel disabled={this.state.StreamStatus} checked={this.state.systemloadswitch} onChange={this.systemLoad} control={<Switch />} label="" className='chechlog' />
                                     </div>
                                     <div className='on'>
                                         <Typography>On</Typography>
@@ -383,6 +430,8 @@ export default class Jobs extends Component {
 
 
 
+
+
                                 <div className="listdiv" >
                                     <div className='jobtype1'  >
                                         <h2 className='JobName'>iii:</h2>
@@ -392,7 +441,7 @@ export default class Jobs extends Component {
                                     </div>
                                     <div className='switch'>
                                         <FormControlLabel
-                                            disabled={this.state.status}
+                                            disabled={this.state.StreamStatus}
                                             checked={this.state.checklog}
                                             onChange={this.changelog}
                                             control={<Switch />}
@@ -418,6 +467,7 @@ export default class Jobs extends Component {
                                         </FormControl>
                                     </div>
                                 </div>
+                                            */}
 
 
 
@@ -439,6 +489,14 @@ export default class Jobs extends Component {
 
                     </div>
                 }
+
+
+
+
+
+
+
+
             </div >
         )
     }

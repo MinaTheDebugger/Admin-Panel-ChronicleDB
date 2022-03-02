@@ -3,16 +3,21 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import axios from "axios";
 import { FormControlLabel } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
-
-
 import history from './alteComponents/history';
-
 import Switch from '@mui/material/Switch';
 import { TextField, } from '@mui/material';
 import '../components/alteComponents/debug.css'
 import Cookies from 'js-cookie';
-
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { DateTimePicker } from '@mui/lab';
 import '../components/createStreamScreen.css'
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
 
@@ -329,6 +334,8 @@ class CreateStreamScreen extends Component {
             compressor: 'empty',
             riverthreads: 'empty',
             maxdeltaqueue: 10,
+            openschedule: false,
+            dateCreateStream: ""
         }
 
     }
@@ -370,11 +377,23 @@ class CreateStreamScreen extends Component {
 
         }, () => {
             console.log('Multiple disk max queue:', this.state.multiplediskmaxqueue)
-
         }
         )
-
     }
+
+    OpenScheduleDialog = () => {
+        this.setState({
+            openschedule: true
+        })
+    }
+
+    CloseScheduleDialog = () => {
+        this.setState({
+            openschedule: false
+        })
+    }
+
+
     changedatafiles = event => {
         this.setState({
             datafilesinput: event.target.value
@@ -454,6 +473,18 @@ class CreateStreamScreen extends Component {
 
         })
     }
+
+
+
+
+    UpdateDate = (newValue) => {
+        this.setState({
+            dateCreateStream: newValue
+        })
+    }
+
+
+
     changemacroblockbatchallocation = event => {
         this.setState({
             macroblockbatchallocationinput: event.target.value
@@ -515,13 +546,24 @@ class CreateStreamScreen extends Component {
         })
     }
 
-    createStreamTest = () => {
+    setTimerCreateStream = () => {
+        var secondBetweenTwoDate = Math.abs((this.state.dateCreateStream - new Date().getTime()));
+        // alert(secondBetweenTwoDate)
+        setTimeout(() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue), secondBetweenTwoDate);
+        this.setState({
+            openschedule: false
+        })
+    }
+
+
+
+    createStream = (checklog, checkdebug, mulltiplediskmaxqueue, logicalblocksizeinput, macroblocksizeinput, macroblockpreallocationinput, macroblockbatchallocationinput, macroblockscache, nodescache, maxdeltaqueue) => {
         console.log("its working");
         const url = 'http://localhost:8000/create_stream'
-        console.log(this.state.passedmacroblockscache + "CreateStream method");
+        // console.log(this.state.passedmacroblockscache + "CreateStream method");
         const objectTest = `
         [Debug]#
-          Log							= ${this.state.checklog}
+          Log							= ${checklog}
         
           # All the dynamic TAB+Index optimized sizes are discarded and
           # the minimum size for the nodes is used instead, if set to true. 
@@ -529,7 +571,7 @@ class CreateStreamScreen extends Component {
           # 	- Index Data Size 			:= 3 Keys   / Node.
           # 	- Leaf Data Size  			:= 2 Events / Node.
           # Otherwise, calculates the most suitable TAB+Index sizes. and hi
-          Debug							= ${this.state.checkdebug}
+          Debug							= ${checkdebug}
         
         [I/O]#	
           # Data files.
@@ -551,7 +593,7 @@ class CreateStreamScreen extends Component {
           # Multiple Disk Queue Checkpoint.
           # The number of MacroBlocks allowed to be queued on disk writer thread(s).
           # This number must be much lower than MacroBlock Cache * number of data files.
-          Multiple disk max queue 		= ${this.state.mulltiplediskmaxqueue}
+          Multiple disk max queue 		= ${mulltiplediskmaxqueue}
           
         [Stream Event Layout]#
           # You must declare the layout in a valid json format.
@@ -674,31 +716,31 @@ class CreateStreamScreen extends Component {
           # p								:= Physical IO Block Size.
           # <number> 						:= <number> of bytes.
           # WARNING: l and p not supported yet!
-          LogicalBlock size 				= ${this.state.logicalblocksizeinput}
+          LogicalBlock size 				= ${logicalblocksizeinput}
           
           # Number of bytes for a MacroBlock.
           # Denoted in a multiply of Logical Block Size.
           # The multiply value must be a decimal number and never 0.
-          MacroBlock size 				= ${this.state.macroblocksizeinput}
+          MacroBlock size 				= ${macroblocksizeinput}
           
           # Percent of spare space in a MacroBlock.
           MacroBlock spare				= 0.1
           
           # Number of MacroBlocks to preallocate at start.
-          MacroBlock preallocation 		= ${this.state.macroblockpreallocationinput}
+          MacroBlock preallocation 		= ${macroblockpreallocationinput}
           
           # Allocates a number of MacroBlocks, when MacroBlockPreallocation
           # is exhausted.
           # 0								:= Batch allocator disabled.
           # n, where n is greater or equal to MacroBlockPreallocation.
-          MacroBlock batch allocation		= ${this.state.macroblockbatchallocationinput}
+          MacroBlock batch allocation		= ${macroblockbatchallocationinput}
           
         [Cache]#
           # Number of MacroBlocks to keep in memory in LRU i.e. cache.
-          MacroBlocks cache				= ${this.state.macroblockscache}
+          MacroBlocks cache				= ${macroblockscache}
           
           # Number of Nodes to keep in memory in LRU i.e. cache.
-          Nodes cache						= ${this.state.nodescache}
+          Nodes cache						= ${nodescache}
           
         [Compressor]#
           # The compression algorithm used.
@@ -743,7 +785,7 @@ class CreateStreamScreen extends Component {
           # Number of jobs to queue in the delta before blocking.
           # Larger queues may enhance performance, but require longer syncing, when shutdown. 
           # This value * number of disks must be always smaller than MacroBlocksCache.
-          Max delta queue					= ${this.state.maxdeltaqueue}
+          Max delta queue					= ${maxdeltaqueue}
           
           
           
@@ -1118,10 +1160,73 @@ class CreateStreamScreen extends Component {
                             pathname: "/Home",
                             state: { fromDashboard: "Stream Data :" + this.state.compressor + " " + this.state.riverthreads + " " + this.state.maxdeltaqueue }
                         }}>
-                            <button className='createStreambutton1' type="button" name='WWalid' onClick={this.createStreamTest}>
+                            <button className='createStreambutton1' type="button" name='WWalid' onClick={() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue)}>
                                 CreateStream
                             </button>
                         </Link>
+
+
+                        <button variant="outlined"
+                            onClick={this.OpenScheduleDialog}
+                            className='DialogSchedule'
+                        >
+                            Schedule Create Stream
+                        </button>
+                        <Dialog
+                            fullWidth="sm"
+                            maxWidth="sm"
+                            open={this.state.openschedule}
+                            //    onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">
+                                {"Select the Date to create the Stream"}
+                            </DialogTitle>
+                            <DialogContent>
+
+                                <DialogContentText id="alert-dialog-description">
+
+                                </DialogContentText>
+                                <div className='Schedulebox'>
+
+
+
+
+                                    <LocalizationProvider dateAdapter={AdapterDateFns} >
+                                        <DateTimePicker
+                                            renderInput={(props) => <TextField {...props} />}
+                                            label="DateTimePicker"
+                                            value={this.state.dateCreateStream}
+                                            onChange={this.UpdateDate}
+
+
+                                        />
+                                    </LocalizationProvider>
+                                </div>
+
+
+
+
+
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    onClick={this.CloseScheduleDialog}
+                                >Close</Button>
+                                <Button
+                                    onClick={this.setTimerCreateStream}
+                                    autoFocus>
+                                    Set
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+
+
+
+
+
+
                     </div>
 
                     {/*//////////////////////////////////////// <End of Comüpressor  >////////////////////////////////////////////////////////////////////////////////////////*/}

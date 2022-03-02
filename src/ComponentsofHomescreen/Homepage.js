@@ -10,6 +10,13 @@ import Select from '@mui/material/Select';
 import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import Cookies from 'js-cookie';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { DateTimePicker } from '@mui/lab';
+
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -83,6 +90,20 @@ async function ShowRightFlank(id) {
 }
 
 
+const succesnotify = () => {
+    toast.success('Order Added Succefully', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
 
 
 
@@ -134,6 +155,10 @@ async function getTreeHeight(id) {
 
 
 
+
+
+
+
 /*
 insertOrderedEventArr = async (id, arr) => {
     try {
@@ -172,7 +197,7 @@ export default class Homepage extends Component {
             systeminfoopendialog: false,
             rightflankopendialog: false,
             systeminfo: '',
-            eventType: "U8",
+            eventType: "",
             dataofevent: '0',
             rawtype: "",
             consttype: "",
@@ -185,7 +210,9 @@ export default class Homepage extends Component {
             rightFlankText: '',
             arrayOFIdCurrenUser: [],
             addMultipleEvents: false,
-            EventArray: []
+            EventArray: [],
+            errorChoosetype: false,
+            dateInsertOrder: ''
 
         }
     }
@@ -278,6 +305,16 @@ export default class Homepage extends Component {
         const fetch1 = await fetch('http://localhost:8000/show_streams')
         const response1 = await fetch1.json()
         this.setState({ id: response1 });
+    }
+
+
+    UpdateDateInsertOrder = (newValue) => {
+        this.setState({
+            dateInsertOrder: newValue
+        }, () => {
+
+        })
+
     }
 
 
@@ -534,12 +571,14 @@ export default class Homepage extends Component {
         })
     }
 
+    HideTextAndButton = () => {
+        this.setState({
+            addMultipleEvents: false
+        })
+    }
+
 
     InsertToArray = (id, timeStamp, eventType, dataofevent) => {
-
-
-
-
         this.state.EventArray.push(`
 {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`)
         /*
@@ -551,7 +590,14 @@ export default class Homepage extends Component {
 
     }
 
+    setScheduleInsertOrder = () => {
+        var secondBetweenTwoDate = Math.abs((this.state.dateInsertOrder - new Date().getTime()));
 
+        succesnotify()
+
+
+        setTimeout(() => this.insertEvent(this.state.index, this.state.timeStamp, this.state.eventType, this.state.dataofevent), secondBetweenTwoDate)
+    }
 
 
 
@@ -566,25 +612,55 @@ export default class Homepage extends Component {
     }
 
 
-    insertEvent = async (id, timeStamp, eventType, dataofevent) => {
-        try {
-            let eventDetails = `
+
+
+
+
+
+
+
+
+
+
+
+
+    insertEvent = async (index, timeStamp, eventType, dataofevent) => {
+
+        if (this.state.addMultipleEvents === false) {
+            if (this.state.eventType !== "") {
+
+
+                try {
+                    let eventDetails = `
    {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`
-            const response = await axios.post(`http://localhost:8000/insert_ordered/${id}`, eventDetails);
+                    const response = await axios.post(`http://localhost:8000/insert_ordered/${index}`, eventDetails);
 
-            const data = await response.data;
-            console.log("ddddddddddddddddddddddd ", data);
-            this.setState({
-                InsertOrderDialog: false,
-                addMultipleEvents: false,
-                EventArray: ""
+                    const data = await response.data;
+                    console.log("ddddddddddddddddddddddd ", data);
+                    this.setState({
+                        InsertOrderDialog: false,
+                        addMultipleEvents: false,
+                        EventArray: ""
 
-            })
+                    })
 
-        } catch (e) {
-            //console.log(e)
-            console.error(e)
-            alert("Please the Data correctly")
+                } catch (e) {
+                    //console.log(e)
+                    console.error(e)
+                    alert("Please the Data correctly")
+                }
+            } else {
+                this.setState({
+                    errorChoosetype: true
+                })
+
+            }
+        } else {
+
+
+            alert(this.state.EventArray)
+
+
         }
     }
 
@@ -877,7 +953,23 @@ export default class Homepage extends Component {
                                                         <DialogTitle>Insert Event</DialogTitle>
                                                         <DialogContent>
                                                             <DialogContentText>
-                                                                <h1> Stream {this.state.index} </h1>
+                                                                <h1> Stream: {this.state.index} </h1>
+                                                                <h3>Option to Schedule the Insert Order:
+                                                                    <div className='insertorderschedule'>
+                                                                        <LocalizationProvider dateAdapter={AdapterDateFns}  >
+                                                                            <DateTimePicker
+                                                                                renderInput={(props) => <TextField {...props} />}
+                                                                                label="DateTimePicker"
+                                                                                value={this.state.dateInsertOrder}
+                                                                                onChange={this.UpdateDateInsertOrder}
+
+
+
+                                                                            />
+                                                                        </LocalizationProvider>
+
+                                                                    </div>
+                                                                </h3>
                                                             </DialogContentText>
 
                                                             <TextField
@@ -896,7 +988,10 @@ export default class Homepage extends Component {
 
                                                             <FormControl sx={{ m: 1, minWidth: 450 }}>
                                                                 <InputLabel htmlFor="grouped-native-select" >Raw</InputLabel>
-                                                                <Select native defaultValue="" id="grouped-native-select" label="Grouping" onChange={this.changeraw} value={this.state.rawtype} >
+                                                                <Select native defaultValue=""
+                                                                    error={this.state.errorChoosetype}
+                                                                    helperText={this.state.errorChoosetype ? "Please enter your name" : ""}
+                                                                    id="grouped-native-select" label="Grouping" onChange={this.changeraw} value={this.state.rawtype} >
                                                                     <option aria-label="None" value="" />
 
 
@@ -932,7 +1027,9 @@ export default class Homepage extends Component {
 
                                                             <FormControl sx={{ m: 1, minWidth: 450 }}>
                                                                 <InputLabel htmlFor="grouped-native-select">Const</InputLabel>
-                                                                <Select native defaultValue="" id="grouped-native-select" label="Grouping" onChange={this.changeconst} value={this.state.consttype} >
+                                                                <Select native
+                                                                    error={this.state.errorChoosetype}
+                                                                    defaultValue="" id="grouped-native-select" label="Grouping" onChange={this.changeconst} value={this.state.consttype} >
                                                                     <option aria-label="None" value="" />
                                                                     <optgroup label="String">
                                                                         <option value={"ConstString"}>ConstString</option>
@@ -960,7 +1057,8 @@ export default class Homepage extends Component {
 
                                                             <FormControl sx={{ m: 1, minWidth: 450 }}>
                                                                 <InputLabel htmlFor="grouped-native-select" >Var</InputLabel>
-                                                                <Select native defaultValue="" id="grouped-native-select" label="Grouping" onChange={this.changevar} value={this.state.vartype} >
+                                                                <Select native defaultValue=""
+                                                                    error={this.state.errorChoosetype} id="grouped-native-select" label="Grouping" onChange={this.changevar} value={this.state.vartype} >
                                                                     <option aria-label="None" value="" />
                                                                     <optgroup label="String">
                                                                         <option value={"VarString"}>VarString</option>
@@ -1001,9 +1099,21 @@ export default class Homepage extends Component {
                                                                 helperText="Please enter data according to the chosen Event type!"
 
                                                             />
-                                                            <Button variant="outlined" size="large" className="ArrayOfEvents" onClick={this.ShowHidenTextAndButton}>
-                                                                Add Array of Events
-                                                            </Button>
+
+                                                            {this.state.addMultipleEvents ?
+                                                                <Button variant="outlined" size="large" className="ArrayOfEvents1" onClick={this.HideTextAndButton}>
+                                                                    Add Single Events
+                                                                </Button>
+                                                                :
+                                                                <Button variant="outlined" size="large" className="ArrayOfEvents" onClick={this.ShowHidenTextAndButton}>
+                                                                    Add Array of Events
+                                                                </Button>
+                                                            }
+
+
+
+
+
 
 
                                                             {this.state.addMultipleEvents ?
@@ -1036,8 +1146,13 @@ export default class Homepage extends Component {
 
 
                                                         <DialogActions>
-                                                            <Button className='insertbutton' onClick={() => this.insertEvent(this.state.index, this.state.timeStamp, this.state.eventType, this.state.dataofevent)}>Insert</Button>
+
+                                                            <Button className='insertbutton' onClick={() => this.insertEvent(this.state.index, this.state.timeStamp, this.state.eventType, this.state.dataofevent)}>Insert Now</Button>
+                                                            <Button className='insertbuttonschedule' onClick={() => this.setScheduleInsertOrder()}>Insert As Scheduled</Button>
                                                             <Button className='closeInsertOrderdialog' onClick={this.closeInsertOrderDialog}>Close</Button>
+
+
+
 
                                                         </DialogActions>
                                                     </Dialog>
@@ -1156,8 +1271,8 @@ export default class Homepage extends Component {
 
                                                         </DialogContent>
                                                         <DialogActions>
-                                                            <Button onClick={() => this.show_QueryTime(this.state.index, this.state.exclusiveorinclusive, this.state.queryTimeStart, this.state.queryTimeEnd)}> Show Query Time Travel</Button>
-                                                            <Button onClick={this.closeQueryTimeTravelDialog}>Close</Button>
+                                                            <Button className='insertbutton' onClick={() => this.show_QueryTime(this.state.index, this.state.exclusiveorinclusive, this.state.queryTimeStart, this.state.queryTimeEnd)}> Show Query Time Travel</Button>
+                                                            <Button className='closeInsertOrderdialog' onClick={this.closeQueryTimeTravelDialog}>Close</Button>
 
                                                         </DialogActions>
                                                     </Dialog>
@@ -1193,7 +1308,7 @@ export default class Homepage extends Component {
                                                         </DialogActions>
                                                     </Dialog>
 
-
+                                                    <ToastContainer />
 
 
 

@@ -35,6 +35,12 @@
   float: left;
 }
 
+.JobNameRecover {
+  position: relative;
+  float: left;
+  top: 1.5ch;
+}
+
 .buttonforJob {
   position: relative;
   width: 33.33%;
@@ -56,11 +62,28 @@
   top: 5ch;
   right: 10ch;
 }
+
+.offrecover {
+  position: relative;
+  width: 5%;
+  float: left;
+  top: 7.5ch;
+  right: 10ch;
+}
+
 .switch {
   position: relative;
   width: 5%;
   float: left;
   top: 4.3ch;
+  right: 3ch;
+  right: 10ch;
+}
+.switchrecover {
+  position: relative;
+  width: 5%;
+  float: left;
+  top: 6.7ch;
   right: 3ch;
   right: 10ch;
 }
@@ -73,6 +96,14 @@
   right: 4.7ch;
   right: 10ch;
 }
+.onrecover {
+  position: relative;
+  width: 8%;
+  float: left;
+  top: 7.6ch;
+  right: 4.7ch;
+  right: 10ch;
+}
 
 .intervalloptions {
   position: relative;
@@ -80,4 +111,8 @@
   float: right;
   top: 2ch;
   right: 10ch;
+}
+
+.listdiv1 {
+  position: relative;
 }

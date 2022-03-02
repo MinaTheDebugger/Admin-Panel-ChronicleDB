@@ -12,6 +12,7 @@ import axios from "axios";
 
 import Cookies from 'js-cookie';
 import Jobscreen from './screens/Jobscreen';
+import Example from './ComponentsofHomescreen/Example';
 
 
 
@@ -399,6 +400,11 @@ class App extends Component {
 
           </Switch>
 
+          <Switch>
+            <Route exact path="/Ex">
+              <Example />
+            </Route>
+          </Switch>
 
 
 
