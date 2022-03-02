@@ -34,14 +34,20 @@ const ExluciveOrInclusiveOptions = [
 
 
 async function shutDown(id) {
-    await fetch(`http://localhost:8000/shutdown_stream/${id}`);
-
+    const response = await fetch(`http://localhost:8000/shutdown_stream/${id}`);
+    if (response.status_code == 200) {
+        successShutDownNotify()
+    }
     //  alert("its now shutDown succesfulyys");
 
 }
 
 async function recover(id) {
-    await fetch(`http://localhost:8000/recover_stream_snapshot/${id}`);
+    const response = await fetch(`http://localhost:8000/recover_stream_snapshot/${id}`);
+    if (response.status_code == 200) {
+        successRecovernotify();
+    }
+
     //  alert("stream recovered successfully");
 }
 
@@ -90,8 +96,8 @@ async function ShowRightFlank(id) {
 }
 
 
-const succesnotify = () => {
-    toast.success('Order Added Succefully', {
+const successRecovernotify = () => {
+    toast.success('Successfully recovered', {
         position: "top-right",
         className: "succesnotify",
         autoClose: 5000,
@@ -102,6 +108,85 @@ const succesnotify = () => {
         progress: undefined,
     });
 }
+
+
+
+const successInserOrderNotify = () => {
+    toast.success('Successfully Order Inserted', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
+
+
+
+
+
+const successShutDownNotify = () => {
+    toast.success('Successfully Turned Off', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
+
+
+
+
+const succesnotify = () => {
+    toast.success('Order Added Successfully', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
+const errornotify = () => {
+
+    toast.error(' Please set a date first!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+const missingEventTypeNotify = () => {
+    toast.error(' Please select a EventType!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
 
 
 
@@ -592,11 +677,26 @@ export default class Homepage extends Component {
 
     setScheduleInsertOrder = () => {
         var secondBetweenTwoDate = Math.abs((this.state.dateInsertOrder - new Date().getTime()));
+        if (this.state.dateInsertOrder === '') {
+            errornotify()
 
-        succesnotify()
+            return
+        } else {
 
-
-        setTimeout(() => this.insertEvent(this.state.index, this.state.timeStamp, this.state.eventType, this.state.dataofevent), secondBetweenTwoDate)
+            if (this.state.eventType === '') {
+                this.setState({
+                    errorChoosetype: true
+                })
+                missingEventTypeNotify()
+                return
+            } else {
+                this.setState({
+                    errorChoosetype: false
+                })
+                succesnotify()
+                setTimeout(() => this.insertEvent(this.state.index, this.state.timeStamp, this.state.eventType, this.state.dataofevent), secondBetweenTwoDate)
+            }
+        }
     }
 
 
@@ -628,6 +728,9 @@ export default class Homepage extends Component {
 
         if (this.state.addMultipleEvents === false) {
             if (this.state.eventType !== "") {
+                this.setState({
+                    errorChoosetype: false
+                })
 
 
                 try {
@@ -643,6 +746,9 @@ export default class Homepage extends Component {
                         EventArray: ""
 
                     })
+                    successInserOrderNotify();
+
+
 
                 } catch (e) {
                     //console.log(e)
@@ -653,7 +759,7 @@ export default class Homepage extends Component {
                 this.setState({
                     errorChoosetype: true
                 })
-
+                missingEventTypeNotify()
             }
         } else {
 
@@ -1309,13 +1415,6 @@ export default class Homepage extends Component {
                                                     </Dialog>
 
                                                     <ToastContainer />
-
-
-
-
-
-
-
 
                                                 </div>
                                             </li>

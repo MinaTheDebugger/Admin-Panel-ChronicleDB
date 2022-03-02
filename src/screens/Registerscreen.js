@@ -14,6 +14,8 @@ import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useHistory } from "react-router-dom";
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -27,6 +29,20 @@ function goToLoginScreen() {
 }
 
 */
+
+
+const RegisterSucessfullyNotify = () => {
+    toast.success('Registered Successfully', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
 
 
 function Registerscreen() {
@@ -167,6 +183,7 @@ function Registerscreen() {
                 const response = await axios.post('http://localhost:5000/user/register', signUpDetails)
                 console.log(response.data)
                 goToLoginScreen()
+                RegisterSucessfullyNotify()
 
 
             } catch (err) {
@@ -343,6 +360,7 @@ function Registerscreen() {
                 </Link>
 
             </div>
+            <ToastContainer />
 
         </div >
     )

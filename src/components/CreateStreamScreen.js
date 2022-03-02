@@ -18,6 +18,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -297,7 +299,18 @@ async function CreateStreamPgAdmin(stream_id, user_id) {
 
 
 
-
+const successCreatedStreamNotify = () => {
+    toast.success('Successfully Stream created', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
 
 
 
@@ -805,6 +818,7 @@ class CreateStreamScreen extends Component {
                 //     alert(response.data[31])
 
                 CreateStreamPgAdmin(response.data[31], Cookies.get('UserID'))
+                successCreatedStreamNotify();
 
             })
             .catch(function (error) {
@@ -1232,7 +1246,7 @@ class CreateStreamScreen extends Component {
                     {/*//////////////////////////////////////// <End of Comüpressor  >////////////////////////////////////////////////////////////////////////////////////////*/}
 
                 </div >
-
+                <ToastContainer />
 
             </div>
 
