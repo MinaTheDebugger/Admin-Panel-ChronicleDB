@@ -17,6 +17,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import { DateTimePicker } from '@mui/lab';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -26,14 +28,65 @@ import { DateTimePicker } from '@mui/lab';
 
 
 
-async function shutDown(id) {
-    const response = await fetch(`http://localhost:8000/shutdown_stream/${id}`);
 
-    //  alert("its now shutDown succesfulyys");
-
+const successShutDownNotify = (id) => {
+    toast.warn(`Successfully Stream ${id} Turned Off`, {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
 }
 
 
+const successRecovernotify = (id) => {
+    toast.success(`Successfully Stream ${id} recovered`, {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
+const errorNoDate = () => {
+
+    toast.error(' Please set a date first!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
+
+
+
+
+const errorShutdownNotify = (id) => {
+
+    toast.error(`Error occurred while shutting down Stream ${id}!`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
 
 
 
@@ -54,7 +107,7 @@ export default class Jobs extends Component {
             systemLoadTimer: 0,
             arrayofstreams: [],
             statusofthestream: false,
-            StreamStatus: false,
+            StreamStatus: true,
             recoverSwitch: false,
             ShutdownDate: ''
         }
@@ -64,7 +117,15 @@ export default class Jobs extends Component {
     async componentDidMount() {
         setInterval(() => {
             this.fetchData()
+
         }, 500);
+    }
+
+    componentDidMount() {
+        setInterval(() => {
+            this.getArrayOFStreamsIdOFTHeCurrentUser(Cookies.get('UserID'))
+
+        }, 1000)
     }
 
 
@@ -72,27 +133,29 @@ export default class Jobs extends Component {
 
     recover = () => {
 
+        if (this.state.RecoverDate === '') {
+            errorNoDate();
+            return;
+        }
 
+
+        if (this.state.StreamStatus === true) {
+            return;
+        }
         var secondBetweenTwoDate = Math.abs((this.state.RecoverDate - new Date().getTime()));
-
-
         this.setState({
-            recoverSwitch: !this.state.recoverSwitch,
-
-
+            recoverSwitch: true,
         })
         setTimeout(this.recover2, secondBetweenTwoDate)
     }
 
 
     setShutdwonTimer = (newValue) => {
-
         this.setState({
             ShutdownDate: newValue
-        }, //alert(this.state.ShutdownDate))
-
-        )
-
+        }, () => {
+            //    alert(this.state.ShutdownDate)
+        })
     }
 
 
@@ -112,23 +175,25 @@ export default class Jobs extends Component {
 
 
     recover2 = async () => {
-        if (this.state.recoverSwitch === true) {
-            try {
-                await fetch(`http://localhost:8000/recover_stream_snapshot/${this.state.choosenStream}`);
-                this.setState({
-                    StreamStatus: false,
-                    shutdownswitch: false
 
-                }, () => {
-                    //    alert(this.state.StreamStatus)
-                })
-            } catch (err) {
-                alert(`Error is -->  ${err}`)
-                this.setState({
-                    recoverSwitch: !this.state.recoverSwitch
-                })
-            }
+        try {
+            await fetch(`http://localhost:8000/recover_stream_snapshot/${this.state.choosenStream}`);
+            this.setState({
+                StreamStatus: true,
+                shutdownswitch: false
+
+            }, () => {
+                //    alert(this.state.StreamStatus)
+            })
+
+            successRecovernotify(this.state.choosenStream);
+        } catch (err) {
+            alert(`Error is -->  ${err}`)
+            this.setState({
+                recoverSwitch: false
+            })
         }
+
         //  alert("stream recovered successfully");
     }
 
@@ -138,49 +203,52 @@ export default class Jobs extends Component {
         try {
             const response = await fetch(`http://localhost:8000/shutdown_stream/${this.state.choosenStream}`)
             this.setState({
-                disabledd: true
+                disabledd: true,
+                recoverSwitch: false,
+                StreamStatus: false,
             })
+            successShutDownNotify(this.state.choosenStream)
+
         } catch (err) {
             console.error(`Error is -->  ${err}`)
+            this.setState({
+                shutdownswitch: false,
+            })
+            errorShutdownNotify(this.state.choosenStream)
         }
     }
 
 
 
-    disablebuttons = () => {
-        this.setState({
-            StreamStatus: !this.state.StreamStatus
-        })
-    }
+
 
 
     shutdown = async () => {
 
+        if (this.state.StreamStatus === false) {
+            return
+        }
+
 
         var secondBetweenTwoDate = Math.abs((this.state.ShutdownDate - new Date().getTime()));
-        // alert(secondBetweenTwoDate / 1000)
-        if (this.state.StreamStatus === false) {
+        //alert(secondBetweenTwoDate / 1000)
+        if (this.state.ShutdownDate === '') {
+            errorNoDate();
+            return
+        }
+
+
+        if (this.state.StreamStatus === true) {
             setTimeout(this.shutdown2, secondBetweenTwoDate);
+            this.setState({
+                shutdownswitch: true,
+            })
         }
-        this.setState({
-            shutdownswitch: !this.state.shutdownswitch,
-            recoverSwitch: false
-        })
-        if (this.state.StreamStatus === false) {
-            setTimeout(this.disablebuttons, secondBetweenTwoDate);
-        }
+
+
+
     }
 
-
-
-    systemLoad = async () => {
-        let choosenstream = this.state.choosenStream;
-        let systemLoadTimer1 = this.state.systemLoadTimer
-        setInterval(function () { const response = fetch(`http://localhost:8000/system_load`) }, systemLoadTimer1);
-        this.setState({
-            systemLoadSwitch: !this.state.systemLoadSwitch
-        })
-    }
 
 
     fetchData = async () => {
@@ -198,12 +266,14 @@ export default class Jobs extends Component {
                         // When u see this error u was too fast , Just refresh the page and wait 2 seconds !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         // When u see this error u was too fast , Just refresh the page and wait 2 seconds !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         this.setState({
-                            StreamStatus: false
+                            StreamStatus: true,
+                            recoverSwitch: true
                         })
                     } else {
                         this.setState({
-                            StreamStatus: true,
-                            shutdownswitch: true
+                            StreamStatus: false,
+                            shutdownswitch: true,
+                            recoverSwitch: false
                         })
                     }
 
@@ -245,15 +315,6 @@ export default class Jobs extends Component {
 
 
 
-    setTimerSystemload = event => {
-        this.setState({
-            systemLoadTimer: event.target.value * 1000
-        })
-    }
-
-
-
-
 
     getArrayOFStreamsIdOFTHeCurrentUser = async (id) => {
         try {
@@ -265,7 +326,7 @@ export default class Jobs extends Component {
             array.unshift('');
             let array2 = array.concat(data)
             /* 
-    
+     
              data.forEach(element => {
                  this.state.arrayOFIdCurrenUser.push(element)
              });
@@ -285,13 +346,6 @@ export default class Jobs extends Component {
 
 
 
-
-    componentDidMount() {
-        setInterval(() => {
-            this.getArrayOFStreamsIdOFTHeCurrentUser(Cookies.get('UserID'))
-
-        }, 1000)
-    }
 
 
     render() {
@@ -370,7 +424,7 @@ export default class Jobs extends Component {
                                         <Typography>Off</Typography>
                                     </div>
                                     <div className='switchrecover'>
-                                        <FormControlLabel checked={this.state.recoverSwitch} onChange={this.recover} control={<Switch />} label="" className='chechlog' />
+                                        <FormControlLabel disabled={this.state.StreamStatus} checked={this.state.recoverSwitch} onChange={this.recover} control={<Switch />} label="" className='chechlog' />
                                     </div>
                                     <div className='onrecover'>
                                         <Typography>On</Typography>
@@ -494,7 +548,7 @@ export default class Jobs extends Component {
 
 
 
-
+                <ToastContainer />
 
 
             </div >

@@ -35,8 +35,9 @@ const ExluciveOrInclusiveOptions = [
 
 async function shutDown(id) {
     const response = await fetch(`http://localhost:8000/shutdown_stream/${id}`);
-    if (response.status_code == 200) {
-        successShutDownNotify()
+
+    if (response.status === 200) {
+        successShutDownNotify(id)
     }
     //  alert("its now shutDown succesfulyys");
 
@@ -44,8 +45,9 @@ async function shutDown(id) {
 
 async function recover(id) {
     const response = await fetch(`http://localhost:8000/recover_stream_snapshot/${id}`);
-    if (response.status_code == 200) {
-        successRecovernotify();
+
+    if (response.status == 200) {
+        successRecovernotify(id);
     }
 
     //  alert("stream recovered successfully");
@@ -96,8 +98,8 @@ async function ShowRightFlank(id) {
 }
 
 
-const successRecovernotify = () => {
-    toast.success('Successfully recovered', {
+const successRecovernotify = (id) => {
+    toast.success(`Successfully Stream ${id} recovered`, {
         position: "top-right",
         className: "succesnotify",
         autoClose: 5000,
@@ -130,8 +132,8 @@ const successInserOrderNotify = () => {
 
 
 
-const successShutDownNotify = () => {
-    toast.success('Successfully Turned Off', {
+const successShutDownNotify = (id) => {
+    toast.warn(`Successfully Stream ${id} Turned Off`, {
         position: "top-right",
         className: "succesnotify",
         autoClose: 5000,

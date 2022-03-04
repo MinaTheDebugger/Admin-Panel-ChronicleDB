@@ -45,6 +45,45 @@ const RegisterSucessfullyNotify = () => {
 }
 
 
+const errorMissingFields = () => {
+
+    toast.error(' Please Fill the missing Fields to continue!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
+
+const errorPasswords = () => {
+
+    toast.error(' Please rewrite your password correctly!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
 function Registerscreen() {
 
 
@@ -136,34 +175,37 @@ function Registerscreen() {
 
         if (name === "") {
             setErrorName(true)
-            return
         }
 
         if (email === "") {
             setErrorEmail(true)
-            return
+
         }
 
         if (password1 === "") {
             setErrorPassword1(true)
-            return
+
         }
 
 
         if (password2 === "") {
             setErrorPassword2(true)
-            return
+
         }
 
-        if (email === "" || password === "") {
+
+
+
+        if (errorName === true || errorEmail === true || errorPassword1 === true || errorPassword2 === true) {
+            errorMissingFields();
             return;
         }
 
 
         if (password1 !== password2) {
             setErrorPassword2(true)
+            errorPasswords();
             return;
-
         }
 
 
