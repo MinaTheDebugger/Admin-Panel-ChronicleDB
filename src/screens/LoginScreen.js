@@ -13,6 +13,8 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -24,7 +26,46 @@ import Cookies from 'js-cookie';
 import { useHistory } from "react-router-dom";
 
 
+const RegisterSucessfullyNotify = () => {
+    toast.success('Registered Successfully', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
 
+
+const errorMissingFields = () => {
+
+    toast.error(' Please Fill the missing Fields to continue!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+
+
+const InvalidEmailOrPassword = () => {
+
+    toast.error('Invalid Email or Password !', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
 
 
 
@@ -82,15 +123,27 @@ function Loginscreeen() {
 
     const SignIn = async (email, password) => {
 
+        let error = false;
 
 
-
-        if (email === "" || password === "") {
+        if (email === "") {
 
             setErrorEmail(true)
-            setErrorPassword(true)
+            error = true;
 
-        } else {
+
+
+        } if (password === "") {
+
+            setErrorPassword(true)
+            error = true;
+
+        } if (error === true) {
+            errorMissingFields()
+            return;
+        }
+
+        else {
 
 
             try {
@@ -118,10 +171,9 @@ function Loginscreeen() {
                 //    alert(cookies + "Cookies")
 
             } catch (err) {
-
+                InvalidEmailOrPassword();
                 console.error("error while Signing In is  ", err)
-                setErrorEmail(true)
-                setErrorPassword(true)
+
             }
 
         }
@@ -156,7 +208,7 @@ function Loginscreeen() {
                     error={errorEmail}
                     onChange={setemail}
 
-                    helperText={errorEmail ? "Invalid Email or Password" : ""}
+                    //   helperText={errorEmail ? "Invalid Email or Password" : ""}
                     label="Email"
                     type="email"
 
@@ -190,7 +242,7 @@ function Loginscreeen() {
 
                         //     onChange={setemail}
                         error={errorPassword}
-                        helperText={errorPassword ? "Invalid Email or Password" : ""}
+                        //   helperText={errorPassword ? "Invalid Email or Password" : ""}
 
                         id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
@@ -240,7 +292,7 @@ function Loginscreeen() {
                 </Link>
 
             </div>
-
+            <ToastContainer />
         </div >
     )
 

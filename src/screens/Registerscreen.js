@@ -117,6 +117,8 @@ function Registerscreen() {
 
         Cookies.set('refresh', false, { expires: 7 })
 
+        RegisterSucessfullyNotify()
+
     }
 
     const setname = event => {
@@ -168,38 +170,41 @@ function Registerscreen() {
 
 
 
-
-
     const signUp = async (email, password, name) => {
 
+        let error = false;
 
         if (name === "") {
             setErrorName(true)
+            error = true;
         }
 
         if (email === "") {
             setErrorEmail(true)
-
+            error = true;
         }
 
         if (password1 === "") {
             setErrorPassword1(true)
-
+            error = true;
         }
 
 
         if (password2 === "") {
             setErrorPassword2(true)
-
+            error = true;
         }
 
 
 
 
-        if (errorName === true || errorEmail === true || errorPassword1 === true || errorPassword2 === true) {
+
+        if (error === true) {
             errorMissingFields();
             return;
         }
+
+
 
 
         if (password1 !== password2) {
@@ -208,31 +213,25 @@ function Registerscreen() {
             return;
         }
 
+        try {
+            const signUpDetails = {
+                name: name,
+                email: email,
+
+                password: password
+            };
+            const response = await axios.post('http://localhost:5000/user/register', signUpDetails)
+            console.log(response.data)
+
+            goToLoginScreen()
 
 
 
-
-
-        else {
-
-            try {
-                const signUpDetails = {
-                    name: name,
-                    email: email,
-
-                    password: password
-                };
-                const response = await axios.post('http://localhost:5000/user/register', signUpDetails)
-                console.log(response.data)
-                goToLoginScreen()
-                RegisterSucessfullyNotify()
-
-
-            } catch (err) {
-                console.error(err + "sssssssssssssssssssssssss" + email)
-            }
-
+        } catch (err) {
+            console.error(err + "sssssssssssssssssssssssss" + email)
         }
+
+
     }
 
 

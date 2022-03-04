@@ -20,6 +20,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 
 
 
@@ -68,152 +71,20 @@ const optionsofmultiplediskqueue = [
     }
 ]
 
+const errorMissingFields = () => {
 
-const optionsofstreameventlayout = [
-    {
-        label: "Empty",
-        value: "Empty",
-    },
-    {
-        label: "U8:0",
-        value: "U8",
-    },
-    {
-        label: "I8:0",
-        value: "I8",
-    },
-    {
-        label: "U16:0",
-        value: "U16",
-    },
-    {
-        label: "U2:0",
-        value: "U32",
-    },
-    {
-        label: "I32:0",
-        value: "I32",
-    },
-    {
-        label: "F32:0",
-        value: "F32",
-    },
-    {
-        label: "U64:0",
-        value: "U64",
-    },
-    {
-        label: "I64:0",
-        value: "I64",
-    },
-    {
-        label: "F64:0",
-        value: "F64",
-    },
-    {
-        label: "ConstString",
-        value: "ConstString",
-    },
-    {
-        label: "VarString",
-        value: "VarString",
-    },
-    {
-        label: "ConstU8List",
-        value: "ConstU8List",
-    },
-    {
-        label: "ConstI8List",
-        value: "ConstI8List",
-    },
-
-    {
-        label: "ConstU16List",
-        value: "ConstU16List",
-    },
-    {
-        label: "ConstI16List",
-        value: "ConstI16List",
-    },
-    {
-        label: "ConstU32List",
-        value: "ConstU32List",
-    },
-    {
-        label: "ConstU32List",
-        value: "ConstU32List",
-    },
-    {
-        label: "ConstI32List",
-        value: "ConstI32List",
-    },
-    {
-        label: "ConstF32List",
-        value: "ConstF32List",
-    },
-    {
-        label: "ConstU64List",
-        value: "ConstU64List",
-    },
-    {
-        label: "ConstI64List",
-        value: "ConstI64List",
-    },
-    {
-        label: "ConstF64List",
-        value: "ConstF64List",
-    },
-    {
-        label: "VarU8List",
-        value: "CVarU8List",
-    },
-    {
-        label: "VarI8List",
-        value: "VarI8List",
-    },
-    {
-        label: "VarU16List",
-        value: "VarU16List",
-    },
-    {
-        label: "VarI16List",
-        value: "VarI16List",
-    },
-    {
-        label: "VarU32List",
-        value: "VarU32List",
-    },
-    {
-        label: "VarI32List",
-        value: "VarI32List",
-    },
-    {
-        label: "VarF32List",
-        value: "VarF32List",
-    },
-    {
-        label: "VarU64List",
-        value: "VarU64List",
-    },
-    {
-        label: "VarU64List",
-        value: "VarU64List",
-    },
-    {
-        label: "VarF64List",
-        value: "VarF64List",
-    },
-    {
-        label: "Compound",
-        value: "FixedCompound",
-    },
-    {
-        label: "VarCompound",
-        value: "VarCompound",
-    }
+    toast.error(' Please Fill the missing Fields to continue!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
 
 
-];
 
 
 const optionsoflightweightindex = [
@@ -316,7 +187,9 @@ const successCreatedStreamNotify = () => {
 
 
 
-
+function goToHomePage() {
+    history.push("/Home");
+}
 
 
 
@@ -348,7 +221,13 @@ class CreateStreamScreen extends Component {
             riverthreads: 'empty',
             maxdeltaqueue: 10,
             openschedule: false,
-            dateCreateStream: ""
+            dateCreateStream: "",
+            rawtype: "",
+            consttype: "",
+            vartype: "",
+            eventType: "",
+            dataofevent: '0',
+            errorChoosetype: false
         }
 
     }
@@ -414,6 +293,99 @@ class CreateStreamScreen extends Component {
             console.log('DataFiles: ', this.state.datafilesinput)
 
         })
+    }
+
+
+    changeraw = event => {
+
+        if (event.target.value !== "") {
+            this.setState({
+                rawtype: event.target.value,
+                consttype: "",
+                vartype: "",
+                eventType: event.target.value
+            })
+        }
+        else {
+
+            this.setState({
+                rawtype: event.target.value,
+
+
+
+            }, () => {
+                console.log('eventType2', this.state.eventType)
+
+            }
+            )
+        }
+    }
+
+
+    changedataofevent = event => {
+
+        this.setState({
+            dataofevent: event.target.value,
+        }, () => {
+            console.log('dataofevent', this.state.dataofevent)
+
+        }
+        )
+    }
+
+
+    changeconst = event => {
+
+        if (event.target.value !== "") {
+            this.setState({
+                consttype: event.target.value,
+                rawtype: "",
+                vartype: "",
+                eventType: event.target.value
+            })
+        }
+        else {
+
+            this.setState({
+                consttype: event.target.value,
+
+
+
+            }, () => {
+                console.log('eventType', this.state.eventType)
+
+            }
+            )
+        }
+
+
+    }
+
+
+    changevar = event => {
+
+        if (event.target.value !== "") {
+            this.setState({
+                vartype: event.target.value,
+                rawtype: "",
+                consttype: "",
+                eventType: event.target.value
+            })
+        }
+        else {
+
+            this.setState({
+                vartype: event.target.value,
+
+
+
+            }, () => {
+                console.log('eventType', this.state.eventType)
+
+            }
+            )
+        }
+
     }
     changetranslationfiles = event => {
         this.setState({
@@ -570,9 +542,26 @@ class CreateStreamScreen extends Component {
 
 
 
-    createStream = (checklog, checkdebug, mulltiplediskmaxqueue, logicalblocksizeinput, macroblocksizeinput, macroblockpreallocationinput, macroblockbatchallocationinput, macroblockscache, nodescache, maxdeltaqueue) => {
-        console.log("its working");
+    createStream = (checklog, checkdebug, mulltiplediskmaxqueue, logicalblocksizeinput, macroblocksizeinput, macroblockpreallocationinput, macroblockbatchallocationinput, macroblockscache, nodescache, maxdeltaqueue, eventType, dataofevent) => {
+        //  console.log("its working");
         const url = 'http://localhost:8000/create_stream'
+
+
+        if (eventType === "") {
+            this.setState({
+                errorChoosetype: true
+            }, () => {
+                errorMissingFields();
+                return;
+            })
+
+        } else {
+            this.setState({
+                errorChoosetype: false
+            })
+        }
+
+
         // console.log(this.state.passedmacroblockscache + "CreateStream method");
         const objectTest = `
         [Debug]#
@@ -687,7 +676,7 @@ class CreateStreamScreen extends Component {
           #	{"Compound":[{"U64":0},{"I64":0},{"F64":0.0},{"ConstString":"Hallo-Welt"}]}
           #--------------------------------------------------------
           #Event							= {"ConstU64List":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]}
-          Event 							= {"VarCompound":[{"U64":0},{"I64":0},{"F64":0.0},{"VarString":"Hallo-Welt"}]}
+          Event 							= {"${eventType}" : ${dataofevent}}
           
         [Lightweight Index]#
           # The lightweight index layout must follow similar JSON notes as for for event layout.
@@ -819,10 +808,11 @@ class CreateStreamScreen extends Component {
 
                 CreateStreamPgAdmin(response.data[31], Cookies.get('UserID'))
                 successCreatedStreamNotify();
-
+                goToHomePage();
             })
             .catch(function (error) {
                 console.log(error.message);
+
                 //alert(error.message)
             })
         return
@@ -926,24 +916,121 @@ class CreateStreamScreen extends Component {
                 <div className='streamEventlayout' >
                     <h1>Stream Event Layout</h1>
 
+                    <FormControl sx={{ m: 1, minWidth: 450 }}>
+                        <InputLabel htmlFor="grouped-native-select" >Raw</InputLabel>
+                        <Select native defaultValue=""
+                            error={this.state.errorChoosetype}
+                            helperText={this.state.errorChoosetype ? "Please enter your name" : ""}
+                            id="grouped-native-select" label="Grouping" onChange={this.changeraw} value={this.state.rawtype} >
+                            <option aria-label="None" value="" />
+
+
+                            <optgroup label="Unsigned Integer">
+                                <option value={"U8"}>U8</option>
+                                <option value={"U16"}>U16</option>
+                                <option value={"U32"}>U32</option>
+                                <option value={"U64"}>U64</option>
+                            </optgroup>
+                            <optgroup label="Integer">
+                                <option value={"I8"}>I8</option>
+                                <option value={"I16"}>I16</option>
+                                <option value={"I32"}>I32</option>
+                                <option value={"I64"}>I64</option>
+                            </optgroup>
+                            <optgroup label="Float">
+                                <option value={"F32"}>F32</option>
+                                <option value={"F64"}>F64</option>
+                            </optgroup>
+                        </Select>
+                    </FormControl>
+
+
+
+
+
+
+
+
+
+
+
+
+                    <FormControl sx={{ m: 1, minWidth: 450 }}>
+                        <InputLabel htmlFor="grouped-native-select">Const</InputLabel>
+                        <Select native
+                            error={this.state.errorChoosetype}
+                            defaultValue="" id="grouped-native-select" label="Grouping" onChange={this.changeconst} value={this.state.consttype} >
+                            <option aria-label="None" value="" />
+                            <optgroup label="String">
+                                <option value={"ConstString"}>ConstString</option>
+
+                            </optgroup>
+                            <optgroup label="Unsigned Integer-List">
+                                <option value={"ConstU8List"}>ConstU8List</option>
+                                <option value={"ConstU16List"}>ConstU16List</option>
+                                <option value={"ConstU32List"}>ConstU32List</option>
+                                <option value={"ConstU64List"}>ConstU64List</option>
+                            </optgroup>
+                            <optgroup label="Integer-List">
+                                <option value={"ConstI8List"}>ConstI8List</option>
+                                <option value={"ConstI16List"}>ConstI16List</option>
+                                <option value={"ConstI32List"}>ConstI32List</option>
+                                <option value={"ConstI64List"}>ConstI64List</option>
+                            </optgroup>
+                            <optgroup label="Float-List">
+                                <option value={"ConstF32List"}>ConstF32List</option>
+                                <option value={"ConstF64List"}>ConstF64List</option>
+
+                            </optgroup>
+                        </Select>
+                    </FormControl>
+
+                    <FormControl sx={{ m: 1, minWidth: 450 }}>
+                        <InputLabel htmlFor="grouped-native-select" >Var</InputLabel>
+                        <Select native defaultValue=""
+                            error={this.state.errorChoosetype} id="grouped-native-select" label="Grouping" onChange={this.changevar} value={this.state.vartype} >
+                            <option aria-label="None" value="" />
+                            <optgroup label="String">
+                                <option value={"VarString"}>VarString</option>
+
+                            </optgroup>
+
+                            <optgroup label="Unsigned Integer-List">
+                                <option value={"VarU8List"}>UVarU8List</option>
+                                <option value={"VarU16List"}>VarU16List</option>
+                                <option value={"VarU32List"}>VarU32List</option>
+                                <option value={"VarU64List"}>VarU64List</option>
+                            </optgroup>
+                            <optgroup label="Integer-List">
+                                <option value={"VarI8List"}>VarI8List</option>
+                                <option value={"VarI16List"}>VarI16List</option>
+                                <option value={"VarI32List"}>VarI32List</option>
+                                <option value={"VarI64List"}>VarI64List</option>
+                            </optgroup>
+                            <optgroup label="Float">
+                                <option value={"VarF32List"}>VarF32List</option>
+                                <option value={"VarF64List"}>VarF64List</option>
+                            </optgroup>
+                        </Select>
+                    </FormControl>
 
 
                     <TextField
-                        id="outlined-select-currency-native"
-                        select
-                        label="Data Type:"
-                        sx={{ m: 1, width: '70ch' }}
-                        onChange={this.StreamEventLayoutChange}
+                        onChange={this.changedataofevent}
+                        sx={{ m: 1, width: '80ch' }}
+                        required
+                        id="outlined-required"
+                        label="Data"
+                        defaultValue="0"
+                        fullWidth='md'
+                        maxWidth="md"
+                        autoFocus
+                        margin="dense"
+                        helperText="Please enter data according to the chosen Event type!"
 
-                        SelectProps={{
-                            native: true,
-                        }}
+                    />
 
-                    >
-                        {optionsofstreameventlayout.map((option) => (
-                            <option value={option.label}>{option.value}</option>
-                        ))}
-                    </TextField>
+
 
                     <hr class="rounded"></hr>
 
@@ -1170,14 +1257,11 @@ class CreateStreamScreen extends Component {
 
                     />
                     <div>
-                        <Link to={{
-                            pathname: "/Home",
-                            state: { fromDashboard: "Stream Data :" + this.state.compressor + " " + this.state.riverthreads + " " + this.state.maxdeltaqueue }
-                        }}>
-                            <button className='createStreambutton1' type="button" name='WWalid' onClick={() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue)}>
-                                CreateStream
-                            </button>
-                        </Link>
+
+                        <button className='createStreambutton1' type="button" name='WWalid' onClick={() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue, this.state.eventType, this.state.dataofevent)}>
+                            CreateStream
+                        </button>
+
 
 
                         <button variant="outlined"
