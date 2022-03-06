@@ -23,9 +23,89 @@ import 'react-toastify/dist/ReactToastify.css';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
+import { useHistory } from "react-router-dom";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
 
 
 
+
+
+const Jobsperiod = [
+    {
+        label: 0,
+        value: "NO ",
+    },
+    {
+        label: 30,
+        value: "30 sec",
+    },
+    {
+        label: 60,
+        value: "1 min",
+    },
+    {
+        label: 300,
+        value: "5 min",
+    },
+    {
+        label: 600,
+        value: "10 min",
+    },
+    {
+        label: 900,
+        value: "15 min",
+    },
+    {
+        label: 1800,
+        value: "30 min",
+    },
+    {
+        label: 3600,
+        value: "1 hour",
+    },
+    {
+        label: 7200,
+        value: "2 Hour",
+    }
+    ,
+    {
+        label: 7200,
+        value: "2 Hour",
+    }
+    ,
+    {
+        label: 86.400,
+        value: "1 day",
+    }
+]
 
 
 const optionsofmultiplediskqueue = [
@@ -70,6 +150,7 @@ const optionsofmultiplediskqueue = [
         value: 9,
     }
 ]
+
 
 const errorMissingFields = () => {
 
@@ -144,6 +225,7 @@ const riverthreads = [
 ]
 
 const routeChange = () => {
+
     let path = '/CreateStream';
     history.push(path);
 }
@@ -188,7 +270,23 @@ const successCreatedStreamNotify = () => {
 
 
 function goToHomePage() {
+
     history.push("/Home");
+    window.location.reload();
+
+
+}
+
+function convertHMS(value) {
+    const sec = parseInt(value, 10); // convert value to number if it's string
+    let hours = Math.floor(sec / 3600); // get hours
+    let minutes = Math.floor((sec - (hours * 3600)) / 60); // get minutes
+    let seconds = sec - (hours * 3600) - (minutes * 60); //  get seconds
+    // add 0 if value < 10; Example: 2 => 02
+    if (hours < 10) { hours = "0" + hours; }
+    if (minutes < 10) { minutes = "0" + minutes; }
+    if (seconds < 10) { seconds = "0" + seconds; }
+    return hours + ':' + minutes + ':' + seconds; // Return is HH : MM : SS
 }
 
 
@@ -227,7 +325,13 @@ class CreateStreamScreen extends Component {
             vartype: "",
             eventType: "",
             dataofevent: '0',
-            errorChoosetype: false
+            errorChoosetype: false,
+            period: 30,
+            TableRows: [],
+            rows: [
+
+            ]
+
         }
 
     }
@@ -239,6 +343,22 @@ class CreateStreamScreen extends Component {
 
 
     }
+
+
+
+    createData = (dateofcreation, startsat, period) => {
+        // let answer = this.state.TableRows
+        // answer.push([dateofcreation, startsat, period])
+        return { dateofcreation, startsat, period };
+        /*
+        this.setState({
+            TableRows: answer
+        }, () => {
+            alert(this.state.TableRows)
+        })
+        */
+    }
+
     /*
     , () => {
         console.log('Log is checked :', this.state.checklog)
@@ -248,6 +368,14 @@ class CreateStreamScreen extends Component {
 
 */
 
+
+    changeperiod = event => {
+        this.setState({
+            period: event.target.value
+        }, () => {
+            //  alert(this.state.period)
+        })
+    }
     changedebug = event => {
         /*   this.setState({
                checkdebug: 'true'
@@ -283,6 +411,7 @@ class CreateStreamScreen extends Component {
         this.setState({
             openschedule: false
         })
+
     }
 
 
@@ -465,7 +594,10 @@ class CreateStreamScreen extends Component {
     UpdateDate = (newValue) => {
         this.setState({
             dateCreateStream: newValue
-        })
+        },
+            () => {
+                //   alert(this.state.dateCreateStream)
+            })
     }
 
 
@@ -511,6 +643,11 @@ class CreateStreamScreen extends Component {
         )
 
     }
+
+
+    createData = (name, calories, fat) => {
+        return { name, calories, fat };
+    }
     changeriverthreads = event => {
         this.setState({
             riverthreads: event.target.value
@@ -533,11 +670,24 @@ class CreateStreamScreen extends Component {
 
     setTimerCreateStream = () => {
         var secondBetweenTwoDate = Math.abs((this.state.dateCreateStream - new Date().getTime()));
+        const t = this.state.dateCreateStream
+        //alert(t.toString())
+        if (this.state.period !== 0) {
+            let walid = this.state.rows
+            walid.push(this.createData(new Date().toLocaleString(), t.toString(), `${this.state.period} sec `));
+
+
+            this.setState({
+                rows: walid
+            })
+
+        }
+
         // alert(secondBetweenTwoDate)
         setTimeout(() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue), secondBetweenTwoDate);
-        this.setState({
-            openschedule: false
-        })
+
+
+
     }
 
 
@@ -821,6 +971,9 @@ class CreateStreamScreen extends Component {
     }
 
     render() {
+
+        const rows = this.state.TableRows
+
         return (
             <div>
 
@@ -1271,8 +1424,8 @@ class CreateStreamScreen extends Component {
                             Schedule Create Stream
                         </button>
                         <Dialog
-                            fullWidth="sm"
-                            maxWidth="sm"
+                            fullWidth="lg"
+                            maxWidth="lg"
                             open={this.state.openschedule}
                             //    onClose={handleClose}
                             aria-labelledby="alert-dialog-title"
@@ -1289,18 +1442,74 @@ class CreateStreamScreen extends Component {
                                 <div className='Schedulebox'>
 
 
+                                    <div className='Shedule1'><h3>Job start at</h3></div>
+                                    <div className='Shedule2' >
+                                        <LocalizationProvider dateAdapter={AdapterDateFns} >
+                                            <DateTimePicker
+                                                renderInput={(props) => <TextField {...props} />}
+                                                label="DateTimePicker"
+                                                value={this.state.dateCreateStream}
+                                                onChange={this.UpdateDate}
 
 
-                                    <LocalizationProvider dateAdapter={AdapterDateFns} >
-                                        <DateTimePicker
-                                            renderInput={(props) => <TextField {...props} />}
-                                            label="DateTimePicker"
-                                            value={this.state.dateCreateStream}
-                                            onChange={this.UpdateDate}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div className='Shedule3'><h3>And repeats every</h3></div>
+                                    <div className='Shedule4'>
+                                        <TextField
+                                            id="outlined-select-currency-native"
+                                            select
+                                            label="Repeat Every: "
+                                            sx={{ m: 1, width: '40ch' }}
+                                            onChange={this.changeperiod}
+
+                                            SelectProps={{
+                                                native: true,
+                                            }}
+
+                                        >
+                                            {Jobsperiod.map((option) => (
+                                                <option value={option.label}>{option.value}</option>
+                                            ))}
+                                        </TextField>
+                                    </div>
 
 
-                                        />
-                                    </LocalizationProvider>
+
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <StyledTableCell>Date of Creation</StyledTableCell>
+                                                    <StyledTableCell align="right">Starts at</StyledTableCell>
+                                                    <StyledTableCell align="right">Period</StyledTableCell>
+
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+
+                                                {this.state.rows.map((row) => (
+                                                    <StyledTableRow key={row.name}>
+                                                        <StyledTableCell component="th" scope="row">
+                                                            {row.name}
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                                                        <StyledTableCell align="right">{row.fat}</StyledTableCell>
+
+
+
+                                                    </StyledTableRow>
+                                                ))}
+
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+
+
+
+
+
                                 </div>
 
 

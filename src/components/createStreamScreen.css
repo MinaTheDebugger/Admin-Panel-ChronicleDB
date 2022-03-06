@@ -25,7 +25,25 @@
 
 .Schedulebox {
   position: relative;
+}
+
+.Shedule1 {
+  position: relative;
+  float: left;
+  width: 20%;
+}
+.Shedule2 {
+  position: relative;
+  float: left;
+  width: 30%;
+}
+.Shedule3 {
+  position: relative;
+  float: left;
+  width: 20%;
+}
+.Shedule4 {
+  position: relative;
   float: right;
-  right: 20.5ch;
-  top: 2ch;
+  width: 30%;
 }
