@@ -319,7 +319,7 @@ ul li:nth-child(odd) {
   color: rgb(0, 0, 0);
   background-color: greenyellow;
   border-radius: 12px;
-  top: 30px;
+  bottom: 15px;
   left: 50ch;
 }
 
@@ -366,11 +366,16 @@ ul li:nth-child(odd) {
 
 .insertorderschedule {
   position: relative;
-  right: 85ch;
+  right: 30ch;
   bottom: 1ch;
   float: right;
 }
 
 .succesnotify {
   background-color: #04aa6d;
+}
+
+.period {
+  position: relative;
+  bottom: 0.8ch;
 }

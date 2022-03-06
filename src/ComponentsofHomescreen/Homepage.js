@@ -17,11 +17,90 @@ import { DateTimePicker } from '@mui/lab';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
+
+
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
 
 
 
 
 
+const Jobsperiod = [
+    {
+        label: 0,
+        value: "Just one Time ",
+    },
+    {
+        label: 30,
+        value: "30 sec",
+    },
+    {
+        label: 60,
+        value: "1 min",
+    },
+    {
+        label: 300,
+        value: "5 min",
+    },
+    {
+        label: 600,
+        value: "10 min",
+    },
+    {
+        label: 900,
+        value: "15 min",
+    },
+    {
+        label: 1800,
+        value: "30 min",
+    },
+    {
+        label: 3600,
+        value: "1 hour",
+    },
+    {
+        label: 7200,
+        value: "2 Hour",
+    }
+    ,
+    {
+        label: 7200,
+        value: "2 Hour",
+    }
+    ,
+    {
+        label: 86.400,
+        value: "1 day",
+    }
+]
 
 const ExluciveOrInclusiveOptions = [
     {
@@ -116,7 +195,7 @@ const successRecovernotify = (id) => {
 
 
 const successInserOrderNotify = () => {
-    toast.success('Successfully Order Inserted', {
+    toast.success('Successfully Order Array Inserted', {
         position: "top-right",
         className: "succesnotify",
         autoClose: 5000,
@@ -301,7 +380,9 @@ export default class Homepage extends Component {
             addMultipleEvents: false,
             EventArray: [],
             errorChoosetype: false,
-            dateInsertOrder: ''
+            dateInsertOrder: '',
+            rows: [],
+            period: 0
 
         }
     }
@@ -665,6 +746,16 @@ export default class Homepage extends Component {
             addMultipleEvents: false
         })
     }
+    changeperiod = event => {
+        this.setState({
+            period: event.target.value
+        }, () => {
+            //  alert(this.state.period)
+        })
+    }
+    createData = (name, calories, fat) => {
+        return { name, calories, fat };
+    }
 
 
     InsertToArray = (id, timeStamp, eventType, dataofevent) => {
@@ -681,6 +772,7 @@ export default class Homepage extends Component {
 
     setScheduleInsertOrder = () => {
         var secondBetweenTwoDate = Math.abs((this.state.dateInsertOrder - new Date().getTime()));
+
         if (this.state.dateInsertOrder === '') {
             errornotify()
 
@@ -694,6 +786,20 @@ export default class Homepage extends Component {
                 missingEventTypeNotify()
                 return
             } else {
+
+                if (this.state.period !== 0) {
+                    const t = this.state.dateInsertOrder
+
+                    let walid = this.state.rows
+                    walid.push(this.createData(new Date().toLocaleString(), t.toString(), `${this.state.period} sec `));
+
+
+                    this.setState({
+                        rows: walid
+                    })
+
+                }
+
                 this.setState({
                     errorChoosetype: false
                 })
@@ -745,7 +851,7 @@ export default class Homepage extends Component {
                     const data = await response.data;
                     console.log("ddddddddddddddddddddddd ", data);
                     this.setState({
-                        InsertOrderDialog: false,
+
                         addMultipleEvents: false,
                         EventArray: ""
 
@@ -1048,7 +1154,7 @@ export default class Homepage extends Component {
 
                                                         <Dropdown.Menu title="Dropdown button" id="dropdown-basic-button" as={ButtonGroup} variant="dark" className="dropdown-content">
 
-                                                            <Dropdown.Item variant="outlined" onClick={() => this.OpenIsertOrderDialog(items[0])} href="">Insert Ordered </Dropdown.Item>
+                                                            <Dropdown.Item variant="outlined" onClick={() => this.OpenIsertOrderDialog(items[0])} href="">Insert Ordered / Array </Dropdown.Item>
                                                             <Dropdown.Item onClick={() => this.OpenQueryTimeTravelDialog(items[0])} href="">Query Time Travel</Dropdown.Item>
                                                             <Dropdown.Item onClick={() => ShowRightFlank(items[0])} href="">Show Right Flank</Dropdown.Item>
 
@@ -1064,7 +1170,7 @@ export default class Homepage extends Component {
                                                         <DialogContent>
                                                             <DialogContentText>
                                                                 <h1> Stream: {this.state.index} </h1>
-                                                                <h3>Option to Schedule the Insert Order:
+                                                                <h3>Withouot Inserting a date there will be no Job added:
                                                                     <div className='insertorderschedule'>
                                                                         <LocalizationProvider dateAdapter={AdapterDateFns}  >
                                                                             <DateTimePicker
@@ -1077,6 +1183,23 @@ export default class Homepage extends Component {
 
                                                                             />
                                                                         </LocalizationProvider>
+                                                                        <TextField
+                                                                            className='period'
+                                                                            id="outlined-select-currency-native"
+                                                                            select
+                                                                            label="Repeat Every: "
+                                                                            sx={{ m: 1, width: '40ch' }}
+                                                                            onChange={this.changeperiod}
+
+                                                                            SelectProps={{
+                                                                                native: true,
+                                                                            }}
+
+                                                                        >
+                                                                            {Jobsperiod.map((option) => (
+                                                                                <option value={option.label}>{option.value}</option>
+                                                                            ))}
+                                                                        </TextField>
 
                                                                     </div>
                                                                 </h3>
@@ -1251,6 +1374,38 @@ export default class Homepage extends Component {
 
 
                                                                 : <div></div>}
+
+
+
+                                                            <TableContainer component={Paper}>
+                                                                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                                                    <TableHead>
+                                                                        <TableRow>
+                                                                            <StyledTableCell>Date of Creation</StyledTableCell>
+                                                                            <StyledTableCell align="right">Starts at</StyledTableCell>
+                                                                            <StyledTableCell align="right">Period</StyledTableCell>
+
+                                                                        </TableRow>
+                                                                    </TableHead>
+                                                                    <TableBody>
+
+                                                                        {this.state.rows.map((row) => (
+                                                                            <StyledTableRow key={row.name}>
+                                                                                <StyledTableCell component="th" scope="row">
+                                                                                    {row.name}
+                                                                                </StyledTableCell>
+                                                                                <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                                                                                <StyledTableCell align="right">{row.fat}</StyledTableCell>
+
+
+
+                                                                            </StyledTableRow>
+                                                                        ))}
+
+                                                                    </TableBody>
+                                                                </Table>
+                                                            </TableContainer>
+
                                                         </DialogContent>
 
 
@@ -1358,7 +1513,7 @@ export default class Homepage extends Component {
                                                             />
 
                                                             <TextField
-                                                                id="outlined-read-only-input"
+
                                                                 label="Array[Event]"
                                                                 multiline
                                                                 maxRows={6}

@@ -61,7 +61,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const Jobsperiod = [
     {
         label: 0,
-        value: "Just one Time ",
+        value: "NO ",
     },
     {
         label: 30,
