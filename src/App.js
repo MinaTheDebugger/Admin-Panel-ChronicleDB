@@ -5,13 +5,13 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import Home from '../src/screens/Home'
 import About from '../src/screens/About'
 import CreateStream from '../src/screens/Createstream'
-import history from './components/alteComponents/history';
 import LoginScreen from './screens/LoginScreen';
 import Registerscreen from './screens/Registerscreen';
 import axios from "axios";
-
 import Cookies from 'js-cookie';
 import Jobscreen from './screens/Jobscreen';
+
+import history from './components/alteComponents/history';
 
 
 

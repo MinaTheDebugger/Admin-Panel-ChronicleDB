@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import axios from "axios";
 import { FormControlLabel } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
-import history from './alteComponents/history';
 import Switch from '@mui/material/Switch';
 import { TextField, } from '@mui/material';
-import '../components/alteComponents/debug.css'
+
 import Cookies from 'js-cookie';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
