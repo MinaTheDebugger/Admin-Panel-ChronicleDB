@@ -25,7 +25,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 
-
+// Style for the Table of the Jobs in Insert Orderd
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -36,7 +36,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         fontSize: 14,
     },
 }));
-
+// Style for the Table of the Jobs in Insert Orderd
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-
+// Job period Options
 const Jobsperiod = [
     {
         label: 0,
@@ -100,6 +100,7 @@ const Jobsperiod = [
     }
 ]
 
+// Exxclusive or Inclusive
 const ExluciveOrInclusiveOptions = [
     {
         label: "Inclusive",
@@ -111,16 +112,15 @@ const ExluciveOrInclusiveOptions = [
     }
 ]
 
-
+//shutdown Function
 async function shutDown(id) {
     const response = await fetch(`http://localhost:8000/shutdown_stream/${id}`);
-
     if (response.status === 200) {
         successShutDownNotify(id)
     }
-    //  alert("its now shutDown succesfulyys");
-
 }
+
+//Recover Stream Funtion
 
 async function recover(id) {
     const response = await fetch(`http://localhost:8000/recover_stream_snapshot/${id}`);
@@ -129,14 +129,13 @@ async function recover(id) {
         successRecovernotify(id);
     }
 
-    //  alert("stream recovered successfully");
 }
 
 
 
 
 
-
+//Get Minkey function
 
 async function getMinkey4(id) {
     try {
@@ -159,7 +158,7 @@ async function getMinkey4(id) {
 
 
 
-
+//Show rightflank  function
 async function ShowRightFlank(id) {
 
     try {
@@ -177,6 +176,7 @@ async function ShowRightFlank(id) {
 }
 
 
+//toast when Stream successfully recovered
 const successRecovernotify = (id) => {
     toast.success(`Successfully Stream ${id} recovered`, {
         position: "top-right",
@@ -191,8 +191,21 @@ const successRecovernotify = (id) => {
 }
 
 
-
+//toast when Order successfully Inserted
 const successInserOrderNotify = () => {
+    toast.success('Successfully Order  Inserted', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+//toast when Order Array successfully Inserted
+const successInserOrderArrayNotify = () => {
     toast.success('Successfully Order Array Inserted', {
         position: "top-right",
         className: "succesnotify",
@@ -210,7 +223,7 @@ const successInserOrderNotify = () => {
 
 
 
-
+// Toast when Stream successfully shutdown
 const successShutDownNotify = (id) => {
     toast.warn(`Successfully Stream ${id} Turned Off`, {
         position: "top-right",
@@ -227,7 +240,7 @@ const successShutDownNotify = (id) => {
 
 
 
-
+//Toast When job is added
 
 const succesnotify = () => {
     toast.success('Order Added Successfully', {
@@ -242,7 +255,7 @@ const succesnotify = () => {
     });
 }
 
-
+// Toast when no date is selected and the user wants to set a job without date
 const errornotify = () => {
 
     toast.error(' Please set a date first!', {
@@ -255,7 +268,7 @@ const errornotify = () => {
         progress: undefined,
     });
 }
-
+//Toast when the Event Type is missing
 const missingEventTypeNotify = () => {
     toast.error(' Please select a EventType!', {
         position: "top-right",
@@ -268,13 +281,7 @@ const missingEventTypeNotify = () => {
     });
 }
 
-
-
-
-
-
-
-
+// Get maxkey Funtion
 async function getMaxKey(id) {
 
     try {
@@ -297,7 +304,7 @@ async function getMaxKey(id) {
     }
 }
 
-
+// Get tree Height Function
 async function getTreeHeight(id) {
 
     try {
@@ -320,48 +327,20 @@ async function getTreeHeight(id) {
 
 
 
-
-
-
-
-
-/*
-insertOrderedEventArr = async (id, arr) => {
-    try {
-        let eventDetails = arr
-        const response = await axios.post(`http://localhost:8000/insert_ordered_array/${id}`, eventDetails);
-
-        const data = await response.data;
-        console.log("ddddddddddddddddddddddd ", data);
-        this.setState({
-            InsertOrderDialog: false,
-
-
-        })
-
-    } catch (e) {
-        //console.log(e)
-        console.error(e)
-        alert("Please the Data correctly")
-    }
-}
-*/
-
 export default class Homepage extends Component {
-
+    //Conscructor and the Variable of the class
     constructor(props) {
         super(props)
 
         this.state = {
-            // id: numberofcreatedstreams()
-            id: [],
-            InsertOrderDialog: false,
-            QueryTimeTravelDialog: false,
-            index: 0,
-            istherestreamcreated: false,
-            timeStamp: 0,
-            systeminfoopendialog: false,
-            rightflankopendialog: false,
+            id: [],                                   // store the streams
+            InsertOrderDialog: false,                 // to open/close  the insertOrder dialog
+            QueryTimeTravelDialog: false,             // to open/close  the Querytime dialog
+            index: 0,                                 // to save the id of the stream when working on it
+            istherestreamcreated: false,              // to know if the users has already created streams or not
+            timeStamp: 0,                             //timestamp
+            systeminfoopendialog: false,               //to open systeminfo dialog
+            rightflankopendialog: false,               //to open rightflank dialog
             systeminfo: '',
             eventType: "",
             dataofevent: '0',
@@ -370,11 +349,11 @@ export default class Homepage extends Component {
             vartype: "",
             queryTimeStart: 0,
             queryTimeEnd: 0,
-            exclusiveorinclusive: true,
+            exclusiveorinclusive: true,                     //exclusive or Inclusive
             querytimeResult: '',
             arrayofarrayss: [],
             rightFlankText: '',
-            arrayOFIdCurrenUser: [],
+            arrayOFIdCurrenUser: [],                       // store ids  of the Streams that belongs to the signedin User
             addMultipleEvents: false,
             EventArray: [],
             errorChoosetype: false,
@@ -387,7 +366,7 @@ export default class Homepage extends Component {
 
 
 
-
+    // Get and Arry of the Id's of the Stream of the logged in User
     getArrayOFStreamsIdOFTHeCurrentUser = async (id) => {
         try {
             const url = await `http://localhost:5000/user/streamperuser?user_id=${id}`
@@ -397,7 +376,7 @@ export default class Homepage extends Component {
             this.setState({
                 arrayOFIdCurrenUser: data
             }, () => {
-                //  alert(this.state.arrayOFIdCurrenUser)
+
             }
             )
         } catch (err) {
@@ -408,9 +387,10 @@ export default class Homepage extends Component {
 
 
 
+    // This method adds the min key and right key and the tree height to the list of the Streams
+    // to be later rendered and shown to the user
 
-
-    getStreamIDsFromList = async (list) => {
+    AddkeysandTreeHeigthToStreams = async (list) => {
         if (list.length >= 1) {
             list.forEach(async (e) => {
                 let index = e[0];
@@ -427,55 +407,32 @@ export default class Homepage extends Component {
     }
 
 
-
+    // This method filters the Streams and just leaves the Streams that are created by the current loggedIn User
     filterStreamsForUser = () => {
-        //    alert(this.state.id)
-        //   Cookies.get('isAdmin') === false
+
         if (Cookies.get('isAdmin') === 'false') {
             let array2 = []
 
             this.state.id.forEach((element) => {
-                // alert(element)
-                //  alert(element[0] + "first")
-                // let index = this.state.id.indexOf(element);
-
 
                 if (this.state.arrayOFIdCurrenUser.includes(element[0])) {
 
                     array2.push(element)
-                    //   alert(array2)
-
 
                 }
             })
-
             this.state.id = array2
-
-            //    alert(this.state.id)
-
         }
-
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    // fetch streams from backend
     fetchData = async () => {
         const fetch1 = await fetch('http://localhost:8000/show_streams')
         const response1 = await fetch1.json()
         this.setState({ id: response1 });
     }
 
-
+    //Reading the Date of the Job entered by the user
     UpdateDateInsertOrder = (newValue) => {
         this.setState({
             dateInsertOrder: newValue
@@ -484,11 +441,7 @@ export default class Homepage extends Component {
         })
 
     }
-
-
-
-
-
+    // if there streams created allow the user to see them
     updatestreamcreated = () => {
         const mina = this.state.id;
         if (mina.length !== 0) {
@@ -500,108 +453,19 @@ export default class Homepage extends Component {
     }
 
 
-
+    // this method excute every 1 second
     async componentDidMount() {
         setInterval(() => {
-            this.fetchData()
-            this.getArrayOFStreamsIdOFTHeCurrentUser(Cookies.get('UserID'))
-            this.filterStreamsForUser()
-            this.updatestreamcreated()
-            this.getStreamIDsFromList(this.state.id)
-            //   this.getArrayofKeyfromID(this.state.arrayofIDs)
+            this.fetchData()    // fetch data
+            this.getArrayOFStreamsIdOFTHeCurrentUser(Cookies.get('UserID'))   // get user id of the user
+            this.filterStreamsForUser()   // filter the streams
+            this.updatestreamcreated()       // show the streams
+            this.AddkeysandTreeHeigthToStreams(this.state.id)       // show the minkey and maxkey and tree height to the user
+
         }, 1000);
     }
 
-
-
-
-
-
-
-    /*
-           getStreamIDsFromList = async (list) => {
-               let arrayofarrays = [];
-               let arrayofKeys = [];
-               list.forEach(element => arrayofarrays.push(element[0]))
-       
-       
-       
-               this.setState({
-                   arrayofIDs: arrayofarrays
-               }, () => {
-                   // alert(this.state.arrayofIDs)
-                   // console.log(typeof (this.state.arrayofIDs) + "ssssssssssssssssssssssssssssssss")
-               }
-               )
-           }
-       
-       */
-
-
-
-
-    getStreamIDsFromList = async (list) => {
-        if (list.length >= 1) {
-
-            list.forEach(async (e) => {
-                let index = e[0];
-                let maxkey = await getMaxKey(index)
-                let minkey = await getMinkey4(index);
-                let treeHeight = await getTreeHeight(index);
-                e.push(minkey)
-                e.push(maxkey)
-                e.push(treeHeight)
-                this.state.arrayofarrayss = list
-
-            }
-            )
-        }
-        //   alert(arrayofarrays)
-
-        /*
-                this.setState({
-                    arrayofarrayss: list
-                }, () => {
-                    // alert(this.state.arrayofIDs)
-                    // console.log(typeof (this.state.arrayofIDs) + "ssssssssssssssssssssssssssssssss")
-                }
-                )
-        */
-
-    }
-
-
-
-
-
-
-
-
-
-    getArrayofKeyfromID = async (list2) => {
-        let arrayofarrayss = [];
-
-
-        //   getMinkey4(0)
-
-        list2.forEach(element => list2.push([getMinkey4(0), getMinkey4(0)])
-        )
-
-        this.setState({
-            arrayofKeys: arrayofarrayss
-        }, () => {
-            //  alert(this.state.arrayofKey)
-
-        }
-        )
-    }
-
-
-
-
-
-
-
+    // Open  Order Dialog
     OpenIsertOrderDialog = (id) => {
         this.setState({
             InsertOrderDialog: true,
@@ -609,7 +473,7 @@ export default class Homepage extends Component {
         })
     }
 
-
+    // Open  Time Traveler Dialog
     OpenQueryTimeTravelDialog = (id) => {
         this.setState({
             QueryTimeTravelDialog: true,
@@ -617,9 +481,7 @@ export default class Homepage extends Component {
         })
     }
 
-
-
-
+    // Open FlankDialog and show results
     openRightFlankDialog = async (id) => {
         const url = await `http://localhost:8000/show_right_flank/${id}`
         const response = await axios(url);
@@ -630,38 +492,27 @@ export default class Homepage extends Component {
         })
     }
 
-
+    // Open SystemInfo Dialog and show resukts
     OpenSysteminfoDialog = async (id) => {
         const response = await axios(`http://localhost:8000/stream_info/${id}`);
         const data1 = await response.data;
-        //alert(data1)
-        //let data2 = await JSON.parse(data1)
+
         this.setState({
             systeminfoopendialog: true,
             index: id,
-            // systeminfo: JSON.stringify(data1).
             systeminfo: data1
         })
     }
 
 
-
+    //show system info results
     ShowSysteminfo = async (id) => {
-
         const response = await axios(`http://localhost:8000/stream_info/${id}`);
         const data1 = await response.data;
-
         alert(data1)
-
-
     }
 
-
-
-
-
-
-
+    // close ORder dialog 
     closeInsertOrderDialog = () => {
         this.setState({
             InsertOrderDialog: false,
@@ -672,7 +523,7 @@ export default class Homepage extends Component {
     }
 
 
-
+    // close query Time Traveler dialog 
     closeQueryTimeTravelDialog = () => {
         this.setState({
             QueryTimeTravelDialog: false
@@ -681,7 +532,7 @@ export default class Homepage extends Component {
 
     }
 
-
+    //clsoe Systeminfo dialog
 
     closeSysteminfoDialog = () => {
 
@@ -692,7 +543,7 @@ export default class Homepage extends Component {
         )
     }
 
-
+    //close right flank dialog
 
     closeRightFlankDialog = () => {
 
@@ -701,7 +552,7 @@ export default class Homepage extends Component {
         })
     }
 
-
+    // reading time stamp entered by the user
     changeTimeStamp = event => {
 
         this.setState({
@@ -711,7 +562,7 @@ export default class Homepage extends Component {
         }
         )
     }
-
+    // reading Query Start time entered by the user
     changeQueryTimeStart = event => {
 
         this.setState({
@@ -721,6 +572,7 @@ export default class Homepage extends Component {
         }
         )
     }
+    // reading Query End time entered by the user
     changeQueryTimeEnd = event => {
 
         this.setState({
@@ -731,53 +583,49 @@ export default class Homepage extends Component {
         )
     }
 
-
+    // Show hidden Textfeld to allow the user to insert array ordered
     ShowHidenTextAndButton = () => {
 
         this.setState({
             addMultipleEvents: true
         })
     }
-
+    // SHide the buttons to just enter single event
     HideTextAndButton = () => {
         this.setState({
             addMultipleEvents: false
         })
     }
+    // reading the period entered by the user
     changeperiod = event => {
         this.setState({
             period: event.target.value
         }, () => {
-            //  alert(this.state.period)
+
         })
     }
+    // reading the date entered by the user
     createData = (name, calories, fat) => {
         return { name, calories, fat };
     }
 
-
+    // insert elements to array to be inserted later as array
     InsertToArray = (id, timeStamp, eventType, dataofevent) => {
         this.state.EventArray.push(`
 {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`)
-        /*
-        this.setState({
-            EventArray: [`
-                {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`]
-        })
-*/
 
     }
-
+    // set insert order or insert ordered array as job
     setScheduleInsertOrder = () => {
         var secondBetweenTwoDate = Math.abs((this.state.dateInsertOrder - new Date().getTime()));
 
-        if (this.state.dateInsertOrder === '') {
+        if (this.state.dateInsertOrder === '') {              // toast when no date selected
             errornotify()
 
             return
         } else {
 
-            if (this.state.eventType === '') {
+            if (this.state.eventType === '') {                            // toast when no event selected
                 this.setState({
                     errorChoosetype: true
                 })
@@ -785,7 +633,7 @@ export default class Homepage extends Component {
                 return
             } else {
 
-                if (this.state.period !== 0) {
+                if (this.state.period !== 0) {                                     // when period is selected continue
                     const t = this.state.dateInsertOrder
 
                     let walid = this.state.rows
@@ -808,40 +656,24 @@ export default class Homepage extends Component {
     }
 
 
-
-
-
-
-
+    //Show StreamInfo
     showStreamInfo = async (id) => {
         const response = await axios(`http://localhost:8000/stream_info/${id}`);
         const data = await response.data;
         alert(data)
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //insert Event
     insertEvent = async (index, timeStamp, eventType, dataofevent) => {
 
-        if (this.state.addMultipleEvents === false) {
-            if (this.state.eventType !== "") {
+        if (this.state.addMultipleEvents === false) {                // check if array insert is turned off
+            if (this.state.eventType !== "") {                          //check if event type not empty
                 this.setState({
                     errorChoosetype: false
                 })
 
 
-                try {
+                try {                                                             // trying to insert order
                     let eventDetails = `
    {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`
                     const response = await axios.post(`http://localhost:8000/insert_ordered/${index}`, eventDetails);
@@ -854,14 +686,13 @@ export default class Homepage extends Component {
                         EventArray: ""
 
                     })
-                    successInserOrderNotify();
-
+                    successInserOrderNotify();                                 // when successfully entered toast
 
 
                 } catch (e) {
                     //console.log(e)
                     console.error(e)
-                    alert("Please the Data correctly")
+                    alert("Please the Data correctly")                          // when error alert the user
                 }
             } else {
                 this.setState({
@@ -878,7 +709,7 @@ export default class Homepage extends Component {
         }
     }
 
-
+    // reading the Event entered by the user
 
     changedataofevent = event => {
 
@@ -892,7 +723,7 @@ export default class Homepage extends Component {
     }
 
 
-
+    // reading the Raw entered by the user
 
     changeraw = event => {
 
@@ -919,7 +750,7 @@ export default class Homepage extends Component {
         }
     }
 
-
+    // reading the Const entered by the user
     changeconst = event => {
 
         if (event.target.value !== "") {
@@ -947,6 +778,7 @@ export default class Homepage extends Component {
 
     }
 
+    // reading the Var entered by the user
 
     changevar = event => {
 
@@ -974,6 +806,7 @@ export default class Homepage extends Component {
 
     }
 
+    // reading if user choose exclusive or inclusive by query time traveler
 
     chooseexclusiveorinclusive = event => {
 
@@ -988,85 +821,36 @@ export default class Homepage extends Component {
 
     }
 
-
+    // excuting query time traveler
     show_QueryTime = async (id, exklusivOrInklusiv, start, end) => {
 
-
-
-        //console.log("its working");
         const url = `http://localhost:8000/query_time_travel/${id}`
-        // exklusivOrInklusiv is boolean , falls es true ist dann ist es inklusiv // 
-        // if exklusivOrInklusiv false ist , ist es exklusiv
-        function getInklusivOrExklusiv(exklusivOrInklusiv) {
+
+        function getInklusivOrExklusiv(exklusivOrInklusiv) {                    // exculisve ot inclusive
             return (exklusivOrInklusiv ? "Inclusive" : "Exclusive");
         }
 
         const jsonBody = `{${(exklusivOrInklusiv ? `"Inclusive"` : `"Exclusive"`)} : {"start" : ${start} , "end": ${end}}}`
         //toDo  change URL with the one from Localhost (From the Rust-Project)
         try {
-            const response = await axios.post(url, jsonBody);
+            const response = await axios.post(url, jsonBody);             // trying to excute
             const data = await response.data;
 
-            //   let firstKey = Object.keys(data[0].payload)[0];
-            //   alert(firstKey)
-            //alert(response.data);
-            //  alert(JSON.stringify(data));
+
 
             this.setState({
-                querytimeResult: JSON.stringify(data)
+                querytimeResult: JSON.stringify(data)                   // when successfull show results
             })
 
-            //  alert(JSON.stringify(data[0].payload.U16));
-            //alert("Time Stamp is " + JSON.stringify(data[0].t1) + " type is" + JSON.stringify(data[0].payload))
+
             console.log(data)
         } catch (err) {
-            console.error(`Error is -->  ${err}`)
+            console.error(`Error is -->  ${err}`)                      // show error
             alert(jsonBody + "Error")
 
 
         }
     }
-
-
-
-
-    getMinkey = async (id) => {
-
-        try {
-            const url = `http://localhost:8000/min_key/${id}`
-            const response = await axios(url);
-            const data = await response.data;
-            //   alert(data)
-            return (data)
-        } catch (err) {
-            console.error(`Error is -->  ${err}`)
-
-        }
-    }
-
-
-
-
-    ShowRightFlank = async (id) => {
-
-        try {
-            const url = await `http://localhost:8000/show_right_flank/${id}`
-            const response = await axios(url);
-            const data = await response.data;
-            //  alert(data)
-
-            return (data)
-
-        } catch (err) {
-            console.error(`Error is -->  ${err}`)
-
-
-        }
-    }
-
-
-
-
 
 
 

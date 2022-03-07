@@ -30,8 +30,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { useHistory } from "react-router-dom";
 
+// Style for the Table of the Jobs in CreateStream
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -42,6 +42,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
+// Style for the Table of the Jobs in CreateStream
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
@@ -54,7 +55,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 
-
+// Job period Options
 
 const Jobsperiod = [
     {
@@ -105,7 +106,7 @@ const Jobsperiod = [
     }
 ]
 
-
+// Options of multipleddiskqueue
 const optionsofmultiplediskqueue = [
     {
         label: 10,
@@ -149,7 +150,7 @@ const optionsofmultiplediskqueue = [
     }
 ]
 
-
+//Toast when fields are missing
 const errorMissingFields = () => {
 
     toast.error(' Please Fill the missing Fields to continue!', {
@@ -164,7 +165,7 @@ const errorMissingFields = () => {
 }
 
 
-
+// Options of lightweightindex
 
 const optionsoflightweightindex = [
     {
@@ -183,7 +184,7 @@ const optionsoflightweightindex = [
 
 
 ]
-
+// Options of Compressor
 const compressoroptions = [
     {
         label: "none",
@@ -202,7 +203,7 @@ const compressoroptions = [
         value: "Sprintz",
     }
 ]
-
+// Options of Riverthreads
 const riverthreads = [
     {
         label: "t",
@@ -222,15 +223,10 @@ const riverthreads = [
     }
 ]
 
-const routeChange = () => {
-
-    let path = '/CreateStream';
-    history.push(path);
-}
 
 
+// Create Relation between Stream and User when Stream succesfully created by linking them
 async function CreateStreamPgAdmin(stream_id, user_id) {
-
     try {
         const createStreamDetails = {
             stream_id: stream_id,
@@ -239,8 +235,6 @@ async function CreateStreamPgAdmin(stream_id, user_id) {
         const response = await axios.post('http://localhost:5000/user/createstream', createStreamDetails)
         console.log(response.data)
 
-
-
     } catch (err) {
         console.error(err + "sssssssssssssssssssssssss")
     }
@@ -248,7 +242,7 @@ async function CreateStreamPgAdmin(stream_id, user_id) {
 }
 
 
-
+// Toast when Stream successfully created
 
 const successCreatedStreamNotify = () => {
     toast.success('Successfully Stream created', {
@@ -265,7 +259,7 @@ const successCreatedStreamNotify = () => {
 
 
 
-
+// go to home screen
 
 function goToHomePage() {
 
@@ -275,24 +269,13 @@ function goToHomePage() {
 
 }
 
-function convertHMS(value) {
-    const sec = parseInt(value, 10); // convert value to number if it's string
-    let hours = Math.floor(sec / 3600); // get hours
-    let minutes = Math.floor((sec - (hours * 3600)) / 60); // get minutes
-    let seconds = sec - (hours * 3600) - (minutes * 60); //  get seconds
-    // add 0 if value < 10; Example: 2 => 02
-    if (hours < 10) { hours = "0" + hours; }
-    if (minutes < 10) { minutes = "0" + minutes; }
-    if (seconds < 10) { seconds = "0" + seconds; }
-    return hours + ':' + minutes + ':' + seconds; // Return is HH : MM : SS
-}
-
-
 
 
 
 class CreateStreamScreen extends Component {
 
+
+    // constructor and  initial values of the variables
     constructor(props) {
         super(props)
 
@@ -333,6 +316,7 @@ class CreateStreamScreen extends Component {
         }
 
     }
+    // reading if log set in or off
     changelog = event => {
 
         this.setState(prevState => ({
@@ -343,52 +327,29 @@ class CreateStreamScreen extends Component {
     }
 
 
-
+    // creaeting a  row in the table of jobs
     createData = (dateofcreation, startsat, period) => {
-        // let answer = this.state.TableRows
-        // answer.push([dateofcreation, startsat, period])
         return { dateofcreation, startsat, period };
-        /*
-        this.setState({
-            TableRows: answer
-        }, () => {
-            alert(this.state.TableRows)
-        })
-        */
     }
 
-    /*
-    , () => {
-        console.log('Log is checked :', this.state.checklog)
-
-    })
-}
-
-*/
 
 
+    // reading the peroid entered by the user
     changeperiod = event => {
         this.setState({
             period: event.target.value
         }, () => {
-            //  alert(this.state.period)
+
         })
     }
+    // reading if debug set in or off
     changedebug = event => {
-        /*   this.setState({
-               checkdebug: 'true'
-           }, () => {
-               console.log('Debug is checked :', this.state.checkdebug)
-   
-           })
-   */
-
         this.setState(prevState => ({
             checkdebug: !this.state.checkdebug
         }), console.log('checkdebug is checked :', this.state.checkdebug))
     }
 
-
+    // reading the multiplediskmaxqueue entered by the user
     changemultiplediskmaxqueue = event => {
         this.setState({
             multiplediskmaxqueue: event.target.value
@@ -398,21 +359,20 @@ class CreateStreamScreen extends Component {
         }
         )
     }
-
+    // open schedule dialog
     OpenScheduleDialog = () => {
         this.setState({
             openschedule: true
         })
     }
-
+    // close schedule dialog
     CloseScheduleDialog = () => {
         this.setState({
             openschedule: false
         })
 
     }
-
-
+    // reading the datafile entered by the user
     changedatafiles = event => {
         this.setState({
             datafilesinput: event.target.value
@@ -422,7 +382,7 @@ class CreateStreamScreen extends Component {
         })
     }
 
-
+    // reading the chosen raw type entered by the user
     changeraw = event => {
 
         if (event.target.value !== "") {
@@ -447,7 +407,7 @@ class CreateStreamScreen extends Component {
             )
         }
     }
-
+    // reading the selected type of event  entered by the user
 
     changedataofevent = event => {
 
@@ -459,7 +419,7 @@ class CreateStreamScreen extends Component {
         }
         )
     }
-
+    // reading the chosen const type entered by the user
 
     changeconst = event => {
 
@@ -488,7 +448,7 @@ class CreateStreamScreen extends Component {
 
     }
 
-
+    // reading the chosen var type entered by the user
     changevar = event => {
 
         if (event.target.value !== "") {
@@ -514,6 +474,7 @@ class CreateStreamScreen extends Component {
         }
 
     }
+    // reading the translation files entered by the user
     changetranslationfiles = event => {
         this.setState({
             translationfilesinput: event.target.value
@@ -522,6 +483,7 @@ class CreateStreamScreen extends Component {
 
         })
     }
+    // reading the file input entered by the user 
     changebootfileinput = event => {
         this.setState({
             bootfileinput: event.target.value
@@ -530,7 +492,7 @@ class CreateStreamScreen extends Component {
 
         })
     }
-
+    // reading the Stream Event Layout entered by the user
     StreamEventLayoutChange = event => {
         this.setState({
             datatypeofstreameventlayout: event.target.value
@@ -541,7 +503,7 @@ class CreateStreamScreen extends Component {
         )
 
     }
-
+    // reading the light weight index entered by the user
     changelightweightindex = event => {
         this.setState({
             lightweightindex: event.target.value
@@ -552,7 +514,7 @@ class CreateStreamScreen extends Component {
         )
 
     }
-
+    // reading the logical block size entered by the user
     changelogicalblocksize = event => {
         this.setState({
             logicalblocksizeinput: event.target.value
@@ -561,6 +523,7 @@ class CreateStreamScreen extends Component {
 
         })
     }
+    // reading the macro block size entered by the user
     changemacroblocksize = event => {
         this.setState({
             macroblocksizeinput: event.target.value
@@ -569,6 +532,7 @@ class CreateStreamScreen extends Component {
 
         })
     }
+    // reading the macro block spare entered by the user
     changemacroblockspare = event => {
         this.setState({
             macroblockspareinput: event.target.value
@@ -577,6 +541,7 @@ class CreateStreamScreen extends Component {
 
         })
     }
+    // reading the macro block preallocation entered by the user
     changemacroblockpreallocation = event => {
         this.setState({
             macroblockpreallocationinput: event.target.value
@@ -586,20 +551,18 @@ class CreateStreamScreen extends Component {
         })
     }
 
-
-
-
+    // reading the date of job entered by the user
     UpdateDate = (newValue) => {
         this.setState({
             dateCreateStream: newValue
         },
             () => {
-                //   alert(this.state.dateCreateStream)
+
             })
     }
 
 
-
+    // reading the macro block batch  allocation entered by the user
     changemacroblockbatchallocation = event => {
         this.setState({
             macroblockbatchallocationinput: event.target.value
@@ -608,7 +571,7 @@ class CreateStreamScreen extends Component {
 
         })
     }
-
+    // reading the macro blocks cache entered by the user
     changemacroblockscache = event => {
         this.setState({
             macroblockscache: event.target.value
@@ -617,7 +580,7 @@ class CreateStreamScreen extends Component {
 
         })
     }
-
+    // reading the nodes cache  entered by the user
 
     changenodescache = event => {
         this.setState({
@@ -627,6 +590,7 @@ class CreateStreamScreen extends Component {
 
         })
     }
+    createData
 
     changecompressor = event => {
         this.setState({
@@ -646,6 +610,7 @@ class CreateStreamScreen extends Component {
     createData = (name, calories, fat) => {
         return { name, calories, fat };
     }
+    // reading the river threads  entered by the user
     changeriverthreads = event => {
         this.setState({
             riverthreads: event.target.value
@@ -656,7 +621,7 @@ class CreateStreamScreen extends Component {
         }
         )
     }
-
+    // reading the max delta queue  entered by the user
     changemaxdeltaqueue = event => {
         this.setState({
             maxdeltaqueue: event.target.value
@@ -666,13 +631,14 @@ class CreateStreamScreen extends Component {
         })
     }
 
+    // set Job to Create Stream
     setTimerCreateStream = () => {
-        var secondBetweenTwoDate = Math.abs((this.state.dateCreateStream - new Date().getTime()));
+        var secondBetweenTwoDate = Math.abs((this.state.dateCreateStream - new Date().getTime()));  // calculating the time as difference of the time choosen and the current time
         const t = this.state.dateCreateStream
         //alert(t.toString())
-        if (this.state.period !== 0) {
+        if (this.state.period !== 0) {  // if  period is choosen
             let walid = this.state.rows
-            walid.push(this.createData(new Date().toLocaleString(), t.toString(), `${this.state.period} sec `));
+            walid.push(this.createData(new Date().toLocaleString(), t.toString(), `${this.state.period} sec `));       // create a row in the table
 
 
             this.setState({
@@ -682,14 +648,14 @@ class CreateStreamScreen extends Component {
         }
 
         // alert(secondBetweenTwoDate)
-        setTimeout(() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue), secondBetweenTwoDate);
+        setTimeout(() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue), secondBetweenTwoDate);  // set the job
 
 
 
     }
 
 
-
+    // create Stream by inserting the entered values by the user to the body
     createStream = (checklog, checkdebug, mulltiplediskmaxqueue, logicalblocksizeinput, macroblocksizeinput, macroblockpreallocationinput, macroblockbatchallocationinput, macroblockscache, nodescache, maxdeltaqueue, eventType, dataofevent) => {
         //  console.log("its working");
         const url = 'http://localhost:8000/create_stream'
@@ -951,12 +917,11 @@ class CreateStreamScreen extends Component {
             .then(function (response) {
 
 
-                //console.log(response);
-                //     alert(response.data[31])
+                // s
 
-                CreateStreamPgAdmin(response.data[31], Cookies.get('UserID'))
-                successCreatedStreamNotify();
-                goToHomePage();
+                CreateStreamPgAdmin(response.data[31], Cookies.get('UserID'))  // reading the stream id
+                successCreatedStreamNotify();        // toast stream successfully created
+                goToHomePage();             // go to home page
             })
             .catch(function (error) {
                 console.log(error.message);

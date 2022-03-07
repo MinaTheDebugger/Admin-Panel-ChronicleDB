@@ -19,17 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
-/*
-function goToLoginScreen() {
-
-    history.push("/");
-
-
-
-}
-
-*/
-
+// Toast when Succesullfy registered
 
 const RegisterSucessfullyNotify = () => {
     toast.success('Registered Successfully', {
@@ -45,6 +35,8 @@ const RegisterSucessfullyNotify = () => {
 }
 
 
+// Toast when Fields are missing
+
 const errorMissingFields = () => {
 
     toast.error(' Please Fill the missing Fields to continue!', {
@@ -59,7 +51,7 @@ const errorMissingFields = () => {
 }
 
 
-
+// Taost when passwords doesn't match
 const errorPasswords = () => {
 
     toast.error(' Please rewrite your password correctly!', {
@@ -76,30 +68,14 @@ const errorPasswords = () => {
 
 
 
-
-
-
-
-
-
-
-
 function Registerscreen() {
 
-
+    // All Varaibles of the Register function
     let history = useHistory();
-
-
-
-
-
-
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-
     const [showPassword1, setShowPassword1] = useState("");
     const [showPassword2, setShowPassword2] = useState("");
     const [errorName, setErrorName] = useState(false)
@@ -109,58 +85,50 @@ function Registerscreen() {
 
 
 
-
+    // When signUp is successfull go to loginscreen
 
     function goToLoginScreen() {
         Cookies.remove('User1')
         history.push("/");
-
         Cookies.set('refresh', false, { expires: 7 })
-
         RegisterSucessfullyNotify()
-
     }
 
+    // reading the name entered by the user
     const setname = event => {
-
         setName(event.target.value)
-
-
     }
 
-
+    // reading the Email entered by the user
     const setemail = event => {
         setEmail(event.target.value)
     }
 
-
-
-
-
+    // reading the first Passwrod entered by the user
     const setpassword1 = event => {
         setPassword1(event.target.value)
     }
 
-
+    // reading the second Passwrod entered by the user
     const setpassword2 = event => {
         setPassword2(event.target.value)
     }
 
-
+    // Show OR Hide the first Passwrod entered by the user
 
     const handleClickShowPassword1 = () => {
         setShowPassword1(!showPassword1)
     }
 
-
+    //Default hidden  Password
     const handleMouseDownPassword1 = (event) => {
         event.preventDefault();
     };
-
+    // Show OR Hide the second Passwrod entered by the user
     const handleClickShowPassword2 = () => {
         setShowPassword2(!showPassword2)
     }
-
+    //Default hidden  Password
 
     const handleMouseDownPassword2 = (event) => {
         event.preventDefault();
@@ -169,61 +137,54 @@ function Registerscreen() {
 
 
 
-
+    // SignUp funtion
     const signUp = async (email, password, name) => {
 
-        let error = false;
 
+
+        let error = false;
         if (name === "") {
-            setErrorName(true)
+            setErrorName(true)            // if missing set error
             error = true;
         }
 
         if (email === "") {
-            setErrorEmail(true)
+            setErrorEmail(true)               // if missing set error
             error = true;
         }
 
         if (password1 === "") {
-            setErrorPassword1(true)
+            setErrorPassword1(true)                // if missing set error
             error = true;
         }
 
 
         if (password2 === "") {
-            setErrorPassword2(true)
+            setErrorPassword2(true)                       // if missing set error
             error = true;
         }
 
-
-
-
-
         if (error === true) {
-            errorMissingFields();
+            errorMissingFields();                               // if missing set error
             return;
         }
 
-
-
-
         if (password1 !== password2) {
-            setErrorPassword2(true)
+            setErrorPassword2(true)                                 // if missing set error
             errorPasswords();
             return;
         }
 
         try {
             const signUpDetails = {
-                name: name,
+                name: name,                                                         // trying to signup
                 email: email,
-
                 password: password
             };
             const response = await axios.post('http://localhost:5000/user/register', signUpDetails)
             console.log(response.data)
 
-            goToLoginScreen()
+            goToLoginScreen()                        // when succesfull goto loginscreen
 
 
 
@@ -237,40 +198,23 @@ function Registerscreen() {
 
 
 
-
-
-
-
-
     return (
         <div className='register'>
-
-
             <div>
                 <h2 className='title'>Register:
                     Please fill the detials
                 </h2>
-
             </div>
-
             <div>
-
-
                 <div >
                     <TextField
                         error={errorName}
                         className='textfield'
                         onChange={setname}
-
-
                         helperText={errorName ? "Please enter your name" : ""}
-
                         label="Name"
-
-
                         defaultValue=""
                         fullWidth
-
                         sx={{ m: 1, width: '51ch' }}
 
                     />
@@ -282,22 +226,16 @@ function Registerscreen() {
 
                 <div >
                     <TextField
-
                         className='textfield'
                         onChange={setemail}
-
                         error={errorEmail}
-
                         label="Email"
                         type="email"
                         required
                         id="outlined-required"
-
                         helperText={errorEmail ? "Please enter your Email" : ""}
-
                         defaultValue=""
                         fullWidth
-
                         sx={{ m: 1, width: '51ch' }}
 
                     />
@@ -337,13 +275,8 @@ function Registerscreen() {
                             label="Password"
                         />
                     </FormControl>
-
                 </div>
-
             </div>
-
-
-
             <div>
 
 
