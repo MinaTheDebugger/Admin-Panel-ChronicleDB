@@ -5,10 +5,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import './Appbar.css';
-
-
-
-
 import { useHistory } from "react-router-dom";
 import Cookies from 'js-cookie';
 
@@ -17,30 +13,29 @@ import Cookies from 'js-cookie';
 
 function Appbar() {
 
-    let history = useHistory();
+    let history = useHistory();           // use history allows navigatiing between pages
 
-    function goToHomePage() {
+    function goToHomePage() {             // send user to home screen
         history.push("/Home");
     }
 
-    function goToCreateStreamPage() {
+    function goToCreateStreamPage() {     // send user to createStrean screen
         history.push("/CreateStream");
     }
 
 
-    function goToAboutPage() {
+    function goToAboutPage() {               // send user to About screen
         history.push("/About");
     }
 
 
-    function goToJobsPage() {
+    function goToJobsPage() {               // send user to Job screen
         history.push("/Jobs")
     }
-
-    function Signout() {
+ 
+    function Signout() {                        // signing out and deleting data of the user
         Cookies.remove('User1')
         history.push("/");
-
         Cookies.set('refresh', false, { expires: 1 })
         Cookies.set('isAdmin', false, { expires: 1 })
         Cookies.set('Name', "NO", { expires: 1 })
@@ -50,8 +45,6 @@ function Appbar() {
 
 
     return (
-
-
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed">
                 <Toolbar>

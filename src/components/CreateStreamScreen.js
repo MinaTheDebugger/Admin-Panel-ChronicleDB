@@ -150,6 +150,10 @@ const optionsofmultiplediskqueue = [
 ]
 
 
+
+
+
+
 const errorMissingFields = () => {
 
     toast.error(' Please Fill the missing Fields to continue!', {
@@ -183,6 +187,83 @@ const optionsoflightweightindex = [
 
 
 ]
+
+async function createStreamJava(streamName, schemaName, schemaType, Nullable, LightweightIndex) {
+    // const requestOptions = {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': "application/x-www-form-urlencoded" },
+    //     body: `
+    //     {
+    //         "streamName": "${streamName}",
+    //         "schema": [
+    //           {
+    //             "name": "${schemaName}",
+    //             "type": "${schemaType}",
+    //             "properties": {
+    //               "nullable": ${Nullable},
+    //               "index": ${LightweightIndex}
+    //             }
+    //           },
+    //           {
+    //             "name": "yyY",
+    //             "type": "DOUBLE",
+    //             "properties": {
+    //               "nullable": false,
+    //               "index": true
+    //             }
+    //           }
+    //         ]
+    //       }`
+    // }
+    const data = `
+    {
+        "streamName": "${streamName}",
+        "schema": [
+          {
+            "name": "${schemaName}",
+            "type": "${schemaType}",
+            "properties": {
+              "nullable": ${Nullable},
+              "index": ${LightweightIndex}
+            }
+          },
+          {
+            "name": "yyY",
+            "type": "DOUBLE",
+            "properties": {
+              "nullable": false,
+              "index": true
+            }
+          }
+        ]
+      }`
+    //axios.defaults.baseURL = 'http://myurl';
+
+
+    try {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            // 'Access-Control-Allow-Headers' : 'Authorization',
+            //'Content-Type': '',
+            'Access-Control-Allow-Methods': 'Accept',
+            "Content-Type": "APPLICATION/JSON",
+            "Access-Control-Allow-Methods": "POST"
+        }
+
+        const response = await axios.post('https://dbs-demo.mathematik.uni-marburg.de/native/create-stream', data, {
+            headers: headers
+        })
+        alert("it worked " + JSON.stringify(response.body))
+        console.log(JSON.stringify(response.body))
+    } catch (error) {
+        alert("it not " + JSON.stringify(data))
+        alert(error)
+        console.error(error)
+    }
+}
+
+
 
 const compressoroptions = [
     {
@@ -1412,7 +1493,9 @@ class CreateStreamScreen extends Component {
                         <button className='createStreambutton1' type="button" name='WWalid' onClick={() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue, this.state.eventType, this.state.dataofevent)}>
                             CreateStream
                         </button>
-
+                        <button className='createStreambutton1' type="button" name='WWalid' onClick={() => createStreamJava("testT", "Y", "DOUBLE", false, false)}>
+                            CreateStreamJAVA
+                        </button>
 
 
                         <button variant="outlined"
