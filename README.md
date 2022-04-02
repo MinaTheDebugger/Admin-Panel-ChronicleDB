@@ -2,9 +2,7 @@
 an Admin Panel for A DB using React as a frontEnd-Framework
 
 ## Aktuelle Screenshots 
-![Home Page](https://github.com/MinaTheDebugger/Admin-Panel-ChronicleDB/blob/main/HomePage.jpeg)
-![created Streams](https://github.com/MinaTheDebugger/Admin-Panel-ChronicleDB/blob/main/createdStreams.jpeg)
-
+All Screenshots can be found in Photos Folder
 
 
 
