@@ -1,0 +1,170 @@
+.maindiv{
+    position: relative;
+    top: 12ch;
+
+}
+
+.TableJavadiv{
+    position: relative;
+    width: 100%;
+}
+
+.TableStreamName {
+    position: relative;
+    width: 50%;
+    left: 5ch;
+    float: left;
+    
+  }
+  .TableCreateStream{
+    position: relative;
+    width: 50%;
+   
+    float: right;
+  }
+
+  .listsOfStreams{
+      position: relative;
+     
+  }
+
+
+  .CreateStreamButton{
+    position: relative;
+left:39.7ch;
+top: 0ch;
+    height: 80px;
+    width: 250px;
+    background-color: LightBlue;
+    font-size: 20px;
+    border-radius: 4px;
+    border: 2px solid #555555;
+  }
+
+  .closeDialogButton{
+    height: 9ch;
+  width: 23ch;
+  background-color: red;
+  }
+
+.ExcuteSchemaButton{
+  height: 9ch;
+  width: 23ch;
+  background-color: green;
+}
+
+  .CreateStreamButtonInDialog{
+    height: 9ch;
+    width: 23ch;
+    background-color: green;
+  }
+
+  .AddAttribute{
+    height: 9ch;
+    width: 23ch;
+    background-color: LightGoldenRodYellow;
+  }
+
+  .StreamNames {
+    /* background-color: #f44336;*/
+    position: relative;
+    width: 7%;
+    float: left;
+  }
+
+  .buttonsdiv{
+    position: relative;
+    width: 60%;
+    float: left;
+  }
+
+  .StreamInfoButton{
+    position: relative;
+    left: 70ch;
+    height: 67px;
+    width: 120px;
+    background-color: yellow;
+    border-radius: 12px;
+    float: left;
+    margin: 3px;
+    bottom: 12px;
+  }
+
+  .InsertButton{
+    position: relative;
+    left: 70ch;
+    height: 67px;
+    width: 120px;
+    background-color: LightSeaGreen;
+    border-radius: 12px;
+    float: left;
+    margin: 3px;
+    bottom: 12px;  
+  }
+
+  .Query{
+    position: relative;
+    left: 70ch;
+    height: 67px;
+    width: 120px;
+    background-color: Salmon;
+    border-radius: 12px;
+    float: left;
+    margin: 3px;
+    bottom: 12px;
+  }
+
+
+  .a {
+    margin: 0;
+    padding: 0;
+    width: 26cm;
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    /* Float the buttons side by side */
+    height: 3cm;
+  }
+  
+  /* Style the list items */
+   .li {
+    cursor: pointer;
+    position: relative;
+    padding: 12px 8px 12px 40px;
+    background: #eee;
+    font-size: 35px;
+    transition: 0.2s;
+  
+    /* make the list items unselectable */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Set all odd list items to a different color (zebra-stripes) */
+  ul1 li:nth-child(odd) {
+    background: #f9f9f9;
+  }
+
+  .Pingbutton{
+    position: relative;
+    right: 31ch;
+    height: 80px;
+    width: 250px;
+    background-color: Bisque;
+    font-size: 20px;
+    border-radius: 4px;
+    border: 2px solid #555555;
+  }
+
+  .Schemabutton{
+    position: relative;
+    right: 30ch;
+    height: 80px;
+    width: 250px;
+    background-color: Plum;
+    font-size: 20px;
+    border-radius: 4px;
+    border: 2px solid #555555;
+  }
+  

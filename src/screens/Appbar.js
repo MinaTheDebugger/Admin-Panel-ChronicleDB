@@ -32,7 +32,12 @@ function Appbar() {
     function goToJobsPage() {               // send user to Job screen
         history.push("/Jobs")
     }
- 
+
+
+    function goToJavaPage() {               // send user to Job screen
+        history.push("/Java")
+    }
+
     function Signout() {                        // signing out and deleting data of the user
         Cookies.remove('User1')
         history.push("/");
@@ -94,6 +99,20 @@ function Appbar() {
 
                     </IconButton>
 
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={goToJavaPage}
+                    >
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            Java
+
+                        </Typography>
+
+                    </IconButton>
 
 
                     <IconButton
@@ -110,6 +129,11 @@ function Appbar() {
                         </Typography>
 
                     </IconButton>
+
+
+
+
+
 
 
                     <Typography variant="h6" color="inherit" component="div" className='username'  >

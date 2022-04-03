@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import Jobscreen from './screens/Jobscreen';
 
 import history from './components/alteComponents/history';
+import JavaScreen from './screens/JavaScreen';
 
 
 
@@ -166,6 +167,20 @@ class App extends Component {
     )
   }
 
+  ProtectJavaScreen = () => {
+    return (
+      < Switch >
+        <Route
+          render={() => this.state.auth ? (
+            <JavaScreen />
+          ) :
+            (<Redirect to={{ pathname: "/" }} />
+            )
+          } />
+      </Switch >
+
+    )
+  }
 
 
 
@@ -212,6 +227,9 @@ class App extends Component {
             <this.ProtectJobs exact path="/Jobs">
               <Jobscreen />
             </this.ProtectJobs>
+            <this.ProtectJavaScreen exact path="/Java">
+              <JavaScreen />
+            </this.ProtectJavaScreen>
           </Switch>
           <Switch>
           </Switch>

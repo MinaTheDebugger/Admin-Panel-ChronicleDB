@@ -217,27 +217,18 @@ async function createStreamJava(streamName, schemaName, schemaType, Nullable, Li
     // }
     const data = `
     {
-        "streamName": "${streamName}",
+        "streamName": "t2",
         "schema": [
           {
-            "name": "${schemaName}",
-            "type": "${schemaType}",
-            "properties": {
-              "nullable": ${Nullable},
-              "index": ${LightweightIndex}
-            }
-          },
-          {
-            "name": "yyY",
+            "name": "Y",
             "type": "DOUBLE",
             "properties": {
               "nullable": false,
-              "index": true
+              "index": false
             }
           }
         ]
-      }`
-    //axios.defaults.baseURL = 'http://myurl';
+ }`
 
 
     try {
