@@ -217,10 +217,14 @@ export default class Java extends Component {
             ArrayOfAttributes: [],
             SchemaDialog: false,
             SqlSchemaQuery: "",
-            resultOfShemaQuery: ""
+            resultOfShemaQuery: "",
+            xValue: 0.0,
+            yValue: 0.0,
+            tStart: 0,
+            ArrayofEvents: [],
+            QueryString: ""
         }
     }
-
     OpenCreateStreamDialog = (id) => {
         this.setState({
             CreateStreamDialog: true,
@@ -229,7 +233,7 @@ export default class Java extends Component {
     }
 
 
-    InsertToArray = (name, type, nullable, index) => {
+    InsertTOAttributesArray = (name, type, nullable, index) => {
         this.state.ArrayOfAttributes.push(`
 {
     "name":"${name}",
@@ -241,6 +245,21 @@ export default class Java extends Component {
 }`)
 
     }
+
+    InsertToEventArray = (xValue, yValue, tStart) => {
+
+        this.state.ArrayofEvents.push(`
+{
+    "X" : ${xValue},
+    "Y" : ${yValue},
+    "TSTART" : ${tStart}
+}
+`)
+    }
+
+
+
+
 
 
     closeCreateStreamDialog = () => {
@@ -325,6 +344,16 @@ export default class Java extends Component {
         )
     }
 
+    changeQueryString = event => {
+        this.setState({
+            QueryString: event.target.value
+        }, () => {
+            alert(this.state.QueryString)
+        }
+        )
+    }
+
+
     changeLightweightIndex = event => {
         this.setState({
             LightweightIndex: event.target.value,
@@ -367,6 +396,34 @@ export default class Java extends Component {
             AttributeName: event.target.value
         })
     }
+
+    changeXvalue = event => {
+        this.setState({
+            xValue: event.target.value
+        },
+            () => {
+                //     alert(this.state.xValue)
+            })
+    }
+    changeYvalue = event => {
+        this.setState({
+            yValue: event.target.value
+        },
+            () => {
+                //   alert(this.state.yValue)
+            })
+    }
+
+    changeTStart = event => {
+        this.setState({
+            tStart: event.target.value
+        },
+            () => {
+                //       alert(this.state.tStart)
+            })
+    }
+
+
 
 
     changeSchemaType = event => {
@@ -547,7 +604,7 @@ export default class Java extends Component {
 
                     </DialogContent>
                     <DialogActions>
-                        <Button className="AddAttribute" onClick={() => this.InsertToArray(this.state.AttributeName, this.state.StreamType, this.state.Nullable, this.state.LightweightIndex)} >Add Attribute</Button>
+                        <Button className="AddAttribute" onClick={() => this.InsertTOAttributesArray(this.state.AttributeName, this.state.StreamType, this.state.Nullable, this.state.LightweightIndex)} >Add Attribute</Button>
                         <Button className="CreateStreamButtonInDialog">CreateStream</Button>
                         <Button onClick={this.closeCreateStreamDialog} className="closeDialogButton">Close</Button>
 
@@ -564,9 +621,69 @@ export default class Java extends Component {
                         <DialogContentText>
                             <h1> Stream Name: {this.state.StreamNameInInsertDialog} </h1>
                         </DialogContentText>
+
+                        <TextField
+                            onChange={this.changeXvalue}
+                            required
+                            sx={{ m: 1, width: '63ch' }}
+                            id="outlined-required"
+                            label="X"
+                            defaultValue="0"
+                            fullWidth='md'
+                            maxWidth="md"
+                            autoFocus
+                            margin="dense"
+
+                        />
+                        <TextField
+                            onChange={this.changeYvalue}
+                            sx={{ m: 1, width: '63ch' }}
+                            required
+                            id="outlined-required"
+                            label="Y"
+                            defaultValue="0"
+                            fullWidth='md'
+                            maxWidth="md"
+                            autoFocus
+                            margin="dense"
+
+                        />
+                        <TextField
+                            onChange={this.changeTStart}
+                            sx={{ m: 1, width: '63ch' }}
+                            required
+                            id="outlined-required"
+                            label="TStart"
+                            defaultValue="0"
+                            fullWidth='md'
+                            maxWidth="md"
+                            autoFocus
+                            margin="dense"
+
+                        />
+
+
+                        <TextField
+                            id="outlined-read-only-input"
+                            label="Events"
+                            multiline
+                            maxRows={6}
+                            sx={{ m: 1, width: '130ch' }}
+
+
+                            variant="filled"
+                            helperText="Added Events"
+                            value={this.state.ArrayofEvents}
+                        />
+
+
+
+
+
                     </DialogContent>
                     <DialogActions>
-
+                        <Button className="CreateStreamButtonInDialog">Insert</Button>
+                        <Button onClick={() => this.InsertToEventArray(this.state.xValue, this.state.yValue, this.state.tStart)} className="AddAttribute">Add to Array</Button>
                         <Button onClick={this.closeInsertDialog} className="closeDialogButton">Close</Button>
 
                     </DialogActions>
@@ -582,6 +699,24 @@ export default class Java extends Component {
                             <h1> Stream Name: {this.state.StreamNameInQueryDialog} </h1>
 
                         </DialogContentText>
+
+
+                        <TextField
+                            onChange={this.changeQueryString}
+                            required
+                            id="outlined-required"
+                            label="Stream Name"
+                            defaultValue="0"
+                            fullWidth='md'
+                            maxWidth="md"
+                            autoFocus
+                            margin="dense"
+
+                        />
+
+
+
+
                     </DialogContent>
                     <DialogActions>
 

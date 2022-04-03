@@ -612,7 +612,7 @@ export default class Homepage extends Component {
     // insert elements to array to be inserted later as array
     InsertToArray = (id, timeStamp, eventType, dataofevent) => {
         this.state.EventArray.push(`
-{"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`)
+     {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`)
 
     }
     // set insert order or insert ordered array as job
@@ -675,7 +675,7 @@ export default class Homepage extends Component {
 
                 try {                                                             // trying to insert order
                     let eventDetails = `
-   {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`
+       {"t1":${timeStamp},"payload":{"${eventType}":${dataofevent}}}`
                     const response = await axios.post(`http://localhost:8000/insert_ordered/${index}`, eventDetails);
 
                     const data = await response.data;

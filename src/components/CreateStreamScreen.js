@@ -31,6 +31,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+import { response } from 'express'
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -215,23 +217,27 @@ async function createStreamJava(streamName, schemaName, schemaType, Nullable, Li
     //         ]
     //       }`
     // }
-    const data = `
-    {
-        "streamName": "t2",
-        "schema": [
-          {
-            "name": "Y",
-            "type": "DOUBLE",
-            "properties": {
-              "nullable": false,
-              "index": false
-            }
-          }
-        ]
- }`
+
 
 
     try {
+
+
+        const data = `
+        {
+            "streamName": "t6",
+            "schema": [
+              {
+                "name": "Y",
+                "type": "DOUBLE",
+                "properties": {
+                  "nullable": false,
+                  "index": false
+                }
+              }
+            ]
+     }`
+
         const headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -241,14 +247,29 @@ async function createStreamJava(streamName, schemaName, schemaType, Nullable, Li
             "Content-Type": "APPLICATION/JSON",
             "Access-Control-Allow-Methods": "POST"
         }
+        const rawResponse = await fetch("native/create-stream", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            method: "post",
+            body: JSON.stringify(data)
+        }).then(response =>
+            alert(response)
+        )
 
-        const response = await axios.post('https://dbs-demo.mathematik.uni-marburg.de/native/create-stream', data, {
-            headers: headers
-        })
-        alert("it worked " + JSON.stringify(response.body))
-        console.log(JSON.stringify(response.body))
+        // const content = await rawResponse.json();
+
+        //  alert(content)
+        //        const response = await axios.post('native/create-stream', data, {
+        //        headers:{
+        //           "Content-Type": "application/json",
+        //       },
+        //     })
+        //   alert("it worked " + JSON.stringify(response.body))
+        //  console.log(JSON.stringify(response.body))
+        //     alert("it worked")
     } catch (error) {
-        alert("it not " + JSON.stringify(data))
+        // alert("it not " + JSON.stringify(data))
         alert(error)
         console.error(error)
     }
