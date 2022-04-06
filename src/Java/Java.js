@@ -130,8 +130,10 @@ async function query(queryString, startTime, endTime) {
      }`
         const response = await axios.post(url, request)
         console.log(response)
+        alert("it worked")
     } catch (error) {
         console.error(error)
+        alert("it doesn#t word")
     }
 }
 //{
@@ -146,8 +148,10 @@ async function insertEvent(streamName, events) {
           }`
         const response = await axios.post(url, request)
         console.log(response)
+        alert("it worked")
     } catch (error) {
         console.error(error)
+        alert("it doesn#t work")
     }
 }
 
@@ -207,6 +211,9 @@ export default class Java extends Component {
             }
 
 
+            ,
+            startTime: 0,
+            endTime: 0
         }
     }
     OpenCreateStreamDialog = (id) => {
@@ -418,6 +425,28 @@ export default class Java extends Component {
         }
         )
     }
+
+    changeStartTime = event => {
+        this.setState({
+            startTime: event.target.value
+        }, () => {
+            //  alert(this.state.startTime)
+        }
+        )
+    }
+
+    changeEndTime = event => {
+        this.setState({
+            endTime: event.target.value
+        }, () => {
+            //   alert(this.state.endTime)
+        }
+
+
+        )
+
+    }
+
 
 
 
@@ -730,7 +759,18 @@ export default class Java extends Component {
 
                     </DialogContent>
                     <DialogActions>
-                        <Button className="CreateStreamButtonInDialog">Insert</Button>
+                        <Button className="CreateStreamButtonInDialog" onClick={() => insertEvent("mina", [
+                            {
+                                "X": 42.0,
+                                "Y": 1337.0,
+                                "TSTART": 12
+                            },
+                            {
+                                "X": 17.0,
+                                "Y": 137.0,
+                                "TSTART": 14
+                            }
+                        ])}>Insert</Button>
                         <Button onClick={() => this.InsertToEventArray(this.state.xValue, this.state.yValue, this.state.tStart)} className="AddAttribute">Add to Array</Button>
                         <Button onClick={this.closeInsertDialog} className="closeDialogButton">Close</Button>
 
@@ -762,12 +802,39 @@ export default class Java extends Component {
 
                         />
 
+                        <TextField
+                            onChange={this.changeStartTime}
+
+                            sx={{ m: 1, width: '63ch' }}
+                            id="outlined-required"
+                            label="Start Time"
+                            defaultValue="0"
+                            fullWidth='md'
+                            maxWidth="md"
+                            autoFocus
+                            margin="dense"
+
+                        />
+
+                        <TextField
+                            onChange={this.changeEndTime}
+                            required
+                            sx={{ m: 1, width: '63ch' }}
+                            id="outlined-required"
+                            label="End Time"
+                            defaultValue="0"
+                            fullWidth='md'
+                            maxWidth="md"
+                            autoFocus
+                            margin="dense"
+
+                        />
 
 
 
                     </DialogContent>
                     <DialogActions>
-
+                        <Button onClick={() => query("SELECT (X+Y) AS XY FROM S", this.state.startTime, this.state.endTime)} className="CreateStreamButtonInDialog">Excute</Button>
                         <Button onClick={this.closeQueryDialog} className="closeDialogButton">Close</Button>
 
                     </DialogActions>
