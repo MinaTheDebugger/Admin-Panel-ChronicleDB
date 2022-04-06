@@ -120,14 +120,15 @@ async function streamInfo(streamName) {
 
 
 async function query(queryString, startTime, endTime) {
-
+    let request = `{
+        "queryString":"${queryString}",
+        "startTime": ${startTime},
+        "endTime": ${endTime}
+ }`
+    alert(request)
     try {
         const url = 'https://dbs-demo.mathematik.uni-marburg.de/native/query'
-        let request = `{
-            "queryString":${queryString},
-            "startTime": ${startTime},
-            "endTime": ${endTime}
-     }`
+
         const response = await axios.post(url, request)
         console.log(response)
         alert("it worked")
@@ -140,12 +141,16 @@ async function query(queryString, startTime, endTime) {
 
 async function insertEvent(streamName, events) {
 
+    let request = `{
+        "streamName": ${streamName},
+        "events": ${events}
+      }`
+
+    alert(request)
+
     try {
         const url = 'https://dbs-demo.mathematik.uni-marburg.de/native/insert'
-        let request = `{
-            "streamName": ${streamName},
-            "events": ${events}
-          }`
+
         const response = await axios.post(url, request)
         console.log(response)
         alert("it worked")
@@ -155,18 +160,7 @@ async function insertEvent(streamName, events) {
     }
 }
 
-async function insertEventS(queryString) {
-    try {
-        const url = 'https://dbs-demo.mathematik.uni-marburg.de/native/schema'
-        let request = `{
-            "queryString": ${queryString}
-          }`
-        const response = await axios.post(url, request)
-        console.log(response)
-    } catch (error) {
-        console.error(error)
-    }
-}
+
 
 function mina() {
     alert("sdasda")
@@ -764,11 +758,6 @@ export default class Java extends Component {
                                 "X": 42.0,
                                 "Y": 1337.0,
                                 "TSTART": 12
-                            },
-                            {
-                                "X": 17.0,
-                                "Y": 137.0,
-                                "TSTART": 14
                             }
                         ])}>Insert</Button>
                         <Button onClick={() => this.InsertToEventArray(this.state.xValue, this.state.yValue, this.state.tStart)} className="AddAttribute">Add to Array</Button>
