@@ -31,7 +31,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { response } from 'express'
+
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -190,90 +190,6 @@ const optionsoflightweightindex = [
 
 ]
 
-async function createStreamJava(streamName, schemaName, schemaType, Nullable, LightweightIndex) {
-    // const requestOptions = {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': "application/x-www-form-urlencoded" },
-    //     body: `
-    //     {
-    //         "streamName": "${streamName}",
-    //         "schema": [
-    //           {
-    //             "name": "${schemaName}",
-    //             "type": "${schemaType}",
-    //             "properties": {
-    //               "nullable": ${Nullable},
-    //               "index": ${LightweightIndex}
-    //             }
-    //           },
-    //           {
-    //             "name": "yyY",
-    //             "type": "DOUBLE",
-    //             "properties": {
-    //               "nullable": false,
-    //               "index": true
-    //             }
-    //           }
-    //         ]
-    //       }`
-    // }
-
-
-
-    try {
-
-
-        const data = `
-        {
-            "streamName": "t6",
-            "schema": [
-              {
-                "name": "Y",
-                "type": "DOUBLE",
-                "properties": {
-                  "nullable": false,
-                  "index": false
-                }
-              }
-            ]
-     }`
-
-        const headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            // 'Access-Control-Allow-Headers' : 'Authorization',
-            //'Content-Type': '',
-            'Access-Control-Allow-Methods': 'Accept',
-            "Content-Type": "APPLICATION/JSON",
-            "Access-Control-Allow-Methods": "POST"
-        }
-        const rawResponse = await fetch("native/create-stream", {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "post",
-            body: JSON.stringify(data)
-        }).then(response =>
-            alert(response)
-        )
-
-        // const content = await rawResponse.json();
-
-        //  alert(content)
-        //        const response = await axios.post('native/create-stream', data, {
-        //        headers:{
-        //           "Content-Type": "application/json",
-        //       },
-        //     })
-        //   alert("it worked " + JSON.stringify(response.body))
-        //  console.log(JSON.stringify(response.body))
-        //     alert("it worked")
-    } catch (error) {
-        // alert("it not " + JSON.stringify(data))
-        alert(error)
-        console.error(error)
-    }
-}
 
 
 
@@ -1505,9 +1421,7 @@ class CreateStreamScreen extends Component {
                         <button className='createStreambutton1' type="button" name='WWalid' onClick={() => this.createStream(this.state.checklog, this.state.checkdebug, this.state.mulltiplediskmaxqueue, this.state.logicalblocksizeinput, this.state.macroblocksizeinput, this.state.macroblockpreallocationinput, this.state.macroblockbatchallocationinput, this.state.macroblockscache, this.state.nodescache, this.state.maxdeltaqueue, this.state.eventType, this.state.dataofevent)}>
                             CreateStream
                         </button>
-                        <button className='createStreambutton1' type="button" name='WWalid' onClick={() => createStreamJava("testT", "Y", "DOUBLE", false, false)}>
-                            CreateStreamJAVA
-                        </button>
+                        
 
 
                         <button variant="outlined"

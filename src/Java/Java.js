@@ -92,39 +92,7 @@ const ServerNotRunning = () => {
 
 
 
-function createStreamwithJava(streamName, schemaName, schemaType, Nullable, LightweightIndex) {
-    //  console.log("its working");
-    try {
-        const url = 'https://dbs-demo.mathematik.uni-marburg.de/native/create-stream'
-        let request = `{
-            "streamName": ${streamName},
-            "schema": [
-              {
-                "name": ${schemaName},
-                "type": ${schemaType},
-                "properties": {
-                  "nullable": ${Nullable},
-                  "index": ${LightweightIndex}
-                }
-              },
-              {
-                "name": "Y",
-                "type": "DOUBLE",
-                "properties": {
-                  "nullable": false,
-                  "index": true
-                }
-              }
-            ]
-          }`
-        const response = axios.post(url, request)
-        console.log("it worked", response.data)
-        alert("it worked" + response.data)
 
-    } catch (error) {
-        alert(error)
-    }
-}
 // https://dbs-demo.mathematik.uni-marburg.de/native/stream-info
 async function streamInfo(streamName) {
     //  console.log("its working");
@@ -196,6 +164,10 @@ async function insertEventS(queryString) {
     }
 }
 
+function mina() {
+    alert("sdasda")
+}
+
 
 
 export default class Java extends Component {
@@ -222,7 +194,19 @@ export default class Java extends Component {
             yValue: 0.0,
             tStart: 0,
             ArrayofEvents: [],
-            QueryString: ""
+            QueryString: "",
+            Array:
+
+            {
+                "name": "X123",
+                "type": "DOUBLE",
+                "properties": {
+                    "nullable": false,
+                    "index": true
+                }
+            }
+
+
         }
     }
     OpenCreateStreamDialog = (id) => {
@@ -307,7 +291,7 @@ export default class Java extends Component {
             SqlSchemaQuery: event.target.value
         },
             () => {
-                // alert(this.state.SqlSchemaQuery)
+                alert(this.state.SqlSchemaQuery)
             })
     }
 
@@ -348,7 +332,7 @@ export default class Java extends Component {
         this.setState({
             QueryString: event.target.value
         }, () => {
-            alert(this.state.QueryString)
+            //   alert(this.state.QueryString)
         }
         )
     }
@@ -450,6 +434,67 @@ export default class Java extends Component {
             this.fetchDataJava();
         }, 1000);
     }
+
+    schema = async (queryString) => {
+        // alert("sdad")
+        try {
+            const data = `
+        {
+        "queryString" : "${queryString}"
+        }`
+            const headers = {
+                'Content-Type': 'application/json'
+            }
+            const response = await axios.post('http://localhost:4000/schema', data, {
+                headers: headers
+            })
+            this.setState({
+                resultOfShemaQuery: JSON.stringify(response)
+            })
+
+
+            alert("it worked " + JSON.stringify(response))
+            console.log("SDFADSAD")
+        } catch (error) {
+            alert(error)
+            console.error(error)
+        }
+    }
+
+    createStreamJava = async (streamName, schema) => {
+        alert(schema)
+        alert(typeof schema)
+
+        const data = `{
+                    "streamName": "${streamName}",
+                    "schema": ${schema}
+                }`
+
+
+
+        try {
+
+            const headers = {
+                'Content-Type': 'application/json'
+            }
+            const response = await axios.post('http://localhost:4000/createstream', data,
+                { headers: headers }
+            )
+            alert("it worked " + JSON.stringify(response.body))
+        } catch (error) {
+            // alert("it not " + JSON.stringify(data))
+            alert(error)
+            alert(data)
+            console.log(data)
+            // console.error(error)
+            console.log(data)
+        }
+    }
+
+
+
+
+
 
 
 
@@ -605,7 +650,10 @@ export default class Java extends Component {
                     </DialogContent>
                     <DialogActions>
                         <Button className="AddAttribute" onClick={() => this.InsertTOAttributesArray(this.state.AttributeName, this.state.StreamType, this.state.Nullable, this.state.LightweightIndex)} >Add Attribute</Button>
-                        <Button className="CreateStreamButtonInDialog">CreateStream</Button>
+                        <Button className="CreateStreamButtonInDialog"
+                            onClick={() => this.createStreamJava("Ss", this.state.Array)}
+
+                        >CreateStream</Button>
                         <Button onClick={this.closeCreateStreamDialog} className="closeDialogButton">Close</Button>
 
                     </DialogActions>
@@ -768,7 +816,7 @@ export default class Java extends Component {
                     </DialogContent>
                     <DialogActions>
 
-                        <Button className="ExcuteSchemaButton">Execute</Button>
+                        <Button className="ExcuteSchemaButton" onClick={() => this.schema(this.state.SqlSchemaQuery)}>Execute</Button>
                         <Button onClick={this.closeSchemaDialog} className="closeDialogButton">Close</Button>
 
 
@@ -781,7 +829,7 @@ export default class Java extends Component {
 
 
                 <ToastContainer />
-            </div>
+            </div >
         )
     }
 }
