@@ -1,6 +1,6 @@
 import { FaceRetouchingOffSharp, Stream } from '@mui/icons-material';
 import React, { Component } from 'react'
-import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, } from '@mui/material';
+import { Dialog, DialogContentText, TextField, DialogTitle, DialogContent, DialogActions, Alert, } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import './java.css'
 import { ToastContainer, toast } from 'react-toastify';
@@ -74,6 +74,30 @@ const ServerConnected = () => {
         progress: undefined,
     });
 }
+const StreamSuccConnected = () => {
+    toast.success('Stream Created Succesffulyy', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
+const EventInsertConnected = () => {
+    toast.success('Event Inserted Succesfully', {
+        position: "top-right",
+        className: "succesnotify",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
+}
 
 const ServerNotRunning = () => {
     toast.error(' Server is not running', {
@@ -93,22 +117,15 @@ const ServerNotRunning = () => {
 
 
 
-// https://dbs-demo.mathematik.uni-marburg.de/native/stream-info
 async function streamInfo(streamName) {
-    //  console.log("its working");
     try {
         const url = 'https://dbs-demo.mathematik.uni-marburg.de/native/stream-info'
-        //     let request = `{
-        //     "name": ${streamName}
-        //  }`
-        //const response = await axios.post(url, request)
+        
         const res = await axios(url, {
             params: {
                 name: streamName
             }
         })
-        //console.log(res)
-        //alert(JSON.stringify(res))
         const data1 = await res.data;
         alert(JSON.stringify(data1))
     } catch (error) {
@@ -119,44 +136,26 @@ async function streamInfo(streamName) {
 // https://dbs-demo.mathematik.uni-marburg.de/native/query
 
 
-async function query(queryString, startTime, endTime) {
-    let request = `{
-        "queryString":"${queryString}",
-        "startTime": ${startTime},
-        "endTime": ${endTime}
- }`
-    alert(request)
-    try {
-        const url = 'https://dbs-demo.mathematik.uni-marburg.de/native/query'
-
-        const response = await axios.post(url, request)
-        console.log(response)
-        alert("it worked")
-    } catch (error) {
-        console.error(error)
-        alert("it doesn#t word")
-    }
-}
 //{
 
 async function insertEvent(streamName, events) {
-
+    const headers = {
+        'Content-Type': 'application/json'
+    }
     let request = `{
-        "streamName": ${streamName},
+        "streamName": "${streamName}",
         "events": ${events}
       }`
-
-    alert(request)
-
     try {
-        const url = 'https://dbs-demo.mathematik.uni-marburg.de/native/insert'
+        const url = 'http://localhost:4000/event'
 
-        const response = await axios.post(url, request)
+        const response = await axios.post(url, request,
+            { headers : headers})
         console.log(response)
-        alert("it worked")
+        EventInsertConnected()
     } catch (error) {
         console.error(error)
-        alert("it doesn#t work")
+        alert("it doesnt work")
     }
 }
 
@@ -177,7 +176,7 @@ export default class Java extends Component {
             CreateStreamDialog: false,
             StreamName: "",
             AttributeName: "",
-            StreamType: "",
+            StreamType: "BOOLEAN",
             Nullable: false,
             LightweightIndex: false,
             InsertDialog: false,
@@ -207,7 +206,8 @@ export default class Java extends Component {
 
             ,
             startTime: 0,
-            endTime: 0
+            endTime: 0,
+            resultOfQuery: ""
         }
     }
     OpenCreateStreamDialog = (id) => {
@@ -219,18 +219,10 @@ export default class Java extends Component {
 
 
     InsertTOAttributesArray = (name, type, nullable, index) => {
-        this.state.ArrayOfAttributes.push(`
-{
-    "name":"${name}",
-    "type":"${type}",
-    "properties" : {
-         "nullable" : ${nullable},
-          "index" : ${index}
-     }
-}`)
-
+        this.state.ArrayOfAttributes.push(`{"name":"${name}","type":"${type}","properties" : {"nullable" : ${nullable},"index" : ${index}}}`)
+        alert(this.state.ArrayOfAttributes)
     }
-
+    
     InsertToEventArray = (xValue, yValue, tStart) => {
 
         this.state.ArrayofEvents.push(`
@@ -263,7 +255,6 @@ export default class Java extends Component {
             InsertDialog: true
 
         }, () => {
-            // alert(this.state.StreamNameInInsertDialog)
         }
         )
         this.state.StreamNameInInsertDialog = streamName
@@ -324,7 +315,6 @@ export default class Java extends Component {
         this.setState({
             Nullable: event.target.value,
         }, () => {
-            //   alert(this.state.Nullable)
         }
         )
     }
@@ -333,7 +323,6 @@ export default class Java extends Component {
         this.setState({
             QueryString: event.target.value
         }, () => {
-            //   alert(this.state.QueryString)
         }
         )
     }
@@ -343,7 +332,6 @@ export default class Java extends Component {
         this.setState({
             LightweightIndex: event.target.value,
         }, () => {
-            //   alert(this.state.LightweightIndex)
         }
         )
     }
@@ -371,7 +359,6 @@ export default class Java extends Component {
         this.setState({
             StreamName: event.target.value,
         }, () => {
-            // alert(this.state.StreamName)
         }
         )
     }
@@ -387,7 +374,6 @@ export default class Java extends Component {
             xValue: event.target.value
         },
             () => {
-                //     alert(this.state.xValue)
             })
     }
     changeYvalue = event => {
@@ -395,7 +381,6 @@ export default class Java extends Component {
             yValue: event.target.value
         },
             () => {
-                //   alert(this.state.yValue)
             })
     }
 
@@ -404,7 +389,6 @@ export default class Java extends Component {
             tStart: event.target.value
         },
             () => {
-                //       alert(this.state.tStart)
             })
     }
 
@@ -415,7 +399,7 @@ export default class Java extends Component {
         this.setState({
             StreamType: event.target.value
         }, () => {
-            //    alert(this.state.StreamType)
+                alert(this.state.StreamType)
         }
         )
     }
@@ -424,7 +408,6 @@ export default class Java extends Component {
         this.setState({
             startTime: event.target.value
         }, () => {
-            //  alert(this.state.startTime)
         }
         )
     }
@@ -433,7 +416,6 @@ export default class Java extends Component {
         this.setState({
             endTime: event.target.value
         }, () => {
-            //   alert(this.state.endTime)
         }
 
 
@@ -445,10 +427,13 @@ export default class Java extends Component {
 
 
     fetchDataJava = async () => {
+       try {
         const fetch1 = await fetch('https://dbs-demo.mathematik.uni-marburg.de/native/get-streams')
         const response1 = await fetch1.json()
         this.setState({ Streams: response1 });
-        //  alert(response1)
+       } catch (error) {
+           console.error(error)
+       } 
     }
 
 
@@ -458,8 +443,31 @@ export default class Java extends Component {
         }, 1000);
     }
 
+    query = async (queryString, startTime, endTime) => {
+        let request = `{
+            "queryString":"${queryString}",
+            "startTime": ${startTime},
+            "endTime": ${endTime}
+     }`
+        alert(request)
+        try {
+            const url = 'http://localhost:4000/query'
+            const headers = {
+                'Content-Type': 'application/json'
+            }
+            const response = await axios.post(url, request , 
+                { headers : headers}
+                )
+           this.setState({
+            resultOfQuery: JSON.stringify(response)
+        })
+        } catch (error) {
+            console.error(error)
+            alert("it doesn#t word")
+        }
+    }
+    
     schema = async (queryString) => {
-        // alert("sdad")
         try {
             const data = `
         {
@@ -485,15 +493,11 @@ export default class Java extends Component {
     }
 
     createStreamJava = async (streamName, schema) => {
-        alert(schema)
-        alert(typeof schema)
 
         const data = `{
                     "streamName": "${streamName}",
-                    "schema": ${schema}
+                    "schema" : ${schema}
                 }`
-
-
 
         try {
 
@@ -503,13 +507,11 @@ export default class Java extends Component {
             const response = await axios.post('http://localhost:4000/createstream', data,
                 { headers: headers }
             )
-            alert("it worked " + JSON.stringify(response.body))
+            StreamSuccConnected()
         } catch (error) {
-            // alert("it not " + JSON.stringify(data))
-            alert(error)
-            alert(data)
+            alert("it didnt Work" ,error)
+            alert("data is " , data)
             console.log(data)
-            // console.error(error)
             console.log(data)
         }
     }
@@ -674,8 +676,16 @@ export default class Java extends Component {
                     <DialogActions>
                         <Button className="AddAttribute" onClick={() => this.InsertTOAttributesArray(this.state.AttributeName, this.state.StreamType, this.state.Nullable, this.state.LightweightIndex)} >Add Attribute</Button>
                         <Button className="CreateStreamButtonInDialog"
-                            onClick={() => this.createStreamJava("Ss", this.state.Array)}
-
+                            onClick={() => this.createStreamJava(this.state.StreamName,JSON.stringify([
+                                {
+                                    "name": this.state.AttributeName,
+                                    "type": this.state.StreamType,
+                                    "properties": {
+                                      "nullable": this.state.Nullable,
+                                      "index": this.state.LightweightIndex
+                                    }
+                                }
+                            ]))}
                         >CreateStream</Button>
                         <Button onClick={this.closeCreateStreamDialog} className="closeDialogButton">Close</Button>
 
@@ -753,13 +763,14 @@ export default class Java extends Component {
 
                     </DialogContent>
                     <DialogActions>
-                        <Button className="CreateStreamButtonInDialog" onClick={() => insertEvent("mina", [
-                            {
-                                "X": 42.0,
-                                "Y": 1337.0,
-                                "TSTART": 12
+                        <Button className="CreateStreamButtonInDialog" onClick={() => insertEvent(this.state.streamNameInInsertDialog, JSON.stringify([
+                           {
+            xValue: 0.0,
+                                "X": this.state.xValue,
+                                "Y": this.state.yValue,
+                                "TSTART": this.state.tStart
                             }
-                        ])}>Insert</Button>
+                        ]))}>Insert</Button>
                         <Button onClick={() => this.InsertToEventArray(this.state.xValue, this.state.yValue, this.state.tStart)} className="AddAttribute">Add to Array</Button>
                         <Button onClick={this.closeInsertDialog} className="closeDialogButton">Close</Button>
 
@@ -782,7 +793,7 @@ export default class Java extends Component {
                             onChange={this.changeQueryString}
                             required
                             id="outlined-required"
-                            label="Stream Name"
+                            label="Query String"
                             defaultValue="0"
                             fullWidth='md'
                             maxWidth="md"
@@ -820,10 +831,22 @@ export default class Java extends Component {
                         />
 
 
+<TextField
+                            id="outlined-read-only-input"
+                            label="Result"
+                            multiline
+                            maxRows={6}
+                            sx={{ m: 1, width: '130ch' }}
+
+
+                            variant="filled"
+                            helperText="Here will be the answered shown"
+                            value={this.state.resultOfQuery}
+                        />
 
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => query("SELECT (X+Y) AS XY FROM S", this.state.startTime, this.state.endTime)} className="CreateStreamButtonInDialog">Excute</Button>
+                        <Button onClick={() => this.query(this.state.QueryString ,this.state.startTime, this.state.endTime)} className="CreateStreamButtonInDialog">Excute</Button>
                         <Button onClick={this.closeQueryDialog} className="closeDialogButton">Close</Button>
 
                     </DialogActions>
